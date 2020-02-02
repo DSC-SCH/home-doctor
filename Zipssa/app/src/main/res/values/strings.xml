@@ -1,0 +1,6 @@
+<resources>
+	<string name="app_name">Zipssa</string>
+	<string name="home">홈</string>
+	<string name="back">뒤로가기</string>
+	<string name="add_alarm_title">알림 추가</string>
+</resources>

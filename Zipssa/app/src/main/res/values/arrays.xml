@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="alarm_times">
+		<item>1회</item>
+		<item>2회</item>
+		<item>3회</item>
+		<item>6회</item>
+		<item>8회</item>
+		<item>12회</item>
+	</string-array>
+</resources>

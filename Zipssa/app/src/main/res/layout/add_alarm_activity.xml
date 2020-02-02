@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/background_theme"
+	android:focusableInTouchMode="true">
+
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/add_toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/main_theme"
+		android:orientation="horizontal"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/scrollView">
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginRight="20dp"
+			android:gravity="center"
+			android:text="알림 추가"
+			android:textSize="@dimen/add_alarm_text_large"
+			android:textColor="#FFFFFF"/>
+	</androidx.appcompat.widget.Toolbar>
+
+	<ScrollView
+		android:id="@+id/scrollView"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/add_toolbar"
+		app:layout_constraintBottom_toBottomOf="parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+
+			<LinearLayout
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="8"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="이름 설정"
+					android:textColor="@color/main_theme"
+					android:layout_marginTop="@dimen/add_alarm_voutside"
+					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"
+					android:textSize="@dimen/add_alarm_text_large" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:background="@drawable/add_alarm_box"
+					android:paddingHorizontal="@dimen/add_alarm_text_hinside">
+
+					<EditText
+						android:id="@+id/add_title"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginVertical="@dimen/add_alarm_text_vinside"
+						android:hint="\@@감기약 먹자@@"
+						android:textSize="@dimen/add_alarm_text_small"/>
+				</LinearLayout>
+
+				<Switch
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="시간 설정"
+					android:textColor="@color/main_theme"
+					android:layout_marginTop="@dimen/add_alarm_voutside"
+					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"
+					android:textSize="@dimen/add_alarm_text_large"
+					android:checked="true"/>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:background="@drawable/add_alarm_box">
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="match_parent"
+							android:gravity="center|left"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:paddingVertical="@dimen/add_alarm_text_vinside"
+							android:text="알림 횟수"/>
+
+						<Spinner
+							android:id="@+id/alarm_counts"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:layout_gravity="end"
+							android:textAlignment="textEnd"
+							android:background="#FFFFFF"
+							android:spinnerMode="dropdown"
+							android:textColor="@color/main_theme"/>
+					</LinearLayout>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="1dp"
+						android:background="@color/split_line"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
+
+					<LinearLayout
+						android:id="@+id/count_container"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"
+						android:orientation="vertical" />
+				</LinearLayout>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="날짜 설정"
+					android:textColor="@color/main_theme"
+					android:layout_marginTop="@dimen/add_alarm_voutside"
+					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"
+					android:textSize="@dimen/add_alarm_text_large" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:background="@drawable/add_alarm_box">
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+						android:paddingTop="@dimen/add_alarm_text_vinside"
+						android:paddingBottom="@dimen/add_alarm_text_vinside_close"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large">
+
+						<TextView
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:text="시작 날짜"/>
+
+						<TextView
+							android:id="@+id/add_start_date"
+							android:layout_width="wrap_content"
+							android:layout_height="match_parent"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@color/main_theme"
+							android:text="0000년 00월 00일"/>
+					</LinearLayout>
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+						android:paddingTop="@dimen/add_alarm_text_vinside_close"
+						android:paddingBottom="@dimen/add_alarm_text_vinside"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large">
+
+						<TextView
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:text="종료 날짜"
+							android:textSize="@dimen/add_alarm_text_small" />
+
+						<TextView
+							android:id="@+id/add_end_date"
+							android:layout_width="wrap_content"
+							android:layout_height="match_parent"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@color/main_theme"
+							android:text="0000년 00월 00일"/>
+					</LinearLayout>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="1dp"
+						android:background="@color/split_line"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
+
+					<TextView
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:layout_marginVertical="@dimen/add_alarm_text_vinside"
+						android:text="반복 알림"
+						android:textSize="@dimen/add_alarm_text_small"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large"/>
+
+					<View
+						android:layout_width="match_parent"
+						android:layout_height="1dp"
+						android:background="@color/split_line"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
+
+					<RadioGroup
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large" >
+
+						<RadioButton
+							android:id="@+id/add_date_everyday"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="매일"
+							android:textColor="@color/text_color"
+							android:textSize="@dimen/add_alarm_text_small"/>
+
+						<RadioButton
+							android:id="@+id/add_date_select"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="요일 지정"
+							android:textColor="@color/text_color"
+							android:textSize="@dimen/add_alarm_text_small"/>
+					</RadioGroup>
+
+					<LinearLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="horizontal"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside">
+
+						<TextView
+							android:layout_width="0dp"
+							android:layout_height="wrap_content"
+							tools:ignore="Suspicious0dp"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:paddingVertical="@dimen/add_alarm_text_vinside"
+							android:text="1"/>
+
+						<ToggleButton
+							android:id="@+id/add_date_sun"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:background="@drawable/add_alarm_date_selector"
+							android:textColor="@drawable/add_alarm_date_color"
+							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:textOff="일"
+							android:textOn="일"
+							android:textSize="@dimen/add_alarm_text_small" />
+
+						<ToggleButton
+							android:id="@+id/add_date_mon"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@drawable/add_alarm_date_color"
+							android:background="@drawable/add_alarm_date_selector"
+							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:textOff="월"
+							android:textOn="월" />
+
+						<ToggleButton
+							android:id="@+id/add_date_tue"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@drawable/add_alarm_date_color"
+							android:background="@drawable/add_alarm_date_selector"
+							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:textOff="화"
+							android:textOn="화" />
+
+						<ToggleButton
+							android:id="@+id/add_date_wed"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@drawable/add_alarm_date_color"
+							android:background="@drawable/add_alarm_date_selector"
+							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:textOff="수"
+							android:textOn="수" />
+
+						<ToggleButton
+							android:id="@+id/add_date_thu"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@drawable/add_alarm_date_color"
+							android:background="@drawable/add_alarm_date_selector"
+							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:textOff="목"
+							android:textOn="목" />
+
+						<ToggleButton
+							android:id="@+id/add_date_fri"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@drawable/add_alarm_date_color"
+							android:background="@drawable/add_alarm_date_selector"
+							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:textOff="금"
+							android:textOn="금" />
+
+						<ToggleButton
+							android:id="@+id/add_date_sat"
+							android:layout_width="0dp"
+							android:layout_height="match_parent"
+							android:layout_weight="1"
+							android:textSize="@dimen/add_alarm_text_small"
+							android:textColor="@drawable/add_alarm_date_color"
+							android:background="@drawable/add_alarm_date_selector"
+							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:textOff="토"
+							android:textOn="토" />
+					</LinearLayout>
+				</LinearLayout>
+				
+				<Button
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@drawable/add_alarm_submit"
+					android:layout_marginVertical="@dimen/add_alarm_voutside"
+					android:layout_gravity="center"
+					android:paddingVertical="20dp"
+					android:paddingHorizontal="60dp"
+					android:textSize="@dimen/add_alarm_text_large"
+					android:textColor="@color/main_theme"
+					android:text="설정 완료"/>
+			</LinearLayout>
+
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="match_parent"
+				android:layout_weight="1"/>
+		</LinearLayout>
+	</ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

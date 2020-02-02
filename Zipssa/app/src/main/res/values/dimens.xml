@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="add_alarm_houtside">30dp</dimen>
+	<dimen name="add_alarm_voutside">30dp</dimen>
+	<dimen name="add_alarm_text_hinside">20dp</dimen>
+	<dimen name="add_alarm_text_hinside_large">40dp</dimen>
+	<dimen name="add_alarm_text_vinside">10dp</dimen>
+	<dimen name="add_alarm_text_vinside_close">5dp</dimen>
+	<dimen name="add_alarm_text_large">15sp</dimen>
+	<dimen name="add_alarm_text_small">10sp</dimen>
+</resources>
