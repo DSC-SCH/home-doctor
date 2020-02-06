@@ -8,4 +8,11 @@
 	<dimen name="add_alarm_text_vinside_close">5dp</dimen>
 	<dimen name="add_alarm_text_large">15sp</dimen>
 	<dimen name="add_alarm_text_small">10sp</dimen>
+	<dimen name="main_list_name">30sp</dimen>
+	<dimen name="main_list_name_top">30dp</dimen>
+	<dimen name="main_list_name_side">10dp</dimen>
+	<dimen name="main_list_side">30dp</dimen>
+	<dimen name="main_list_distance">20dp</dimen>
+	<dimen name="main_list_text_large">20sp</dimen>
+	<dimen name="main_list_text_small">15sp</dimen>
 </resources>

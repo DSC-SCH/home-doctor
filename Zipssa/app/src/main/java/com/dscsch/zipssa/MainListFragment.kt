@@ -1,29 +1,41 @@
 package com.dscsch.zipssa
 
+import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.main_list.*
 
 class MainListFragment : Fragment() {
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = inflater.inflate(R.layout.main_list, container, false)
+
 		return view
 	}
 
-	companion object {
-		val frag : MainListFragment? = null
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		val cur_context = view.context
 
-		fun newInstance() : MainListFragment {
-			return if (frag == null) MainListFragment().apply {
-				arguments = Bundle()
-			} else frag
+		add_button.setOnClickListener {
+			val nextIntent = Intent(cur_context, AddAlarm::class.java)
+			startActivity(nextIntent)
+		}
+
+		super.onViewCreated(view, savedInstanceState)
+	}
+
+	companion object {
+		var frag : MainListFragment? = null
+
+		fun newInstance() : MainListFragment? {
+			if (frag == null) {
+				frag = MainListFragment().apply { arguments = Bundle() }
+				return frag
+			} else return frag
 		}
 	}
 }

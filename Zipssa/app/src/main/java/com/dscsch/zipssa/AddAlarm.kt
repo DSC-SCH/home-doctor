@@ -20,6 +20,7 @@ class AddAlarm : AppCompatActivity() {
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		supportActionBar?.setDisplayShowHomeEnabled(true)
 
+		// Setting alarm count
 		val alarm_counts_array = resources.getStringArray(R.array.alarm_times)
 		val adapter = ArrayAdapter<String>(applicationContext, R.layout.alarm_count_spinner_item, alarm_counts_array)
 		adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
@@ -34,8 +35,13 @@ class AddAlarm : AppCompatActivity() {
 				return
 			}
 		}
+
+		submit_button.setOnClickListener {
+
+		}
 	}
 
+	// Setting buttons on title bar
 	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 		menuInflater.inflate(R.menu.home, menu)
 		return true

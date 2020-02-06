@@ -12,3 +12,8 @@
 /captures
 .externalNativeBuild
 .cxx
+local.properties
+build/
+.gradle/
+/*/build/
+*.apk

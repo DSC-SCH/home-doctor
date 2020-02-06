@@ -19,12 +19,13 @@ class MainCalenderFragment : Fragment() {
 	}
 
 	companion object {
-		val frag : MainCalenderFragment? = null
+		var frag : MainCalenderFragment? = null
 
-		fun newInstance() : MainCalenderFragment {
-			return if (frag == null) MainCalenderFragment().apply {
-				arguments = Bundle()
-			} else frag
+		fun getInstance() : MainCalenderFragment? {
+			if (frag == null) {
+				frag = MainCalenderFragment().apply { arguments = Bundle() }
+				return frag
+			} else return frag
 		}
 	}
 }

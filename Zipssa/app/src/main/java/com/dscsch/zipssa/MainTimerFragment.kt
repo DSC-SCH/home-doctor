@@ -19,12 +19,13 @@ class MainTimerFragment : Fragment() {
 	}
 
 	companion object {
-		val frag : MainTimerFragment? = null
+		var frag : MainTimerFragment? = null
 
-		fun newInstance() : MainTimerFragment {
-			return if (frag == null) MainTimerFragment().apply {
-				arguments = Bundle()
-			} else frag
+		fun newInstance() : MainTimerFragment? {
+			if (frag == null) {
+				frag = MainTimerFragment().apply { arguments = Bundle() }
+				return frag
+			} else return frag
 		}
 	}
 }

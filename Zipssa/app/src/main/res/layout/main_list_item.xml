@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginTop="30dp"
+	android:orientation="vertical"
+	android:background="@drawable/main_list_item_box">
+
+	<TextView
+		android:id="@+id/list_item_time"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textSize="@dimen/main_list_text_small"
+		android:textColor="@color/text_color"
+		android:text="오전 9:00"
+		android:paddingVertical="@dimen/add_alarm_text_vinside"/>
+
+	<TextView
+		android:id="@+id/list_item_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textSize="@dimen/main_list_text_large"
+		android:textColor="@color/text_color"
+		android:text="\@@감기약 먹자@@"
+		android:paddingVertical="@dimen/add_alarm_text_vinside"/>
+</LinearLayout>
