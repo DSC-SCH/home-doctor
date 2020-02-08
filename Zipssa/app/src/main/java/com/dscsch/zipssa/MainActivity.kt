@@ -8,10 +8,14 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
+	val DB_VERSION = 1
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.main_activity)
+
+		SharedDB.helper = DBHelper(this@MainActivity, SharedDB.DB_NAME, null, DB_VERSION)
+		SharedDB.database = SharedDB.helper.writableDatabase
 
 		val adapterViewPager = MyPageAdapter(supportFragmentManager)
 		main_pager.adapter = adapterViewPager
@@ -23,9 +27,9 @@ class MainActivity : AppCompatActivity() {
 
 		override fun getItem(position: Int): Fragment {
 			return when(position) {
-				1 -> MainTimerFragment.newInstance()
+				1 -> MainTimerFragment.getInstance()
 				2 -> MainCalenderFragment.getInstance()
-				else -> MainListFragment.newInstance()
+				else -> MainListFragment.getInstance()
 			}
 		}
 

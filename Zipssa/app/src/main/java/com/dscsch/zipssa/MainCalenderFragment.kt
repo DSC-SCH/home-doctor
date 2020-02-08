@@ -19,10 +19,10 @@ class MainCalenderFragment : Fragment() {
 	}
 
 	companion object {
-		var frag : MainCalenderFragment? = null
+		lateinit var frag : MainCalenderFragment
 
-		fun getInstance() : MainCalenderFragment? {
-			if (frag == null) {
+		fun getInstance() : MainCalenderFragment {
+			if (!::frag.isInitialized) {
 				frag = MainCalenderFragment().apply { arguments = Bundle() }
 				return frag
 			} else return frag

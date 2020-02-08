@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="alarm_times">
+		<item>필요 시 섭취</item>
 		<item>1회</item>
 		<item>2회</item>
 		<item>3회</item>

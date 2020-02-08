@@ -29,10 +29,10 @@ class MainListFragment : Fragment() {
 	}
 
 	companion object {
-		var frag : MainListFragment? = null
+		lateinit var frag : MainListFragment
 
-		fun newInstance() : MainListFragment? {
-			if (frag == null) {
+		fun getInstance() : MainListFragment {
+			if (!::frag.isInitialized) {
 				frag = MainListFragment().apply { arguments = Bundle() }
 				return frag
 			} else return frag

@@ -19,10 +19,10 @@ class MainTimerFragment : Fragment() {
 	}
 
 	companion object {
-		var frag : MainTimerFragment? = null
+		lateinit var frag : MainTimerFragment
 
-		fun newInstance() : MainTimerFragment? {
-			if (frag == null) {
+		fun getInstance() : MainTimerFragment {
+			if (!::frag.isInitialized) {
 				frag = MainTimerFragment().apply { arguments = Bundle() }
 				return frag
 			} else return frag

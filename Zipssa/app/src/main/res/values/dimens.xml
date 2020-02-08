@@ -15,4 +15,5 @@
 	<dimen name="main_list_distance">20dp</dimen>
 	<dimen name="main_list_text_large">20sp</dimen>
 	<dimen name="main_list_text_small">15sp</dimen>
+	<dimen name="shadow_size">3dp</dimen>
 </resources>
