@@ -2,13 +2,15 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#009AFA</color>
-    <color name="main_theme">#009AFA</color>
-    <color name="main_theme_thick">#2B8834</color>
-    <color name="background_theme">#ECECEC</color>
+    <color name="colorAccent">#0089FA</color>
+    <color name="main_theme">#0089FA</color>
+    <color name="main_theme_thick">#006ECC</color>
+    <color name="background_theme">#F7F7F7</color>
     <color name="text_color">#707070</color>
-    <color name="split_line">#B5B5B5</color>
-    <color name="main_list_text">#FFFFFF</color>
-    <color name="main_list_item">#B4FFBC</color>
+    <color name="split_line">#E1E1E1</color>
+    <color name="main_list_text">#009AFA</color>
+    <color name="main_list_item">#FFFFFF</color>
     <color name="box_theme">#FFFFFF</color>
+    <color name="white_pressed">#E6E6E6</color>
+    <color name="bottom_bar_text">#FFFFFF</color>
 </resources>

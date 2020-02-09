@@ -8,21 +8,28 @@
 	android:focusableInTouchMode="true"
 	android:orientation="vertical">
 
-	<androidx.appcompat.widget.Toolbar
-		android:id="@+id/add_toolbar"
+	<FrameLayout
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
 		android:background="@color/main_theme" >
 
+		<ImageView
+			android:id="@+id/back_btn"
+			android:layout_width="wrap_content"
+			android:layout_height="20dp"
+			android:layout_gravity="left|center"
+			android:adjustViewBounds="true"
+			android:layout_marginHorizontal="15dp"
+			android:src="@drawable/ic_arrow_back_24px" />
+
 		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_marginRight="20dp"
-			android:gravity="center"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
 			android:text="알림 추가"
 			android:textSize="@dimen/add_alarm_text_large"
 			android:textColor="#FFFFFF"/>
-	</androidx.appcompat.widget.Toolbar>
+	</FrameLayout>
 
 	<ScrollView
 		android:id="@+id/scrollView"
@@ -120,7 +127,7 @@
 
 					<View
 						android:layout_width="match_parent"
-						android:layout_height="1dp"
+						android:layout_height="@dimen/split_line"
 						android:background="@color/split_line"
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
 
@@ -198,7 +205,7 @@
 
 					<View
 						android:layout_width="match_parent"
-						android:layout_height="1dp"
+						android:layout_height="@dimen/split_line"
 						android:background="@color/split_line"
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
 
@@ -213,7 +220,7 @@
 
 					<View
 						android:layout_width="match_parent"
-						android:layout_height="1dp"
+						android:layout_height="@dimen/split_line"
 						android:background="@color/split_line"
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
 

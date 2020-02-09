@@ -1,5 +1,6 @@
 package com.dscsch.zipssa
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,24 +18,26 @@ class MainActivity : AppCompatActivity() {
 		SharedDB.helper = DBHelper(this@MainActivity, SharedDB.DB_NAME, null, DB_VERSION)
 		SharedDB.database = SharedDB.helper.writableDatabase
 
-		val adapterViewPager = MyPageAdapter(supportFragmentManager)
-		main_pager.adapter = adapterViewPager
-	}
-
-	class MyPageAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-		private val NUM_ITEMS = 3
-		private var frag = null
-
-		override fun getItem(position: Int): Fragment {
-			return when(position) {
-				1 -> MainTimerFragment.getInstance()
-				2 -> MainCalenderFragment.getInstance()
-				else -> MainListFragment.getInstance()
-			}
+		bar_home.setOnClickListener {
+			callPage(0)
 		}
 
-		override fun getCount(): Int {
-			return NUM_ITEMS
+		bar_add.setOnClickListener {
+			val intent = Intent(this@MainActivity, AddAlarm::class.java)
+			startActivity(intent)
+		}
+
+		callPage(0)
+	}
+
+	fun callPage(no: Int) {
+		val transaction = supportFragmentManager.beginTransaction()
+
+		when (no) {
+			0 -> {
+				transaction.replace(R.id.main_container, MainListFragment.getInstance())
+				transaction.commit()
+			}
 		}
 	}
 }

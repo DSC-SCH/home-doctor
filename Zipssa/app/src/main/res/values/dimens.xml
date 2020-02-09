@@ -6,14 +6,21 @@
 	<dimen name="add_alarm_text_hinside_large">40dp</dimen>
 	<dimen name="add_alarm_text_vinside">10dp</dimen>
 	<dimen name="add_alarm_text_vinside_close">5dp</dimen>
+	<dimen name="main_name_top">30dp</dimen>
+	<dimen name="main_name_side">10dp</dimen>
+	<dimen name="main_side">30dp</dimen>
+	<dimen name="main_distance_large">20dp</dimen>
+	<dimen name="main_distance_mid">10dp</dimen>
+	<dimen name="main_distance_small">5dp</dimen>
+	<dimen name="shadow_size">3dp</dimen>
+	<dimen name="split_line">2dp</dimen>
+	<dimen name="bottom_bar">80dp</dimen>
+
 	<dimen name="add_alarm_text_large">15sp</dimen>
 	<dimen name="add_alarm_text_small">10sp</dimen>
-	<dimen name="main_list_name">30sp</dimen>
-	<dimen name="main_list_name_top">30dp</dimen>
-	<dimen name="main_list_name_side">10dp</dimen>
-	<dimen name="main_list_side">30dp</dimen>
-	<dimen name="main_list_distance">20dp</dimen>
-	<dimen name="main_list_text_large">20sp</dimen>
-	<dimen name="main_list_text_small">15sp</dimen>
-	<dimen name="shadow_size">3dp</dimen>
+	<dimen name="main_name">30sp</dimen>
+	<dimen name="main_text_large">20sp</dimen>
+	<dimen name="main_text_mid">15sp</dimen>
+	<dimen name="main_text_small">10sp</dimen>
+	<dimen name="bottom_bar_text">13sp</dimen>
 </resources>

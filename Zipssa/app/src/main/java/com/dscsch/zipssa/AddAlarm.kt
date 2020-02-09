@@ -20,10 +20,10 @@ class AddAlarm : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.add_alarm_activity)
 
-		setSupportActionBar(add_toolbar)
-
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		supportActionBar?.setDisplayShowHomeEnabled(true)
+		// Setting back button
+		back_btn.setOnClickListener {
+			onBackPressed()
+		}
 
 		// Setting alarm count
 		val alarm_counts_array = resources.getStringArray(R.array.alarm_times)
@@ -161,11 +161,5 @@ class AddAlarm : AppCompatActivity() {
 			""".trimMargin()
 			SharedDB.helper.insertAlarm(SharedDB.database, sql)
 		}
-	}
-
-	// Setting back button on title bar
-	override fun onSupportNavigateUp(): Boolean {
-		onBackPressed()
-		return true
 	}
 }
