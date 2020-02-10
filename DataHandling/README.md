@@ -6,7 +6,7 @@
 Pre-Requirement
 
 - pandas
-- pdfminer
+- pdfminer3k
 - requests
 - lxml
 - BeautifulSoup4
