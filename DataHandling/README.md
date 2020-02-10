@@ -9,3 +9,5 @@ Pre-Requirement
 - pdfminer
 - requests
 - lxml
+- BeautifulSoup4
+- selenium
