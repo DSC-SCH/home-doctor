@@ -6,7 +6,6 @@ os.chdir('C:/Users/student/Desktop')
 
 medical = pd.read_csv('./박성아/global/OpenData_ItemPermitDetail20200208.csv',encoding='cp949')
 medical = medical[medical['취소상태']=='정상']
-medical_effection = medical['용법용량'][0:1000]
 
 from pdfminer.pdfparser import PDFParser, PDFDocument
 from pdfminer.pdfinterp import PDFResourceManager, process_pdf
@@ -57,6 +56,6 @@ def text_extration(col_, seperator):
 
 
 effect = text_extration(total['효능효과'],'효능효과')
-usage_capacity = text_extration(medical_effection, '용법용량')
+usage_capacity = text_extration(medical['용법용량'], '용법용량')
 
 
