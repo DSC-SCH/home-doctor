@@ -15,6 +15,7 @@
 		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:elevation="@dimen/shadow_size"
+		android:fontFamily="@font/bmjua"
 		android:textSize="@dimen/main_text_mid"
 		android:textColor="@color/main_list_remain_time"
 		android:text="0h 00m"
@@ -79,6 +80,7 @@
 						android:layout_height="match_parent"
 						android:gravity="center"
 						android:layout_marginLeft="20dp"
+						android:fontFamily="@font/bmjua"
 						android:text="감기약"
 						android:textSize="@dimen/main_text_mid"
 						android:textColor="@color/text_color"/>
@@ -90,10 +92,11 @@
 
 					<ToggleButton
 						android:id="@+id/main_item_switch"
-						android:layout_width="50dp"
+						android:layout_width="40dp"
 						android:layout_height="25dp"
 						android:background="@drawable/alarm_btn_selector"
 						android:layout_marginRight="30dp"
+						android:fontFamily="@font/daylight_210"
 						android:textOn="알림 on"
 						android:textOff="알림 off"
 						android:textSize="@dimen/alarm_switch"/>
@@ -117,6 +120,7 @@
 						android:layout_height="wrap_content"
 						android:gravity="center"
 						android:layout_marginHorizontal="10dp"
+						android:fontFamily="@font/daylight_210"
 						android:text="1회 복용"
 						android:textSize="@dimen/main_text_mid"
 						android:textColor="@color/text_color"/>
@@ -146,6 +150,7 @@
 						android:layout_height="wrap_content"
 						android:gravity="center"
 						android:layout_marginLeft="10dp"
+						android:fontFamily="@font/daylight_210"
 						android:text="00.00.00"
 						android:textSize="@dimen/main_text_mid"
 						android:textColor="@color/text_color"/>
@@ -154,6 +159,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:gravity="center"
+						android:fontFamily="@font/daylight_210"
 						android:text=" ~ "
 						android:textSize="@dimen/main_text_mid"
 						android:textColor="@color/text_color"/>
@@ -163,6 +169,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:gravity="center"
+						android:fontFamily="@font/daylight_210"
 						android:text="00.00.00"
 						android:textSize="@dimen/main_text_mid"
 						android:textColor="@color/text_color"/>
@@ -187,6 +194,7 @@
 						android:layout_height="wrap_content"
 						android:gravity="center"
 						android:layout_marginHorizontal="10dp"
+						android:fontFamily="@font/daylight_210"
 						android:text="D-0"
 						android:textSize="@dimen/main_text_mid"
 						android:textColor="@color/text_color"/>

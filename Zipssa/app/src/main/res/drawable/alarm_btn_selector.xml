@@ -4,7 +4,7 @@
 		<shape>
 			<stroke android:color="#707070" android:width="1dp"/>
 			<solid android:color="#B5B5B5"/>
-			<corners android:radius="30dp" />
+			<corners android:radius="15dp" />
 		</shape>
 	</item>
 
@@ -12,7 +12,7 @@
 		<shape>
 			<stroke android:color="#707070" android:width="1dp"/>
 			<solid android:color="#AAAAAA"/>
-			<corners android:radius="30dp" />
+			<corners android:radius="15dp" />
 		</shape>
 	</item>
 
@@ -20,7 +20,7 @@
 		<shape>
 			<stroke android:color="#707070" android:width="1dp"/>
 			<solid android:color="#AFDBF5"/>
-			<corners android:radius="30dp" />
+			<corners android:radius="15dp" />
 		</shape>
 	</item>
 
@@ -28,7 +28,7 @@
 		<shape>
 			<stroke android:color="#707070" android:width="1dp"/>
 			<solid android:color="#94CDEC"/>
-			<corners android:radius="30dp" />
+			<corners android:radius="15dp" />
 		</shape>
 	</item>
 </selector>

@@ -8,7 +8,8 @@
 		android:id="@+id/time_item"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textSize="@dimen/add_alarm_text_large"
+		android:fontFamily="@font/daylight_210"
+		android:textSize="@dimen/add_alarm_text_mid"
 		android:textColor="@color/text_color"
-		android:paddingVertical="@dimen/add_alarm_text_vinside"/>
+		android:paddingVertical="7dp"/>
 </LinearLayout>

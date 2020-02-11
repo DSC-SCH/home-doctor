@@ -16,7 +16,7 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
+		android:layout_height="@dimen/bottom_bar"
 		android:orientation="horizontal"
 		android:background="@color/main_theme" >
 
@@ -40,6 +40,8 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:fontFamily="@font/daylight_210"
 				android:text="홈"
 				android:textColor="@color/bottom_bar_text"
 				android:textSize="@dimen/bottom_bar_text"/>
@@ -71,6 +73,8 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:fontFamily="@font/daylight_210"
 				android:text="촬영"
 				android:textColor="@color/bottom_bar_text"
 				android:textSize="@dimen/bottom_bar_text"/>
@@ -102,6 +106,8 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:fontFamily="@font/daylight_210"
 				android:text="검색"
 				android:textColor="@color/bottom_bar_text"
 				android:textSize="@dimen/bottom_bar_text"/>
@@ -133,6 +139,8 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:fontFamily="@font/daylight_210"
 				android:text="설정"
 				android:textColor="@color/bottom_bar_text"
 				android:textSize="@dimen/bottom_bar_text"/>

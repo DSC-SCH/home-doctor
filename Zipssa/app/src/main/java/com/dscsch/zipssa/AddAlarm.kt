@@ -25,14 +25,16 @@ class AddAlarm : AppCompatActivity() {
 	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
 	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
+	var repeatCount = 7
+
 	val DEFAULT_TIMES = JsonParser.parseString("""[
 		|[],
-		|["오전 09:00"],
-		|["오전 09:00", "오후 07:00"],
-		|["오전 09:00", "오후 01:00", "오후 07:00"],
-		|["오전 09:00", "오전 11:00", "오후 01:00", "오후 03:00", "오후 05:00", "오후 07:00"],
-		|["오전 09:00", "오전 11:00", "오후 01:00", "오후 03:00", "오후 05:00", "오후 07:00", "오후 09:00", "오후 09:00"],
-		|["오전 09:00", "오전 11:00", "오후 01:00", "오후 03:00", "오후 05:00", "오후 07:00", "오후 09:00", "오후 09:00", "오후 09:00", "오후 09:00", "오후 09:00", "오후 09:00"]
+		|["오전 9:00"],
+		|["오전 9:00", "오후 7:00"],
+		|["오전 9:00", "오후 1:00", "오후 7:00"],
+		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00"],
+		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00"],
+		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00"]
 	]""".trimMargin()).asJsonArray
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,14 +106,6 @@ class AddAlarm : AppCompatActivity() {
 		add_repeat_group.setOnCheckedChangeListener { radioGroup: RadioGroup, res_id: Int ->
 			when(res_id) {
 				R.id.add_repeat_everyday -> {
-					add_date_sun.isEnabled = false
-					add_date_mon.isEnabled = false
-					add_date_tue.isEnabled = false
-					add_date_wed.isEnabled = false
-					add_date_thu.isEnabled = false
-					add_date_fri.isEnabled = false
-					add_date_sat.isEnabled = false
-
 					add_date_sun.isChecked = true
 					add_date_mon.isChecked = true
 					add_date_tue.isChecked = true
@@ -119,8 +113,16 @@ class AddAlarm : AppCompatActivity() {
 					add_date_thu.isChecked = true
 					add_date_fri.isChecked = true
 					add_date_sat.isChecked = true
+
+					add_date_sun.isEnabled = false
+					add_date_mon.isEnabled = false
+					add_date_tue.isEnabled = false
+					add_date_wed.isEnabled = false
+					add_date_thu.isEnabled = false
+					add_date_fri.isEnabled = false
+					add_date_sat.isEnabled = false
 				}
-				else -> {
+				R.id.add_repeat_select -> {
 					add_date_sun.isEnabled = true
 					add_date_mon.isEnabled = true
 					add_date_tue.isEnabled = true
@@ -158,6 +160,9 @@ class AddAlarm : AppCompatActivity() {
 				return@setOnClickListener
 			}
 
+			// TODO("Label")
+			// TODO("Use label as title if title is empty")
+
 			val sql = """
 				|INSERT INTO ALARMS (TITLE, START_DT, END_DT, TIMES, REPEATS, ALARM)
 				|VALUES (
@@ -181,7 +186,7 @@ class AddAlarm : AppCompatActivity() {
 }
 
 class AddTimeRecyclerAdapter(context: Context?, lTimes: JsonArray): RecyclerView.Adapter<AddTimeRecyclerAdapter.ViewHolder>() {
-	val sdf_time_show = SimpleDateFormat("a hh:mm", Locale.KOREA)
+	val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 	val context: Context?
 	val lTimes: JsonArray
 

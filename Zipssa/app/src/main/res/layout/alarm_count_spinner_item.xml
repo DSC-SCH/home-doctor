@@ -4,6 +4,7 @@
 	android:layout_height="wrap_content"
 	android:textSize="@dimen/add_alarm_text_small"
 	style="?android:attr/spinnerItemStyle"
+	android:fontFamily="@font/daylight_210"
 	android:textColor="@color/main_theme"
 	android:gravity="right"
 	android:paddingVertical="5dp"/>

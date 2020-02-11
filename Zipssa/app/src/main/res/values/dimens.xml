@@ -2,8 +2,9 @@
 <resources>
 	<dimen name="add_alarm_houtside">30dp</dimen>
 	<dimen name="add_alarm_voutside">30dp</dimen>
-	<dimen name="add_alarm_text_hinside">20dp</dimen>
-	<dimen name="add_alarm_text_hinside_large">40dp</dimen>
+	<dimen name="add_alarm_text_hinside_small">15dp</dimen>
+	<dimen name="add_alarm_text_hinside_mid">20dp</dimen>
+	<dimen name="add_alarm_text_hinside_large">25dp</dimen>
 	<dimen name="add_alarm_text_vinside">10dp</dimen>
 	<dimen name="add_alarm_text_vinside_close">5dp</dimen>
 	<dimen name="main_name_top">30dp</dimen>
@@ -13,11 +14,13 @@
 	<dimen name="main_distance_large">20dp</dimen>
 	<dimen name="main_distance_mid">10dp</dimen>
 	<dimen name="main_distance_small">5dp</dimen>
+	<dimen name="main_distance_xsmall">2dp</dimen>
 	<dimen name="shadow_size">3dp</dimen>
 	<dimen name="split_line">1dp</dimen>
-	<dimen name="bottom_bar">80dp</dimen>
+	<dimen name="bottom_bar">60dp</dimen>
 
-	<dimen name="add_alarm_text_large">15sp</dimen>
+	<dimen name="add_alarm_text_large">20sp</dimen>
+	<dimen name="add_alarm_text_mid">15sp</dimen>
 	<dimen name="add_alarm_text_small">10sp</dimen>
 	<dimen name="main_name">30sp</dimen>
 	<dimen name="main_text_large">20sp</dimen>
@@ -25,6 +28,6 @@
 	<dimen name="main_text_small">10sp</dimen>
 	<dimen name="bottom_bar_text">13sp</dimen>
 
-	<dimen name="alarm_switch">10dp</dimen>
+	<dimen name="alarm_switch">8dp</dimen>
 	<dimen name="main_item_time">8dp</dimen>
 </resources>
