@@ -8,7 +8,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import java.lang.Exception
 
-class DBHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) :
+class MyDbOpenHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) :
 	SQLiteOpenHelper(context, name, factory, version) {
 
 	override fun onCreate(db: SQLiteDatabase) {
@@ -24,49 +24,18 @@ class DBHelper(context: Context?, name: String?, factory: SQLiteDatabase.CursorF
 			|CREATE TABLE IF NOT EXISTS ALARMS (
 			|_ID INTEGER PRIMARY KEY AUTOINCREMENT,
 			|TITLE VARCAHR(64) NOT NULL,
-			|START_DT DATE NOT NULL,
-			|END_DT DATE NOT NULL,
+			|START_DT CHAR(10) NOT NULL,
+			|END_DT CHAR(10) NOT NULL,
 			|TIMES VARCHAR(128),
 			|REPEATS VARCHAR(32),
 			|ALARM INTEGER(1) NOT NULL,
 			|LABEL INTEGER
 			|)
 		""".trimMargin()
-		Log.i("@@@", "Create table ALARMS")
-		Log.i("@@@", sql)
 		try {
 			db.execSQL(sql)
 		} catch (e: Exception) {
 			e.printStackTrace()
 		}
-	}
-
-	fun insertAlarm(db: SQLiteDatabase, sql: String) {
-		try {
-			db.execSQL(sql)
-		} catch (e: Exception) {
-			e.printStackTrace()
-		}
-	}
-
-	fun getAlarm(db: SQLiteDatabase, sql: String) : JsonArray {
-		val jRet = JsonArray()
-		try {
-			val cursor = db.rawQuery(sql, null)
-			val colNames = cursor.columnNames
-			val colCounts = cursor.columnCount
-			if (cursor.count > 0) {
-				while (cursor.moveToNext()) {
-					val jItem = JsonObject()
-					for (i in 0..colCounts-1) {
-						jItem.addProperty(colNames[i], cursor.getString(i))
-					}
-					jRet.add(jItem)
-				}
-			}
-		} catch (e: Exception) {
-			e.printStackTrace()
-		}
-		return jRet
 	}
 }

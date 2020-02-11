@@ -9,6 +9,7 @@
     <color name="text_color">#707070</color>
     <color name="split_line">#E1E1E1</color>
     <color name="main_list_text">#009AFA</color>
+    <color name="main_list_remain_time">#74B9F2</color>
     <color name="main_list_item">#FFFFFF</color>
     <color name="box_theme">#FFFFFF</color>
     <color name="white_pressed">#E6E6E6</color>

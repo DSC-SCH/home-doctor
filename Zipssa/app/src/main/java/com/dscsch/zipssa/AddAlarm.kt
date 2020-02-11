@@ -2,19 +2,38 @@ package com.dscsch.zipssa
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.add_alarm_activity.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddAlarm : AppCompatActivity() {
-	val sdf_time = SimpleDateFormat("a hh:mm", Locale.KOREAN)
-	val sdf_date = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREAN)
-	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREAN)
-	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN)
+	val sdf_time_show = SimpleDateFormat("a hh:mm", Locale.KOREA)
+	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
+	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+
+	val DEFAULT_TIMES = JsonParser.parseString("""[
+		|[],
+		|["오전 09:00"],
+		|["오전 09:00", "오후 07:00"],
+		|["오전 09:00", "오후 01:00", "오후 07:00"],
+		|["오전 09:00", "오전 11:00", "오후 01:00", "오후 03:00", "오후 05:00", "오후 07:00"],
+		|["오전 09:00", "오전 11:00", "오후 01:00", "오후 03:00", "오후 05:00", "오후 07:00", "오후 09:00", "오후 09:00"],
+		|["오전 09:00", "오전 11:00", "오후 01:00", "오후 03:00", "오후 05:00", "오후 07:00", "오후 09:00", "오후 09:00", "오후 09:00", "오후 09:00", "오후 09:00", "오후 09:00"]
+	]""".trimMargin()).asJsonArray
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -37,7 +56,6 @@ class AddAlarm : AppCompatActivity() {
 			}
 
 			override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-				add_time_container.removeAllViews()
 				val count: Int
 				when (position) {
 					1 -> count = 1
@@ -50,24 +68,10 @@ class AddAlarm : AppCompatActivity() {
 				}
 				add_times_switch.tag = count
 
-				for (i in 1..count) {
-					val item = AddTimeItem(this@AddAlarm)
-					add_time_container.addView(item)
-					val time = findViewById<TextView>(R.id.time_item)
-					val id = resources.getIdentifier("time_item_" + i, "id", applicationContext.packageName)
-					time.id = id
-					time.text = "오전 09:00"
-					time.setOnClickListener {
-						val timeView = it as TextView
-						val cal = Calendar.getInstance()
-						cal.time = sdf_time.parse(timeView.text.toString())
-						TimePickerDialog(this@AddAlarm, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
-							cal[Calendar.HOUR_OF_DAY] = hourOfDay
-							cal[Calendar.MINUTE] = minute
-							timeView.text = sdf_time.format(cal.time)
-						}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
-					}
-				}
+				val adapter = AddTimeRecyclerAdapter(this@AddAlarm, DEFAULT_TIMES[position].asJsonArray)
+				val lm = LinearLayoutManager(this@AddAlarm)
+				add_time_container.layoutManager = lm
+				add_time_container.adapter = adapter
 			}
 		}
 
@@ -75,15 +79,15 @@ class AddAlarm : AppCompatActivity() {
 		val startCal = Calendar.getInstance()
 		val endCal = Calendar.getInstance()
 		endCal.add(Calendar.DAY_OF_MONTH, 6)
-		add_start_date.text =sdf_date.format(startCal.time)
-		add_end_date.text =sdf_date.format(endCal.time)
+		add_start_date.text =sdf_date_show.format(startCal.time)
+		add_end_date.text =sdf_date_show.format(endCal.time)
 
 		add_start_date.setOnClickListener {
 			DatePickerDialog(this@AddAlarm, {view, year, month, dayOfMonth ->
 				startCal[Calendar.YEAR] = year
 				startCal[Calendar.MONTH] = month
 				startCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				add_start_date.text = sdf_date.format(startCal.time)
+				add_start_date.text = sdf_date_show.format(startCal.time)
 			}, startCal[Calendar.YEAR], startCal[Calendar.MONTH], startCal[Calendar.DAY_OF_MONTH]).show()
 		}
 
@@ -92,7 +96,7 @@ class AddAlarm : AppCompatActivity() {
 				endCal[Calendar.YEAR] = year
 				endCal[Calendar.MONTH] = month
 				endCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				add_end_date.text = sdf_date.format(endCal.time)
+				add_end_date.text = sdf_date_show.format(endCal.time)
 			}, endCal[Calendar.YEAR], endCal[Calendar.MONTH], endCal[Calendar.DAY_OF_MONTH]).show()
 		}
 
@@ -133,33 +137,82 @@ class AddAlarm : AppCompatActivity() {
 			val count = add_times_switch.tag as Int
 
 			val lTimes = mutableListOf<String>()
-			for (i in 1..count) {
-				val id = resources.getIdentifier("time_item_" + i, "id", applicationContext.packageName)
-				lTimes.add("\"${sdf_time_save.format(sdf_time.parse(findViewById<TextView>(id).text.toString()))}\"")
+			for (i in 0..count-1) {
+				val holder = add_time_container.getChildViewHolder(add_time_container[i]) as AddTimeRecyclerAdapter.ViewHolder
+				lTimes.add("\"${sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString()))}\"")
 			}
 			lTimes.sort()
+			lTimes.toString()
 
 			val lRepeats = mutableListOf<Int>()
-			if (add_date_sun.isChecked) lRepeats.add(0)
-			if (add_date_mon.isChecked) lRepeats.add(1)
-			if (add_date_tue.isChecked) lRepeats.add(2)
-			if (add_date_wed.isChecked) lRepeats.add(3)
-			if (add_date_thu.isChecked) lRepeats.add(4)
-			if (add_date_fri.isChecked) lRepeats.add(5)
-			if (add_date_sat.isChecked) lRepeats.add(6)
+			if (add_date_sun.isChecked) lRepeats.add(1)
+			if (add_date_mon.isChecked) lRepeats.add(2)
+			if (add_date_tue.isChecked) lRepeats.add(3)
+			if (add_date_wed.isChecked) lRepeats.add(4)
+			if (add_date_thu.isChecked) lRepeats.add(5)
+			if (add_date_fri.isChecked) lRepeats.add(6)
+			if (add_date_sat.isChecked) lRepeats.add(7)
+
+			if (lTimes.size > 0 && lRepeats.size == 0) {
+				Toast.makeText(this@AddAlarm, "요일을 선택해 주세요", Toast.LENGTH_SHORT).show()
+				return@setOnClickListener
+			}
 
 			val sql = """
 				|INSERT INTO ALARMS (TITLE, START_DT, END_DT, TIMES, REPEATS, ALARM)
 				|VALUES (
-				|"${add_title.text}",
-				|${sdf_date_save.format(startCal.time)},
-				|${sdf_date_save.format(endCal.time)},
-				|${if (lTimes.size > 0) "'{${lTimes.joinToString(",")}}'" else "NULL"},
-				|${if (lRepeats.size > 0) "'{${lRepeats.joinToString(",")}}'" else "NULL"},
+				|'${add_title.text}',
+				|'${sdf_date_save.format(startCal.time)}',
+				|'${sdf_date_save.format(endCal.time)}',
+				|'[${lTimes.joinToString(",")}]',
+				|'[${lRepeats.joinToString(",")}]',
 				|${if (add_times_switch.isChecked) 1 else 0}
 				|)
 			""".trimMargin()
-			SharedDB.helper.insertAlarm(SharedDB.database, sql)
+			Log.i("${packageName} - AddAlarm", sql)
+			val mHandler = DBHandler.open(this@AddAlarm)
+			if (mHandler.execNonResult(sql) == 0) {
+				mHandler.close()
+				finish()
+			}
+			mHandler.close()
+		}
+	}
+}
+
+class AddTimeRecyclerAdapter(context: Context?, lTimes: JsonArray): RecyclerView.Adapter<AddTimeRecyclerAdapter.ViewHolder>() {
+	val sdf_time_show = SimpleDateFormat("a hh:mm", Locale.KOREA)
+	val context: Context?
+	val lTimes: JsonArray
+
+	init {
+		this.context = context
+		this.lTimes = lTimes
+	}
+
+	inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+		val time = itemView.findViewById<TextView>(R.id.time_item)
+	}
+
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+		val view = LayoutInflater.from(context).inflate(R.layout.alarm_time_item, parent, false)
+		return ViewHolder(view)
+	}
+
+	override fun getItemCount(): Int {
+		return lTimes.size()
+	}
+
+	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+		holder.time.text = lTimes[position].asString
+		holder.time.setOnClickListener {
+			val cal = Calendar.getInstance()
+			cal.time = sdf_time_show.parse(holder.time.text.toString())
+			TimePickerDialog(context, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
+				cal[Calendar.HOUR_OF_DAY] = hourOfDay
+				cal[Calendar.MINUTE] = minute
+				holder.time.text = sdf_time_show.format(cal.time)
+			}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
 		}
 	}
 }

@@ -131,12 +131,21 @@
 						android:background="@color/split_line"
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
 
+					<androidx.recyclerview.widget.RecyclerView
+						android:id="@+id/add_time_container"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:overScrollMode="never"
+						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"/>
+
+					<!--
 					<LinearLayout
 						android:id="@+id/add_time_container"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"
 						android:orientation="vertical" />
+					-->
 				</LinearLayout>
 
 				<TextView
