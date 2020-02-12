@@ -1,4 +1,4 @@
-package com.dscsch.zipssa
+package com.khnsoft.zipssa
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

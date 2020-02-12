@@ -1,4 +1,4 @@
-package com.dscsch.zipssa
+package com.khnsoft.zipssa
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

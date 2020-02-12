@@ -63,6 +63,7 @@
 					android:fontFamily="@font/bmjua"
 					android:textColor="@color/main_theme"
 					android:layout_marginTop="@dimen/add_alarm_voutside"
+					android:layout_marginBottom="@dimen/add_alarm_text_vinside_close"
 					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
 					android:textSize="@dimen/add_alarm_text_mid" />
 
@@ -160,6 +161,7 @@
 					android:textColor="@color/main_theme"
 					android:layout_marginTop="@dimen/add_alarm_voutside"
 					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
+					android:layout_marginBottom="@dimen/add_alarm_text_vinside_close"
 					android:textSize="@dimen/add_alarm_text_mid" />
 
 				<LinearLayout
@@ -392,10 +394,11 @@
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:fontFamily="@font/bmjua"
 					android:text="라벨 설정"
+					android:fontFamily="@font/bmjua"
 					android:textColor="@color/main_theme"
 					android:layout_marginTop="@dimen/add_alarm_voutside"
+					android:layout_marginBottom="@dimen/add_alarm_text_vinside_close"
 					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
 					android:textSize="@dimen/add_alarm_text_mid" />
 
@@ -403,15 +406,16 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="vertical"
+					android:elevation="@dimen/shadow_size"
 					android:background="@drawable/white_background_box"
 					android:paddingHorizontal="@dimen/add_alarm_text_hinside_small">
 
 					<LinearLayout
+						android:id="@+id/add_label_container"
 						android:layout_width="match_parent"
-						android:layout_height="wrap_content">
-
-
-					</LinearLayout>
+						android:layout_height="wrap_content"
+						android:orientation="vertical"
+						android:padding="@dimen/add_alarm_text_hinside_small"/>
 				</LinearLayout>
 
 				<Button

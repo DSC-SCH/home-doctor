@@ -1,4 +1,4 @@
-package com.dscsch.zipssa
+package com.khnsoft.zipssa
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

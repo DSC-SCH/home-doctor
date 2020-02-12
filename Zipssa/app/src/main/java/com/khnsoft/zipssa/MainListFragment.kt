@@ -1,4 +1,4 @@
-package com.dscsch.zipssa
+package com.khnsoft.zipssa
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.main_list_fragment.*
 import java.text.SimpleDateFormat
@@ -150,8 +149,7 @@ class MainItemRecyclerAdapter(context: Context?, lItems: JsonArray) :
 		val adapter = MainItemTimeRecyclerAdapter(context, lTimes)
 		val curTime = sdf_time_save.format(curCal.time)
 
-		if (lTimes.size() > 0) {
-			var isToday = true
+		if (lTimes.size() > 0 && lRepeats.size() > 0) {
 			val nextCal = Calendar.getInstance()
 			var temp = ""
 			selectDay@ while (true) {
@@ -165,7 +163,6 @@ class MainItemRecyclerAdapter(context: Context?, lItems: JsonArray) :
 						}
 					}
 				}
-				isToday = false
 				nextCal.add(Calendar.DAY_OF_MONTH, 1)
 			}
 
@@ -181,6 +178,8 @@ class MainItemRecyclerAdapter(context: Context?, lItems: JsonArray) :
 		}
 
 		holder.title.text = jItem["TITLE"].asString
+		// TODO("Change title background color depend to label color")
+
 		holder.count.text = "${lTimes.size()}회 복용"
 		holder.time_container.layoutManager = lm
 		holder.time_container.adapter = adapter
@@ -189,7 +188,7 @@ class MainItemRecyclerAdapter(context: Context?, lItems: JsonArray) :
 		holder.end_date.text = sdf_date_show.format(endDate)
 		holder.dday.text = "D-${dday}"
 
-		// TODO("CheckBox")
+		// TODO("Checkbox or '0/0'")
 	}
 }
 

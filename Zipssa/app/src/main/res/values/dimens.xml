@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!--  Layout size with 'dp'  -->
 	<dimen name="add_alarm_houtside">30dp</dimen>
 	<dimen name="add_alarm_voutside">30dp</dimen>
 	<dimen name="add_alarm_text_hinside_small">15dp</dimen>
@@ -19,6 +20,8 @@
 	<dimen name="split_line">1dp</dimen>
 	<dimen name="bottom_bar">60dp</dimen>
 
+
+	<!--  Text size with 'sp'  -->
 	<dimen name="add_alarm_text_large">20sp</dimen>
 	<dimen name="add_alarm_text_mid">15sp</dimen>
 	<dimen name="add_alarm_text_small">10sp</dimen>
@@ -28,6 +31,9 @@
 	<dimen name="main_text_small">10sp</dimen>
 	<dimen name="bottom_bar_text">13sp</dimen>
 
+
+	<!--  Text size with 'dp'  -->
+	<dimen name="add_alarm_label_text">11dp</dimen>
 	<dimen name="alarm_switch">8dp</dimen>
 	<dimen name="main_item_time">8dp</dimen>
 </resources>

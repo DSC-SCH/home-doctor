@@ -1,8 +1,10 @@
-package com.dscsch.zipssa
+package com.khnsoft.zipssa
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +16,7 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.add_alarm_activity.*
 import java.text.SimpleDateFormat
@@ -27,7 +30,8 @@ class AddAlarm : AppCompatActivity() {
 
 	var repeatCount = 7
 
-	val DEFAULT_TIMES = JsonParser.parseString("""[
+	val DEFAULT_TIMES = JsonParser.parseString(
+		"""[
 		|[],
 		|["오전 9:00"],
 		|["오전 9:00", "오후 7:00"],
@@ -35,7 +39,8 @@ class AddAlarm : AppCompatActivity() {
 		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00"],
 		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00"],
 		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00"]
-	]""".trimMargin()).asJsonArray
+	]""".trimMargin()
+	).asJsonArray
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -81,11 +86,11 @@ class AddAlarm : AppCompatActivity() {
 		val startCal = Calendar.getInstance()
 		val endCal = Calendar.getInstance()
 		endCal.add(Calendar.DAY_OF_MONTH, 6)
-		add_start_date.text =sdf_date_show.format(startCal.time)
-		add_end_date.text =sdf_date_show.format(endCal.time)
+		add_start_date.text = sdf_date_show.format(startCal.time)
+		add_end_date.text = sdf_date_show.format(endCal.time)
 
 		add_start_date.setOnClickListener {
-			DatePickerDialog(this@AddAlarm, {view, year, month, dayOfMonth ->
+			DatePickerDialog(this@AddAlarm, { view, year, month, dayOfMonth ->
 				startCal[Calendar.YEAR] = year
 				startCal[Calendar.MONTH] = month
 				startCal[Calendar.DAY_OF_MONTH] = dayOfMonth
@@ -94,7 +99,7 @@ class AddAlarm : AppCompatActivity() {
 		}
 
 		add_end_date.setOnClickListener {
-			DatePickerDialog(this@AddAlarm, {view, year, month, dayOfMonth ->
+			DatePickerDialog(this@AddAlarm, { view, year, month, dayOfMonth ->
 				endCal[Calendar.YEAR] = year
 				endCal[Calendar.MONTH] = month
 				endCal[Calendar.DAY_OF_MONTH] = dayOfMonth
@@ -104,7 +109,7 @@ class AddAlarm : AppCompatActivity() {
 
 		// Setting repeats
 		add_repeat_group.setOnCheckedChangeListener { radioGroup: RadioGroup, res_id: Int ->
-			when(res_id) {
+			when (res_id) {
 				R.id.add_repeat_everyday -> {
 					add_date_sun.isChecked = true
 					add_date_mon.isChecked = true
@@ -134,13 +139,54 @@ class AddAlarm : AppCompatActivity() {
 			}
 		}
 
+		// Setting labels
+		val sql = """
+			|SELECT _ID, TITLE, COLOR FROM LABELS
+		""".trimMargin()
+
+		val jAddLabel = JsonParser.parseString("""{"_ID":"", "TITLE":"+", "COLOR":"00000000"}""").asJsonObject
+		val myHandler = DBHandler.open(this@AddAlarm)
+		val lLabels = myHandler.execResult(sql)
+		lLabels.add(jAddLabel)
+		Log.i("@@@", lLabels.toString())
+		val labelSize = lLabels.size()
+		var count = 0
+		var labelLine: AlarmLabelLine
+		val labelBoxes = MutableList(4) { LinearLayout(this@AddAlarm) }
+		var labelItem: AlarmLabelItem
+		var labelText: TextView
+		var jLabel: JsonObject
+		var drawable: GradientDrawable
+
+		while (count < labelSize) {
+			labelLine = AlarmLabelLine(this@AddAlarm)
+			add_label_container.addView(labelLine)
+			for (i in 0..3) {
+				if (count == labelSize) break
+				jLabel = lLabels[i].asJsonObject
+				labelBoxes[i] = findViewById<LinearLayout>(resources.getIdentifier("label_box_0${i}", "id", packageName))
+				labelBoxes[i].id = resources.getIdentifier("label_box_${i}", "id", packageName)
+				labelItem = AlarmLabelItem(this@AddAlarm)
+				labelBoxes[i].addView(labelItem)
+				labelText = findViewById<TextView>(R.id.add_label_item)
+				labelText.id = resources.getIdentifier("label_item_${i}", "id", packageName)
+				labelText.text = jLabel["TITLE"].asString
+				drawable = labelText.background as GradientDrawable
+				drawable.setColor(Color.parseColor("#${jLabel["COLOR"].asString}"))
+				count++
+			}
+		}
+
+		// TODO("Function for 'Add' button")
+
 		// Setting submit the input
 		submit_button.setOnClickListener {
 			val count = add_times_switch.tag as Int
 
 			val lTimes = mutableListOf<String>()
-			for (i in 0..count-1) {
-				val holder = add_time_container.getChildViewHolder(add_time_container[i]) as AddTimeRecyclerAdapter.ViewHolder
+			for (i in 0..count - 1) {
+				val holder =
+					add_time_container.getChildViewHolder(add_time_container[i]) as AddTimeRecyclerAdapter.ViewHolder
 				lTimes.add("\"${sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString()))}\"")
 			}
 			lTimes.sort()
@@ -160,8 +206,8 @@ class AddAlarm : AppCompatActivity() {
 				return@setOnClickListener
 			}
 
-			// TODO("Label")
 			// TODO("Use label as title if title is empty")
+			// TODO("Cannot add alarm if not label")
 
 			val sql = """
 				|INSERT INTO ALARMS (TITLE, START_DT, END_DT, TIMES, REPEATS, ALARM)
@@ -185,7 +231,8 @@ class AddAlarm : AppCompatActivity() {
 	}
 }
 
-class AddTimeRecyclerAdapter(context: Context?, lTimes: JsonArray): RecyclerView.Adapter<AddTimeRecyclerAdapter.ViewHolder>() {
+class AddTimeRecyclerAdapter(context: Context?, lTimes: JsonArray) :
+	RecyclerView.Adapter<AddTimeRecyclerAdapter.ViewHolder>() {
 	val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 	val context: Context?
 	val lTimes: JsonArray
@@ -195,7 +242,7 @@ class AddTimeRecyclerAdapter(context: Context?, lTimes: JsonArray): RecyclerView
 		this.lTimes = lTimes
 	}
 
-	inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+	inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		val time = itemView.findViewById<TextView>(R.id.time_item)
 	}
 

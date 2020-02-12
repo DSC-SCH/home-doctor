@@ -1,4 +1,4 @@
-package com.dscsch.zipssa
+package com.khnsoft.zipssa
 
 import org.junit.Test
 
