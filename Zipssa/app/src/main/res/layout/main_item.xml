@@ -77,9 +77,11 @@
 					<TextView
 						android:id="@+id/main_item_title"
 						android:layout_width="wrap_content"
-						android:layout_height="match_parent"
-						android:gravity="center"
+						android:layout_height="wrap_content"
+						android:layout_gravity="left|center"
+						android:background="@drawable/main_title"
 						android:layout_marginLeft="20dp"
+						android:paddingHorizontal="@dimen/main_distance_small"
 						android:fontFamily="@font/bmjua"
 						android:text="감기약"
 						android:textSize="@dimen/main_text_mid"

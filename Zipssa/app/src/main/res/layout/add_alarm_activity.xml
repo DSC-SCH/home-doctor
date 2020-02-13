@@ -82,7 +82,8 @@
 						android:layout_marginVertical="@dimen/add_alarm_text_vinside"
 						android:hint="\@@감기약 먹자@@"
 						android:fontFamily="@font/daylight_210"
-						android:textSize="@dimen/add_alarm_text_small" />
+						android:textSize="@dimen/add_alarm_text_small"
+						android:textColor="@color/text_color" />
 				</LinearLayout>
 
 				<Switch

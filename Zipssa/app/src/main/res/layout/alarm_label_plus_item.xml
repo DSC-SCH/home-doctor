@@ -4,7 +4,7 @@
 	android:layout_height="wrap_content"
 	android:orientation="horizontal">
 
-	<RadioButton
+	<TextView
 		android:id="@+id/add_label_item"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -15,5 +15,6 @@
 		android:layout_margin="@dimen/add_alarm_text_vinside_close"
 		android:fontFamily="@font/daylight_210"
 		android:textSize="@dimen/add_alarm_label_text"
-		android:textColor="@color/text_color" />
+		android:textColor="@color/text_color"
+		android:text="+" />
 </LinearLayout>

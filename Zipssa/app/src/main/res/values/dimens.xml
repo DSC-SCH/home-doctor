@@ -19,6 +19,8 @@
 	<dimen name="shadow_size">3dp</dimen>
 	<dimen name="split_line">1dp</dimen>
 	<dimen name="bottom_bar">60dp</dimen>
+	<dimen name="label_item">20dp</dimen>
+	<dimen name="label_item_margin">7dp</dimen>
 
 
 	<!--  Text size with 'sp'  -->

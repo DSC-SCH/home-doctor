@@ -2,6 +2,8 @@ package com.khnsoft.zipssa
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -83,7 +85,9 @@ class MainListFragment : Fragment() {
 		val curDate = sdf_date_save.format(curCal.time)
 
 		val sql = """
-			|SELECT _ID, TITLE, START_DT, END_DT, TIMES, REPEATS, ALARM, LABEL FROM ALARMS WHERE START_DT <= "${curDate}" AND END_DT >= "${curDate}" AND REPEATS LIKE "%${curCal[Calendar.DAY_OF_WEEK]}%"
+			|SELECT ALARMS._ID, ALARMS.TITLE, START_DT, END_DT, TIMES, REPEATS, ALARM, LABEL, COLOR FROM ALARMS 
+			|LEFT OUTER JOIN LABELS ON ALARMS.LABEL=LABELS._ID
+			|WHERE START_DT <= "${curDate}" AND END_DT >= "${curDate}" AND REPEATS LIKE "%${curCal[Calendar.DAY_OF_WEEK]}%"
 		""".trimMargin()
 
 		Log.i("${context?.packageName} - MainList", sql)
@@ -178,7 +182,8 @@ class MainItemRecyclerAdapter(context: Context?, lItems: JsonArray) :
 		}
 
 		holder.title.text = jItem["TITLE"].asString
-		// TODO("Change title background color depend to label color")
+		val drawable = holder.title.background as GradientDrawable
+		drawable.setColor(Color.parseColor("#${jItem["COLOR"].asString}"))
 
 		holder.count.text = "${lTimes.size()}회 복용"
 		holder.time_container.layoutManager = lm
