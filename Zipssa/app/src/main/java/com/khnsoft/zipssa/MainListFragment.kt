@@ -85,9 +85,10 @@ class MainListFragment : Fragment() {
 		val curDate = sdf_date_save.format(curCal.time)
 
 		val sql = """
-			|SELECT ALARMS._ID, ALARMS.TITLE, START_DT, END_DT, TIMES, REPEATS, ALARM, LABEL, COLOR FROM ALARMS 
-			|LEFT OUTER JOIN LABELS ON ALARMS.LABEL=LABELS._ID
-			|WHERE START_DT <= "${curDate}" AND END_DT >= "${curDate}" AND REPEATS LIKE "%${curCal[Calendar.DAY_OF_WEEK]}%"
+			|SELECT ALARM_TB._ID, ALARM_TITLE, ALARM_START_DT, ALARM_END_DT, ALARM_TIMES, ALARM_REPEATS, ALARM_ENABLED, ALARM_LABEL, LABEL_COLOR 
+			|FROM ALARM_TB 
+			|LEFT OUTER JOIN LABEL_TB ON ALARM_TB.ALARM_LABEL=LABEL_TB._ID
+			|WHERE ALARM_START_DT <= "${curDate}" AND ALARM_END_DT >= "${curDate}" AND ALARM_REPEATS LIKE "%${curCal[Calendar.DAY_OF_WEEK]}%"
 		""".trimMargin()
 
 		Log.i("${context?.packageName} - MainList", sql)
@@ -145,13 +146,12 @@ class MainItemRecyclerAdapter(context: Context?, lItems: JsonArray) :
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val jItem = lItems[position].asJsonObject
-		val lTimes = JsonParser.parseString(jItem["TIMES"]?.asString).asJsonArray
-		val lRepeats = JsonParser.parseString(jItem["REPEATS"].asString).asJsonArray
-		val endDate = sdf_date_save.parse(jItem["END_DT"].asString)
+		val lTimes = JsonParser.parseString(jItem["ALARM_TIMES"]?.asString).asJsonArray
+		val lRepeats = JsonParser.parseString(jItem["ALARM_REPEATS"].asString).asJsonArray
+		val endDate = sdf_date_save.parse(jItem["ALARM_END_DT"].asString)
 		val dday = endDate.time / DAY_IN_MILLIS - sdf_date_save.parse(sdf_date_save.format(curCal.time)).time / DAY_IN_MILLIS
 		val lm = LinearLayoutManager(context)
 		val adapter = MainItemTimeRecyclerAdapter(context, lTimes)
-		val curTime = sdf_time_save.format(curCal.time)
 
 		if (lTimes.size() > 0 && lRepeats.size() > 0) {
 			val nextCal = Calendar.getInstance()
@@ -181,19 +181,19 @@ class MainItemRecyclerAdapter(context: Context?, lItems: JsonArray) :
 			holder.time_remain.text = "필요 시"
 		}
 
-		holder.title.text = jItem["TITLE"].asString
+		holder.title.text = jItem["ALARM_TITLE"].asString
 		val drawable = holder.title.background as GradientDrawable
-		drawable.setColor(Color.parseColor("#${jItem["COLOR"].asString}"))
+		drawable.setColor(Color.parseColor("${jItem["LABEL_COLOR"].asString}"))
 
 		holder.count.text = "${lTimes.size()}회 복용"
 		holder.time_container.layoutManager = lm
 		holder.time_container.adapter = adapter
-		holder.switch.isChecked = if (jItem["ALARM"].asInt == 0) false else true
-		holder.start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["START_DT"].asString))
+		holder.switch.isChecked = if (jItem["ALARM_ENABLED"].asInt == 0) false else true
+		holder.start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["ALARM_START_DT"].asString))
 		holder.end_date.text = sdf_date_show.format(endDate)
 		holder.dday.text = "D-${dday}"
 
-		// TODO("Checkbox or '0/0'")
+		// TODO("Checkbox or '0/0' after alarm function and medilog tb")
 	}
 }
 

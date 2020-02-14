@@ -57,8 +57,8 @@ class AddLabelPopup : AppCompatActivity() {
 			}
 
 			val sql = """
-				|INSERT INTO LABELS (TITLE, COLOR) 
-				|VALUES ("${label_title.text}", "${LABELS_COLORS[radioGroup.getCheckedIndex()].substring(1)}")
+				|INSERT INTO LABEL_TB (LABEL_TITLE, LABEL_COLOR) 
+				|VALUES ("${label_title.text}", "${LABELS_COLORS[radioGroup.getCheckedIndex()]}")
 			""".trimMargin()
 			val mHandler = DBHandler.open(this@AddLabelPopup)
 			if (mHandler.execNonResult(sql) == 0) {

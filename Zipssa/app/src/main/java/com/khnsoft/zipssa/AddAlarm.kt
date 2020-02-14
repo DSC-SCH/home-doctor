@@ -32,8 +32,6 @@ class AddAlarm : AppCompatActivity() {
 	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
 	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
-	var repeatCount = 7
-
 	val DEFAULT_TIMES = JsonParser.parseString(
 		"""[
 		|[],
@@ -180,7 +178,7 @@ class AddAlarm : AppCompatActivity() {
 			if (add_title.text.isBlank()) add_title.setText(radioGroup.radios[radioGroup.getCheckedIndex()].text)
 
 			val sql = """
-				|INSERT INTO ALARMS (TITLE, START_DT, END_DT, TIMES, REPEATS, ALARM, LABEL)
+				|INSERT INTO ALARM_TB (ALARM_TITLE, ALARM_START_DT, ALARM_END_DT, ALARM_TIMES, ALARM_REPEATS, ALARM_ENABLED, ALARM_LABEL)
 				|VALUES (
 				|'${add_title.text}',
 				|'${sdf_date_save.format(startCal.time)}',
@@ -208,7 +206,7 @@ class AddAlarm : AppCompatActivity() {
 
 	fun setupLabels() {
 		val sql = """
-			|SELECT _ID, TITLE, COLOR FROM LABELS
+			|SELECT _ID, LABEL_TITLE, LABEL_COLOR FROM LABEL_TB
 		""".trimMargin()
 
 		val myHandler = DBHandler.open(this@AddAlarm)
@@ -233,7 +231,6 @@ class AddAlarm : AppCompatActivity() {
 			for (i in 0..3) {
 				labelBox = findViewById<LinearLayout>(resources.getIdentifier("label_box_0${i}", "id", packageName))
 				labelBox.id = 0
-				if (count == labelSize) break@label
 				labelItem = AlarmLabelItem(this@AddAlarm)
 				labelBox.addView(labelItem)
 				labelRadioBtn = findViewById<RadioButton>(R.id.add_label_item)
@@ -242,20 +239,31 @@ class AddAlarm : AppCompatActivity() {
 
 				jLabel = lLabels[count].asJsonObject
 				labelRadioBtn.tag = jLabel["_ID"].asString
-				labelRadioBtn.text = jLabel["TITLE"].asString
+				labelRadioBtn.text = jLabel["LABEL_TITLE"].asString
 
 				// Setting colors
 				drawable = labelRadioBtn.background as StateListDrawable
 				drawableState = drawable.constantState as DrawableContainer.DrawableContainerState
 				children = drawableState.children
 				selected = children[0] as GradientDrawable
-				selected.setColor(Color.parseColor("#${jLabel["COLOR"].asString}"))
+				selected.setColor(Color.parseColor("${jLabel["LABEL_COLOR"].asString}"))
 				unselected = children[1] as GradientDrawable
-				unselected.setColor(Color.parseColor("#${jLabel["COLOR"].asString}"))
+				unselected.setColor(Color.parseColor("${jLabel["LABEL_COLOR"].asString}"))
 
 				count++
+				when (count) {
+					1 -> labelRadioBtn.isChecked = true
+					labelSize -> break@label
+				}
 			}
 		}
+
+		if (count % 4 == 0) {
+			labelLine = AlarmLabelLine(this@AddAlarm)
+			add_label_container.addView(labelLine)
+		}
+
+		labelBox = findViewById<LinearLayout>(resources.getIdentifier("label_box_0${count%4}", "id", packageName))
 
 		val addLabelbox = AlarmLabelPlus(this@AddAlarm)
 		labelBox?.addView(addLabelbox)

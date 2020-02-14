@@ -20,15 +20,15 @@ class MyDbOpenHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
 
 	fun createTableAlarms(db: SQLiteDatabase) {
 		val sql = """
-			|CREATE TABLE IF NOT EXISTS ALARMS (
+			|CREATE TABLE IF NOT EXISTS ALARM_TB (
 			|_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-			|TITLE VARCAHR(64) NOT NULL,
-			|START_DT CHAR(10) NOT NULL,
-			|END_DT CHAR(10) NOT NULL,
-			|TIMES VARCHAR(128),
-			|REPEATS VARCHAR(32),
-			|ALARM INTEGER(1) NOT NULL,
-			|LABEL INTEGER
+			|ALARM_TITLE VARCAHR(64) NOT NULL,
+			|ALARM_START_DT CHAR(10) NOT NULL,
+			|ALARM_END_DT CHAR(10) NOT NULL,
+			|ALARM_TIMES VARCHAR(128),
+			|ALARM_REPEATS VARCHAR(32),
+			|ALARM_ENABLED INTEGER(1) NOT NULL,
+			|ALARM_LABEL INTEGER
 			|)
 		""".trimMargin()
 
@@ -41,10 +41,10 @@ class MyDbOpenHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
 
 	fun createTableLabels(db: SQLiteDatabase) {
 		val sql = """
-			|CREATE TABLE IF NOT EXISTS LABELS (
+			|CREATE TABLE IF NOT EXISTS LABEL_TB (
 			|_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-			|TITLE VARCHAR(16) NOT NULL,
-			|COLOR CHAR(6) NOT NULL
+			|LABEL_TITLE VARCHAR(16) NOT NULL,
+			|LABEL_COLOR CHAR(7) NOT NULL
 			|)
 		""".trimMargin()
 
@@ -58,20 +58,26 @@ class MyDbOpenHelper(context: Context?, name: String?, factory: SQLiteDatabase.C
 	fun insertDefaultLabels(db: SQLiteDatabase) {
 		try {
 			var sql = """
-			|INSERT INTO LABELS (_ID, TITLE, COLOR) 
-			|VALUES (1, "감기","FFD5D5")
+			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
+			|VALUES (1, "없음","#FFFFFF")
 			""".trimMargin()
 			db.execSQL(sql)
 
 			sql = """
-			|INSERT INTO LABELS (_ID, TITLE, COLOR) 
-			|VALUES (2, "비염","B6F6B2")
+			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
+			|VALUES (2, "감기","#FFD5D5")
 			""".trimMargin()
 			db.execSQL(sql)
 
 			sql = """
-			|INSERT INTO LABELS (_ID, TITLE, COLOR) 
-			|VALUES (3, "알레르기","D6D6FF")
+			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
+			|VALUES (3, "비염","#B6F6B2")
+			""".trimMargin()
+			db.execSQL(sql)
+
+			sql = """
+			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
+			|VALUES (4, "알레르기","#D6D6FF")
 			""".trimMargin()
 			db.execSQL(sql)
 		} catch (e: Exception) {
