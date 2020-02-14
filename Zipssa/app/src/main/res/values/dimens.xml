@@ -38,4 +38,5 @@
 	<dimen name="add_alarm_label_text">11dp</dimen>
 	<dimen name="alarm_switch">8dp</dimen>
 	<dimen name="main_item_time">8dp</dimen>
+	<dimen name="main_item_date">15dp</dimen>
 </resources>
