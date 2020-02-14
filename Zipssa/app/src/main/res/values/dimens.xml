@@ -31,6 +31,7 @@
 	<dimen name="main_text_large">20sp</dimen>
 	<dimen name="main_text_mid">15sp</dimen>
 	<dimen name="main_text_small">10sp</dimen>
+	<dimen name="main_remain_title">12sp</dimen>
 	<dimen name="bottom_bar_text">13sp</dimen>
 
 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:paddingVertical="@dimen/main_distance_mid"
+	android:paddingHorizontal="@dimen/main_distance_xlarge"
+	android:clipToPadding="false" >
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/main_remain_time"
+		android:orientation="vertical"
+		android:paddingVertical="@dimen/main_distance_small"
+		android:gravity="center"
+		android:elevation="@dimen/shadow_size">
+
+		<TextView
+			android:id="@+id/main_remain_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/bmjua"
+			android:textSize="@dimen/main_remain_title"
+			android:textColor="@color/text_color"
+			android:paddingVertical="@dimen/main_distance_small"/>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center"
+			android:paddingVertical="@dimen/main_distance_small">
+
+			<ImageView
+				android:layout_width="@dimen/main_text_mid"
+				android:layout_height="@dimen/main_text_mid"
+				android:src="@drawable/alarm_img_remain"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/daylight_210"
+				android:textSize="@dimen/main_remain_title"
+				android:textColor="@color/text_color"
+				android:text=" 다음 알림까지 "/>
+
+			<TextView
+				android:id="@+id/main_remain_time"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/bmjua"
+				android:textSize="@dimen/main_text_mid"
+				android:textColor="@color/main_theme"
+				android:text="0 시간 0 분"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/daylight_210"
+				android:textSize="@dimen/main_remain_title"
+				android:textColor="@color/text_color"
+				android:text=" 남았어요! "/>
+
+			<ImageView
+				android:layout_width="@dimen/main_text_mid"
+				android:layout_height="@dimen/main_text_mid"
+				android:src="@drawable/alarm_img_remain"/>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
