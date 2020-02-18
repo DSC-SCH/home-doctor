@@ -2,6 +2,7 @@ package com.khnsoft.zipssa
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -186,6 +187,12 @@ class MainItemRecyclerAdapter(val context: Context?, val lItems: JsonArray, val 
 			end_date.text = sdf_date_show.format(endDate)
 			dday.text = "D-${day_dday}"
 
+			itemView.setOnClickListener {
+				val intent = Intent(context, MainItemPopup::class.java)
+				intent.putExtra("jItem", jItem.toString())
+				context?.startActivity(intent)
+			}
+
 			// TODO("Checkbox or '0/0' after alarm function and medilog tb")
 		}
 	}
@@ -198,7 +205,6 @@ class MainItemRecyclerAdapter(val context: Context?, val lItems: JsonArray, val 
 			var jItem: JsonObject
 			var lTimes: JsonArray
 			var lRepeats: JsonArray
-			var endDate: Date
 			var nextIndex = -1
 			var nextTime = Long.MAX_VALUE
 

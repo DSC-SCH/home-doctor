@@ -5,15 +5,7 @@ import android.widget.RadioButton
 
 class MyRadioGroup {
 	val radios = MutableList(0) {RadioButton(null)}
-
-	constructor()
-
-	constructor(vararg rbs:RadioButton) {
-		for (rb in rbs) {
-			radios.add(rb)
-			rb.setOnClickListener(onClick)
-		}
-	}
+	var mOnChangeListener: OnChangeListener? = null
 
 	fun add(rb: RadioButton) {
 		radios.add(rb)
@@ -26,6 +18,8 @@ class MyRadioGroup {
 		}
 
 		(it as RadioButton).isChecked = true
+
+		mOnChangeListener?.onChange(it)
 	}
 
 	fun getCheckedIndex(): Int {
@@ -35,7 +29,25 @@ class MyRadioGroup {
 		return -1
 	}
 
-	fun getLastButton(): RadioButton {
-		return radios[radios.size-1]
+	fun getCheckedTag(): Int {
+		for (rb in radios) {
+			if (rb.isChecked) return rb.tag as Int
+		}
+		return -1
+	}
+
+	fun getButtonByTag(tag: Int) : RadioButton? {
+		for (rb in radios) {
+			if ((rb.tag as Int) == tag) return rb
+		}
+		return null
+	}
+
+	fun setOnChangeListener(onChangeListener: OnChangeListener) {
+		mOnChangeListener = onChangeListener
+	}
+
+	interface OnChangeListener {
+		fun onChange(after: RadioButton)
 	}
 }

@@ -17,5 +17,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:colorBackground">#00000000</item>
     </style>
 </resources>

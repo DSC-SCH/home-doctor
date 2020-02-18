@@ -7,6 +7,7 @@
     <color name="main_theme_thick">#006ECC</color>
     <color name="background_theme">#F7F7F7</color>
     <color name="text_color">#707070</color>
+    <color name="text_color_gray">#B5B5B5</color>
     <color name="split_line">#E1E1E1</color>
     <color name="main_list_text">#009AFA</color>
     <color name="main_list_remain_time">#74B9F2</color>

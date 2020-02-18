@@ -16,6 +16,7 @@
 	<dimen name="main_distance_mid">10dp</dimen>
 	<dimen name="main_distance_small">5dp</dimen>
 	<dimen name="main_distance_xsmall">2dp</dimen>
+	<dimen name="main_remain_time_distance">3dp</dimen>
 	<dimen name="shadow_size">3dp</dimen>
 	<dimen name="split_line">1dp</dimen>
 	<dimen name="bottom_bar">60dp</dimen>
@@ -33,7 +34,12 @@
 	<dimen name="main_text_small">10sp</dimen>
 	<dimen name="main_remain_title">12sp</dimen>
 	<dimen name="bottom_bar_text">13sp</dimen>
+	<dimen name="main_popup_text">13sp</dimen>
 
+	<!-- Popup alert window-->
+	<dimen name="popup_outline">10dp</dimen>
+	<dimen name="popup_inline">5dp</dimen>
+	<dimen name="popup_text">15sp</dimen>
 
 	<!--  Text size with 'dp'  -->
 	<dimen name="add_alarm_label_text">11dp</dimen>

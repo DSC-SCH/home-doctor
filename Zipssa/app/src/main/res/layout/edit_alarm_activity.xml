@@ -26,14 +26,13 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
-			android:text="알림 추가"
+			android:text="알림 수정"
 			android:fontFamily="@font/bmjua"
 			android:textSize="@dimen/add_alarm_text_large"
 			android:textColor="#FFFFFF" />
 	</FrameLayout>
 
 	<ScrollView
-		android:id="@+id/scrollView"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1">
@@ -76,7 +75,7 @@
 					android:paddingHorizontal="@dimen/add_alarm_text_hinside_small">
 
 					<EditText
-						android:id="@+id/add_title"
+						android:id="@+id/edit_title"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:layout_marginVertical="@dimen/add_alarm_text_vinside"
@@ -87,7 +86,7 @@
 				</LinearLayout>
 
 				<Switch
-					android:id="@+id/add_times_switch"
+					android:id="@+id/edit_times_switch"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
@@ -137,12 +136,12 @@
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small" />
 
 					<androidx.recyclerview.widget.RecyclerView
-						android:id="@+id/add_time_container"
+						android:id="@+id/edit_time_container"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:overScrollMode="never"
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_mid"
-						android:paddingVertical="@dimen/add_alarm_text_vinside_close"/>
+						android:paddingVertical="@dimen/add_alarm_text_vinside_close" />
 
 					<!--
 					<LinearLayout
@@ -189,7 +188,7 @@
 							android:text="시작 날짜" />
 
 						<TextView
-							android:id="@+id/add_start_date"
+							android:id="@+id/edit_start_date"
 							android:layout_width="wrap_content"
 							android:layout_height="match_parent"
 							android:fontFamily="@font/daylight_210"
@@ -215,7 +214,7 @@
 							android:textSize="@dimen/add_alarm_text_small" />
 
 						<TextView
-							android:id="@+id/add_end_date"
+							android:id="@+id/edit_end_date"
 							android:layout_width="wrap_content"
 							android:layout_height="match_parent"
 							android:fontFamily="@font/daylight_210"
@@ -246,13 +245,13 @@
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small" />
 
 					<RadioGroup
-						android:id="@+id/add_repeat_group"
+						android:id="@+id/edit_repeat_group"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large">
 
 						<RadioButton
-							android:id="@+id/add_repeat_everyday"
+							android:id="@+id/edit_repeat_everyday"
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
 							android:fontFamily="@font/daylight_210"
@@ -262,7 +261,7 @@
 							android:textSize="@dimen/add_alarm_text_small" />
 
 						<RadioButton
-							android:id="@+id/add_repeat_select"
+							android:id="@+id/edit_repeat_select"
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
 							android:fontFamily="@font/daylight_210"
@@ -286,7 +285,7 @@
 							android:text="1" />
 
 						<ToggleButton
-							android:id="@+id/add_date_sun"
+							android:id="@+id/edit_date_sun"
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
@@ -301,7 +300,7 @@
 							android:textOn="일" />
 
 						<ToggleButton
-							android:id="@+id/add_date_mon"
+							android:id="@+id/edit_date_mon"
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
@@ -316,7 +315,7 @@
 							android:textOn="월" />
 
 						<ToggleButton
-							android:id="@+id/add_date_tue"
+							android:id="@+id/edit_date_tue"
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
@@ -331,7 +330,7 @@
 							android:textOn="화" />
 
 						<ToggleButton
-							android:id="@+id/add_date_wed"
+							android:id="@+id/edit_date_wed"
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
@@ -346,7 +345,7 @@
 							android:textOn="수" />
 
 						<ToggleButton
-							android:id="@+id/add_date_thu"
+							android:id="@+id/edit_date_thu"
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
@@ -361,7 +360,7 @@
 							android:textOn="목" />
 
 						<ToggleButton
-							android:id="@+id/add_date_fri"
+							android:id="@+id/edit_date_fri"
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
@@ -376,7 +375,7 @@
 							android:textOn="금" />
 
 						<ToggleButton
-							android:id="@+id/add_date_sat"
+							android:id="@+id/edit_date_sat"
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
@@ -412,26 +411,61 @@
 					android:paddingHorizontal="@dimen/add_alarm_text_hinside_small">
 
 					<LinearLayout
-						android:id="@+id/add_label_container"
+						android:id="@+id/edit_label_container"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:orientation="vertical"
-						android:padding="@dimen/add_alarm_text_hinside_small"/>
+						android:padding="@dimen/add_alarm_text_hinside_small" />
 				</LinearLayout>
 
-				<Button
-					android:id="@+id/submit_button"
-					android:layout_width="wrap_content"
+				<LinearLayout
+					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:background="@drawable/add_alarm_submit"
 					android:layout_marginVertical="@dimen/add_alarm_voutside"
-					android:layout_gravity="center"
-					android:paddingVertical="20dp"
-					android:paddingHorizontal="60dp"
-					android:textSize="@dimen/add_alarm_text_mid"
-					android:textColor="@color/main_theme"
-					android:text="설정 완료"
-					android:fontFamily="@font/bmjua" />
+					android:orientation="horizontal">
+
+					<Space
+						android:layout_width="@dimen/add_alarm_text_hinside_mid"
+						android:layout_height="0dp" />
+
+					<Button
+						android:id="@+id/edit_delete_btn"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:layout_gravity="center"
+						android:layout_marginVertical="@dimen/add_alarm_voutside"
+						android:background="@drawable/edit_delete"
+						android:fontFamily="@font/bmjua"
+						android:paddingHorizontal="@dimen/add_alarm_text_hinside_mid"
+						android:paddingVertical="20dp"
+						android:text="삭제"
+						android:textColor="#FF7070"
+						android:textSize="@dimen/add_alarm_text_mid" />
+
+					<Space
+						android:layout_width="@dimen/add_alarm_text_hinside_mid"
+						android:layout_height="0dp" />
+
+					<Button
+						android:id="@+id/edit_confirm_btn"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:background="@drawable/edit_confirm"
+						android:layout_marginVertical="@dimen/add_alarm_voutside"
+						android:layout_gravity="center"
+						android:paddingVertical="20dp"
+						android:paddingHorizontal="@dimen/add_alarm_text_hinside_mid"
+						android:textSize="@dimen/add_alarm_text_mid"
+						android:textColor="#FFFFFF"
+						android:text="수정"
+						android:fontFamily="@font/bmjua" />
+
+					<Space
+						android:layout_width="@dimen/add_alarm_text_hinside_mid"
+						android:layout_height="0dp" />
+				</LinearLayout>
 			</LinearLayout>
 
 			<Space
