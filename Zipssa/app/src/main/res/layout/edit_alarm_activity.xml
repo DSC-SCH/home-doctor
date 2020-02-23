@@ -15,11 +15,11 @@
 
 		<ImageView
 			android:id="@+id/back_btn"
-			android:layout_width="wrap_content"
-			android:layout_height="20dp"
+			android:layout_width="@dimen/alarm_page_back_size"
+			android:layout_height="@dimen/alarm_page_back_size"
 			android:layout_gravity="left|center"
 			android:adjustViewBounds="true"
-			android:layout_marginHorizontal="15dp"
+			android:layout_marginHorizontal="@dimen/alarm_page_back_marginH"
 			android:src="@drawable/ic_arrow_back_24px" />
 
 		<TextView
@@ -28,7 +28,7 @@
 			android:layout_gravity="center"
 			android:text="알림 수정"
 			android:fontFamily="@font/bmjua"
-			android:textSize="@dimen/add_alarm_text_large"
+			android:textSize="@dimen/alarm_page_title_text"
 			android:textColor="#FFFFFF" />
 	</FrameLayout>
 
@@ -48,10 +48,10 @@
 				android:layout_weight="1" />
 
 			<LinearLayout
-				android:layout_width="20dp"
+				android:layout_width="@dimen/alarm_page_contentbox_sizeH"
 				android:layout_height="wrap_content"
 				android:layout_weight="8"
-				android:paddingHorizontal="10dp"
+				android:paddingHorizontal="@dimen/alarm_page_contentbox_paddingH"
 				android:clipToPadding="false"
 				android:orientation="vertical">
 
@@ -61,10 +61,10 @@
 					android:text="이름 설정"
 					android:fontFamily="@font/bmjua"
 					android:textColor="@color/main_theme"
-					android:layout_marginTop="@dimen/add_alarm_voutside"
-					android:layout_marginBottom="@dimen/add_alarm_text_vinside_close"
-					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
-					android:textSize="@dimen/add_alarm_text_mid" />
+					android:layout_marginTop="@dimen/alarm_page_name_marginT"
+					android:layout_marginBottom="@dimen/alarm_page_name_marginB"
+					android:layout_marginHorizontal="@dimen/alarm_page_name_marginH"
+					android:textSize="@dimen/alarm_page_name_text" />
 
 				<LinearLayout
 					android:layout_width="match_parent"
@@ -72,16 +72,16 @@
 					android:orientation="vertical"
 					android:elevation="@dimen/shadow_size"
 					android:background="@drawable/white_background_box"
-					android:paddingHorizontal="@dimen/add_alarm_text_hinside_small">
+					android:paddingHorizontal="@dimen/alarm_page_box_paddingH"
+					android:paddingVertical="@dimen/alarm_page_box_paddingV">
 
 					<EditText
 						android:id="@+id/edit_title"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginVertical="@dimen/add_alarm_text_vinside"
 						android:hint="\@@감기약 먹자@@"
 						android:fontFamily="@font/daylight_210"
-						android:textSize="@dimen/add_alarm_text_small"
+						android:textSize="@dimen/alarm_page_content_text"
 						android:textColor="@color/text_color" />
 				</LinearLayout>
 
@@ -89,13 +89,13 @@
 					android:id="@+id/edit_times_switch"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
-					android:layout_marginTop="@dimen/add_alarm_voutside"
+					android:layout_marginTop="@dimen/alarm_page_name_marginT"
+					android:layout_marginHorizontal="@dimen/alarm_page_name_marginH"
 					android:checked="true"
 					android:fontFamily="@font/bmjua"
 					android:text="알람 설정"
 					android:textColor="@color/main_theme"
-					android:textSize="@dimen/add_alarm_text_mid" />
+					android:textSize="@dimen/alarm_page_name_text" />
 
 				<LinearLayout
 					android:layout_width="match_parent"
@@ -108,16 +108,15 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:orientation="horizontal"
-						android:layout_marginLeft="@dimen/add_alarm_text_hinside_mid"
-						android:layout_marginRight="@dimen/add_alarm_text_hinside_small">
+						android:layout_marginHorizontal="@dimen/alarm_page_content_marginH" >
 
 						<TextView
 							android:layout_width="wrap_content"
 							android:layout_height="match_parent"
 							android:gravity="center|left"
-							android:paddingVertical="@dimen/add_alarm_text_vinside"
+							android:paddingVertical="@dimen/alarm_page_content_paddingV"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:text="알림 횟수" />
 
 						<Spinner
@@ -133,22 +132,22 @@
 						android:layout_width="match_parent"
 						android:layout_height="@dimen/split_line"
 						android:background="@color/split_line"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small" />
+						android:layout_marginHorizontal="@dimen/alarm_page_split_marginH" />
 
 					<androidx.recyclerview.widget.RecyclerView
 						android:id="@+id/edit_time_container"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:overScrollMode="never"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_mid"
-						android:paddingVertical="@dimen/add_alarm_text_vinside_close" />
+						android:layout_marginHorizontal="@dimen/alarm_page_content_marginH"
+						android:paddingVertical="@dimen/alarm_page_content_distanceH"/>
 
 					<!--
 					<LinearLayout
 						android:id="@+id/add_time_container"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside"
+						android:layout_marginHorizontal="@dimen/alarm_page_text_hinside"
 						android:orientation="vertical" />
 					-->
 				</LinearLayout>
@@ -156,35 +155,35 @@
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/alarm_page_name_marginT"
+					android:layout_marginBottom="@dimen/alarm_page_name_marginB"
+					android:layout_marginHorizontal="@dimen/alarm_page_name_marginH"
 					android:fontFamily="@font/bmjua"
 					android:text="날짜 설정"
 					android:textColor="@color/main_theme"
-					android:layout_marginTop="@dimen/add_alarm_voutside"
-					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
-					android:layout_marginBottom="@dimen/add_alarm_text_vinside_close"
-					android:textSize="@dimen/add_alarm_text_mid" />
+					android:textSize="@dimen/alarm_page_name_text" />
 
 				<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="vertical"
 					android:elevation="@dimen/shadow_size"
-					android:background="@drawable/white_background_box">
+					android:background="@drawable/white_background_box"
+					android:paddingVertical="@dimen/alarm_page_box_paddingV">
 
 					<LinearLayout
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:orientation="horizontal"
-						android:paddingTop="@dimen/add_alarm_text_vinside"
-						android:paddingBottom="@dimen/add_alarm_text_vinside_close"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_mid">
+						android:paddingBottom="@dimen/alarm_page_content_distanceV"
+						android:layout_marginHorizontal="@dimen/alarm_page_content_marginH">
 
 						<TextView
 							android:layout_width="0dp"
 							android:layout_height="match_parent"
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:text="시작 날짜" />
 
 						<TextView
@@ -192,7 +191,7 @@
 							android:layout_width="wrap_content"
 							android:layout_height="match_parent"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@color/main_theme"
 							android:text="0000년 00월 00일" />
 					</LinearLayout>
@@ -201,9 +200,9 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:orientation="horizontal"
-						android:paddingTop="@dimen/add_alarm_text_vinside_close"
-						android:paddingBottom="@dimen/add_alarm_text_vinside"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_mid">
+						android:paddingTop="@dimen/alarm_page_content_distanceV"
+						android:paddingBottom="@dimen/alarm_page_content_distanceV"
+						android:layout_marginHorizontal="@dimen/alarm_page_content_marginH">
 
 						<TextView
 							android:layout_width="0dp"
@@ -211,14 +210,14 @@
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
 							android:text="종료 날짜"
-							android:textSize="@dimen/add_alarm_text_small" />
+							android:textSize="@dimen/alarm_page_content_text" />
 
 						<TextView
 							android:id="@+id/edit_end_date"
 							android:layout_width="wrap_content"
 							android:layout_height="match_parent"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@color/main_theme"
 							android:text="0000년 00월 00일" />
 					</LinearLayout>
@@ -227,28 +226,28 @@
 						android:layout_width="match_parent"
 						android:layout_height="@dimen/split_line"
 						android:background="@color/split_line"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small" />
+						android:layout_marginHorizontal="@dimen/alarm_page_split_marginH" />
 
 					<TextView
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginVertical="@dimen/add_alarm_text_vinside"
+						android:layout_marginVertical="@dimen/alarm_page_content_distanceVL"
 						android:fontFamily="@font/daylight_210"
 						android:text="반복 알림"
-						android:textSize="@dimen/add_alarm_text_small"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_mid" />
+						android:textSize="@dimen/alarm_page_content_text"
+						android:layout_marginHorizontal="@dimen/alarm_page_content_marginH" />
 
 					<View
 						android:layout_width="match_parent"
 						android:layout_height="@dimen/split_line"
 						android:background="@color/split_line"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small" />
+						android:layout_marginHorizontal="@dimen/alarm_page_split_marginH" />
 
 					<RadioGroup
 						android:id="@+id/edit_repeat_group"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large">
+						android:layout_marginHorizontal="@dimen/alarm_page_repeats_marginH">
 
 						<RadioButton
 							android:id="@+id/edit_repeat_everyday"
@@ -258,7 +257,7 @@
 							android:text="매일"
 							android:textColor="@color/text_color"
 							android:checked="true"
-							android:textSize="@dimen/add_alarm_text_small" />
+							android:textSize="@dimen/alarm_page_content_text" />
 
 						<RadioButton
 							android:id="@+id/edit_repeat_select"
@@ -267,21 +266,21 @@
 							android:fontFamily="@font/daylight_210"
 							android:text="요일 지정"
 							android:textColor="@color/text_color"
-							android:textSize="@dimen/add_alarm_text_small" />
+							android:textSize="@dimen/alarm_page_content_text" />
 					</RadioGroup>
 
 					<LinearLayout
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:orientation="horizontal"
-						android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_large">
+						android:layout_marginHorizontal="@dimen/alarm_page_repeats_marginH">
 
 						<TextView
 							android:layout_width="0dp"
 							android:layout_height="wrap_content"
 							tools:ignore="Suspicious0dp"
-							android:textSize="@dimen/add_alarm_text_small"
-							android:paddingVertical="@dimen/add_alarm_text_vinside"
+							android:textSize="@dimen/alarm_page_content_text"
+							android:paddingVertical="@dimen/alarm_page_content_paddingV"
 							android:text="1" />
 
 						<ToggleButton
@@ -291,9 +290,9 @@
 							android:layout_weight="1"
 							android:background="@drawable/add_alarm_date_selector"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@drawable/add_alarm_date_text_color"
-							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:layout_margin="@dimen/alarm_page_repeats_margin"
 							android:checked="true"
 							android:enabled="false"
 							android:textOff="일"
@@ -305,10 +304,10 @@
 							android:layout_height="match_parent"
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@drawable/add_alarm_date_text_color"
 							android:background="@drawable/add_alarm_date_selector"
-							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:layout_margin="@dimen/alarm_page_repeats_margin"
 							android:checked="true"
 							android:enabled="false"
 							android:textOff="월"
@@ -320,10 +319,10 @@
 							android:layout_height="match_parent"
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@drawable/add_alarm_date_text_color"
 							android:background="@drawable/add_alarm_date_selector"
-							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:layout_margin="@dimen/alarm_page_repeats_margin"
 							android:checked="true"
 							android:enabled="false"
 							android:textOff="화"
@@ -335,10 +334,10 @@
 							android:layout_height="match_parent"
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@drawable/add_alarm_date_text_color"
 							android:background="@drawable/add_alarm_date_selector"
-							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:layout_margin="@dimen/alarm_page_repeats_margin"
 							android:checked="true"
 							android:enabled="false"
 							android:textOff="수"
@@ -350,10 +349,10 @@
 							android:layout_height="match_parent"
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@drawable/add_alarm_date_text_color"
 							android:background="@drawable/add_alarm_date_selector"
-							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:layout_margin="@dimen/alarm_page_repeats_margin"
 							android:checked="true"
 							android:enabled="false"
 							android:textOff="목"
@@ -365,10 +364,10 @@
 							android:layout_height="match_parent"
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@drawable/add_alarm_date_text_color"
 							android:background="@drawable/add_alarm_date_selector"
-							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:layout_margin="@dimen/alarm_page_repeats_margin"
 							android:checked="true"
 							android:enabled="false"
 							android:textOff="금"
@@ -380,10 +379,10 @@
 							android:layout_height="match_parent"
 							android:layout_weight="1"
 							android:fontFamily="@font/daylight_210"
-							android:textSize="@dimen/add_alarm_text_small"
+							android:textSize="@dimen/alarm_page_content_text"
 							android:textColor="@drawable/add_alarm_date_text_color"
 							android:background="@drawable/add_alarm_date_selector"
-							android:layout_margin="@dimen/add_alarm_text_vinside_close"
+							android:layout_margin="@dimen/alarm_page_repeats_margin"
 							android:checked="true"
 							android:enabled="false"
 							android:textOff="토"
@@ -394,13 +393,13 @@
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="라벨 설정"
+					android:layout_marginTop="@dimen/alarm_page_name_marginT"
+					android:layout_marginBottom="@dimen/alarm_page_name_marginB"
+					android:layout_marginHorizontal="@dimen/alarm_page_name_marginH"
 					android:fontFamily="@font/bmjua"
+					android:text="라벨 설정"
 					android:textColor="@color/main_theme"
-					android:layout_marginTop="@dimen/add_alarm_voutside"
-					android:layout_marginBottom="@dimen/add_alarm_text_vinside_close"
-					android:layout_marginHorizontal="@dimen/add_alarm_text_hinside_small"
-					android:textSize="@dimen/add_alarm_text_mid" />
+					android:textSize="@dimen/alarm_page_name_text" />
 
 				<LinearLayout
 					android:layout_width="match_parent"
@@ -408,24 +407,24 @@
 					android:orientation="vertical"
 					android:elevation="@dimen/shadow_size"
 					android:background="@drawable/white_background_box"
-					android:paddingHorizontal="@dimen/add_alarm_text_hinside_small">
+					android:paddingHorizontal="@dimen/alarm_page_box_paddingH">
 
 					<LinearLayout
 						android:id="@+id/edit_label_container"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:orientation="vertical"
-						android:padding="@dimen/add_alarm_text_hinside_small" />
+						android:padding="@dimen/alarm_page_box_paddingH"/>
 				</LinearLayout>
 
 				<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginVertical="@dimen/add_alarm_voutside"
+					android:layout_marginVertical="@dimen/alarm_page_button_marginV"
 					android:orientation="horizontal">
 
 					<Space
-						android:layout_width="@dimen/add_alarm_text_hinside_mid"
+						android:layout_width="@dimen/alarm_page_button_distanceH"
 						android:layout_height="0dp" />
 
 					<Button
@@ -434,17 +433,15 @@
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
 						android:layout_gravity="center"
-						android:layout_marginVertical="@dimen/add_alarm_voutside"
 						android:background="@drawable/edit_delete"
 						android:fontFamily="@font/bmjua"
-						android:paddingHorizontal="@dimen/add_alarm_text_hinside_mid"
-						android:paddingVertical="20dp"
+						android:paddingVertical="@dimen/alarm_page_button_paddingV"
 						android:text="삭제"
 						android:textColor="#FF7070"
-						android:textSize="@dimen/add_alarm_text_mid" />
+						android:textSize="@dimen/alarm_page_button_text" />
 
 					<Space
-						android:layout_width="@dimen/add_alarm_text_hinside_mid"
+						android:layout_width="@dimen/alarm_page_button_distanceH"
 						android:layout_height="0dp" />
 
 					<Button
@@ -453,17 +450,15 @@
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
 						android:background="@drawable/edit_confirm"
-						android:layout_marginVertical="@dimen/add_alarm_voutside"
 						android:layout_gravity="center"
-						android:paddingVertical="20dp"
-						android:paddingHorizontal="@dimen/add_alarm_text_hinside_mid"
-						android:textSize="@dimen/add_alarm_text_mid"
+						android:paddingVertical="@dimen/alarm_page_button_paddingV"
+						android:textSize="@dimen/alarm_page_button_text"
 						android:textColor="#FFFFFF"
 						android:text="수정"
 						android:fontFamily="@font/bmjua" />
 
 					<Space
-						android:layout_width="@dimen/add_alarm_text_hinside_mid"
+						android:layout_width="@dimen/alarm_page_button_distanceH"
 						android:layout_height="0dp" />
 				</LinearLayout>
 			</LinearLayout>

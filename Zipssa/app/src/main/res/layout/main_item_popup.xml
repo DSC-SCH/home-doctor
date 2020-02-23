@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="250dp"
+	android:layout_width="@dimen/popup_sizeH"
 	android:layout_height="wrap_content"
 	android:orientation="vertical">
 
@@ -15,49 +15,49 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/bmjua"
 			android:layout_gravity="center"
-			android:padding="@dimen/main_distance_small"
+			android:padding="@dimen/main_popup_title_padding"
 			android:textColor="@color/text_color"
-			android:textSize="@dimen/main_text_large"
+			android:textSize="@dimen/main_popup_title_text"
 			android:text="처방전"/>
 
 		<ToggleButton
 			android:id="@+id/alarm_switch"
-			android:layout_width="40dp"
-			android:layout_height="20dp"
+			android:layout_width="@dimen/main_popup_switch_sizeH"
+			android:layout_height="@dimen/main_popup_switch_sizeV"
 			android:background="@drawable/alarm_btn_selector"
 			android:layout_gravity="right|center"
-			android:layout_marginVertical="3dp"
-			android:layout_marginRight="20dp"
+			android:layout_marginVertical="@dimen/main_popup_switch_marginV"
+			android:layout_marginRight="@dimen/main_popup_switch_marginR"
 			android:fontFamily="@font/daylight_210"
 			android:textOn="알림 on"
 			android:textOff="알림 off"
-			android:textSize="@dimen/alarm_switch"/>
+			android:textSize="@dimen/main_popup_switch_text"/>
 	</FrameLayout>
 
 	<ScrollView
 		android:layout_width="match_parent"
-		android:layout_height="150dp"
+		android:layout_height="@dimen/main_popup_scroll_sizeV"
 		android:background="@color/background_theme">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:paddingVertical="@dimen/main_distance_small">
+			android:paddingVertical="@dimen/main_popup_content_paddingV">
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
 				android:gravity="center"
-				android:padding="@dimen/main_distance_mid">
+				android:padding="@dimen/main_popup_date_padding">
 
 				<TextView
 					android:id="@+id/start_date"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/bmjua"
-					android:textSize="@dimen/main_text_mid"
+					android:textSize="@dimen/main_popup_date_text"
 					android:textColor="@color/text_color"
 					android:text="0월 00일"/>
 
@@ -65,7 +65,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/daylight_210"
-					android:textSize="@dimen/main_text_mid"
+					android:textSize="@dimen/main_popup_date_text"
 					android:textColor="@color/text_color"
 					android:text=" 부터 "/>
 
@@ -74,7 +74,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/bmjua"
-					android:textSize="@dimen/main_text_mid"
+					android:textSize="@dimen/main_popup_date_text"
 					android:textColor="@color/text_color"
 					android:text="0월 00일"/>
 
@@ -82,7 +82,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/daylight_210"
-					android:textSize="@dimen/main_text_mid"
+					android:textSize="@dimen/main_popup_date_text"
 					android:textColor="@color/text_color"
 					android:text=" 까지 복용"/>
 			</LinearLayout>
@@ -90,22 +90,22 @@
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/split_line"
-				android:background="@color/split_line" />
+				android:background="@color/split_line"
+				android:layout_marginHorizontal="@dimen/main_popup_split_marginH"/>
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
-				android:paddingVertical="@dimen/main_distance_small" >
+				android:paddingVertical="@dimen/main_popup_content_distanceV" >
 
 				<TextView
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
-					android:layout_marginVertical="@dimen/main_distance_small"
 					android:fontFamily="@font/bmjua"
-					android:textSize="@dimen/main_popup_text"
+					android:textSize="@dimen/main_popup_content_text"
 					android:textColor="@color/text_color_gray"
 					android:text="복용 횟수"/>
 
@@ -113,14 +113,13 @@
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:orientation="horizontal"
-					android:layout_marginVertical="@dimen/main_distance_small" >
+					android:orientation="horizontal" >
 
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:fontFamily="@font/daylight_210"
-						android:textSize="@dimen/main_popup_text"
+						android:textSize="@dimen/main_popup_content_text"
 						android:textColor="@color/text_color"
 						android:text="하루 "/>
 
@@ -129,7 +128,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:fontFamily="@font/daylight_210"
-						android:textSize="@dimen/main_popup_text"
+						android:textSize="@dimen/main_popup_content_text"
 						android:textColor="@color/text_color"
 						android:text="0"/>
 
@@ -137,7 +136,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:fontFamily="@font/daylight_210"
-						android:textSize="@dimen/main_popup_text"
+						android:textSize="@dimen/main_popup_content_text"
 						android:textColor="@color/text_color"
 						android:text="회 복용"/>
 				</LinearLayout>
@@ -146,22 +145,23 @@
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/split_line"
-				android:background="@color/split_line" />
+				android:background="@color/split_line"
+				android:layout_marginHorizontal="@dimen/main_popup_split_marginH"/>
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
-				android:paddingVertical="@dimen/main_distance_small">
+				android:paddingVertical="@dimen/main_popup_times_paddingV">
 
 				<TextView
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:gravity="center"
-					android:layout_marginVertical="@dimen/main_remain_time_distance"
+					android:layout_marginVertical="@dimen/main_popup_time_paddingV"
 					android:fontFamily="@font/bmjua"
-					android:textSize="@dimen/main_popup_text"
+					android:textSize="@dimen/main_popup_content_text"
 					android:textColor="@color/text_color_gray"
 					android:text="알림 시간"/>
 
@@ -176,7 +176,8 @@
 			<View
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/split_line"
-				android:background="@color/split_line" />
+				android:background="@color/split_line"
+				android:layout_marginHorizontal="@dimen/main_popup_split_marginH"/>
 		</LinearLayout>
 	</ScrollView>
 
@@ -184,7 +185,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:paddingHorizontal="@dimen/main_distance_mid"
+		android:paddingHorizontal="@dimen/main_popup_buttons_paddingH"
 		android:background="@drawable/main_popup_menubar">
 
 		<Space
@@ -198,11 +199,11 @@
 			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:orientation="vertical"
-			android:padding="@dimen/main_distance_mid">
+			android:padding="@dimen/main_popup_button_paddingH">
 
 			<ImageView
-				android:layout_width="35dp"
-				android:layout_height="35dp"
+				android:layout_width="@dimen/main_popup_icon_size"
+				android:layout_height="@dimen/main_popup_icon_size"
 				android:src="@drawable/delete_icon"/>
 
 			<TextView
@@ -211,8 +212,8 @@
 				android:fontFamily="@font/daylight_210"
 				android:text="삭제"
 				android:textColor="@color/text_color"
-				android:textSize="@dimen/main_popup_text"
-				android:padding="@dimen/main_distance_xsmall"/>
+				android:textSize="@dimen/main_popup_button_text"
+				android:padding="@dimen/main_popup_button_text_padding"/>
 		</LinearLayout>
 
 		<Space
@@ -226,21 +227,21 @@
 			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:orientation="vertical"
-			android:padding="@dimen/main_distance_mid">
+			android:padding="@dimen/main_popup_button_paddingH">
 
 			<ImageView
-				android:layout_width="35dp"
-				android:layout_height="35dp"
+				android:layout_width="@dimen/main_popup_icon_size"
+				android:layout_height="@dimen/main_popup_icon_size"
 				android:src="@drawable/confirm_icon"/>
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/daylight_210"
-				android:textSize="@dimen/main_popup_text"
+				android:textSize="@dimen/main_popup_button_text"
 				android:textColor="@color/text_color"
 				android:text="확인"
-				android:padding="@dimen/main_distance_xsmall" />
+				android:padding="@dimen/main_popup_button_text_padding" />
 		</LinearLayout>
 
 		<Space
@@ -254,21 +255,21 @@
 			android:layout_height="wrap_content"
 			android:gravity="center"
 			android:orientation="vertical"
-			android:padding="@dimen/main_distance_mid">
+			android:padding="@dimen/main_popup_button_paddingH">
 
 			<ImageView
-				android:layout_width="35dp"
-				android:layout_height="35dp"
+				android:layout_width="@dimen/main_popup_icon_size"
+				android:layout_height="@dimen/main_popup_icon_size"
 				android:src="@drawable/edit_icon"/>
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/daylight_210"
-				android:textSize="@dimen/main_popup_text"
+				android:textSize="@dimen/main_popup_button_text"
 				android:textColor="@color/text_color"
 				android:text="수정"
-				android:padding="@dimen/main_distance_xsmall"/>
+				android:padding="@dimen/main_popup_button_text_padding"/>
 		</LinearLayout>
 
 		<Space

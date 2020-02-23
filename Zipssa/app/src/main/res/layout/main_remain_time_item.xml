@@ -9,7 +9,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:fontFamily="@font/daylight_210"
-		android:textSize="@dimen/main_popup_text"
+		android:textSize="@dimen/main_popup_time_text"
 		android:textColor="@color/text_color"
-		android:layout_marginVertical="@dimen/main_remain_time_distance"/>
+		android:layout_marginVertical="@dimen/main_popup_time_paddingV"
+		android:text="오전 0:00"/>
 </LinearLayout>

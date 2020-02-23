@@ -16,7 +16,7 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/bottom_bar"
+		android:layout_height="@dimen/main_bottom_bar_sizeH"
 		android:orientation="horizontal"
 		android:background="@color/main_theme" >
 
@@ -27,8 +27,8 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_distance_mid"
-			android:layout_marginBottom="@dimen/main_distance_small">
+			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
+			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -40,18 +40,18 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="홈"
 				android:textColor="@color/bottom_bar_text"
-				android:textSize="@dimen/bottom_bar_text"/>
+				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 
 		<View
 			android:layout_width="@dimen/split_line"
 			android:layout_height="match_parent"
 			android:background="#FFFFFF"
-			android:layout_marginVertical="5dp"/>
+			android:layout_marginVertical="@dimen/main_bottom_bar_split_marginV"/>
 
 		<LinearLayout
 			android:id="@+id/bar_add"
@@ -60,8 +60,8 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_distance_mid"
-			android:layout_marginBottom="@dimen/main_distance_small">
+			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
+			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -73,18 +73,18 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="촬영"
 				android:textColor="@color/bottom_bar_text"
-				android:textSize="@dimen/bottom_bar_text"/>
+				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 
 		<View
 			android:layout_width="@dimen/split_line"
 			android:layout_height="match_parent"
 			android:background="#FFFFFF"
-			android:layout_marginVertical="5dp"/>
+			android:layout_marginVertical="@dimen/main_bottom_bar_split_marginV"/>
 
 		<LinearLayout
 			android:id="@+id/bar_search"
@@ -93,8 +93,8 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_distance_mid"
-			android:layout_marginBottom="@dimen/main_distance_small">
+			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
+			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -106,18 +106,18 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="검색"
 				android:textColor="@color/bottom_bar_text"
-				android:textSize="@dimen/bottom_bar_text"/>
+				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 
 		<View
 			android:layout_width="@dimen/split_line"
 			android:layout_height="match_parent"
 			android:background="#FFFFFF"
-			android:layout_marginVertical="5dp"/>
+			android:layout_marginVertical="@dimen/main_bottom_bar_split_marginV"/>
 
 		<LinearLayout
 			android:id="@+id/bar_setting"
@@ -126,8 +126,8 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_distance_mid"
-			android:layout_marginBottom="@dimen/main_distance_small">
+			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
+			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -139,11 +139,11 @@
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/main_distance_xsmall"
+				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="설정"
 				android:textColor="@color/bottom_bar_text"
-				android:textSize="@dimen/bottom_bar_text"/>
+				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>

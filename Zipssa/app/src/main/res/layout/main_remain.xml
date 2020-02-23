@@ -3,8 +3,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:paddingVertical="@dimen/main_distance_mid"
-	android:paddingHorizontal="@dimen/main_distance_xlarge"
+	android:paddingVertical="@dimen/main_remain_paddingV"
+	android:paddingHorizontal="@dimen/main_remain_paddingH"
 	android:clipToPadding="false" >
 
 	<LinearLayout
@@ -12,7 +12,7 @@
 		android:layout_height="wrap_content"
 		android:background="@drawable/main_remain_time"
 		android:orientation="vertical"
-		android:paddingVertical="@dimen/main_distance_small"
+		android:paddingVertical="@dimen/main_remain_box_paddingV"
 		android:gravity="center"
 		android:elevation="@dimen/shadow_size">
 
@@ -21,27 +21,28 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/bmjua"
-			android:textSize="@dimen/main_remain_title"
+			android:textSize="@dimen/main_remain_title_text"
 			android:textColor="@color/text_color"
-			android:paddingVertical="@dimen/main_distance_small"/>
+			android:text="Title"
+			android:paddingVertical="@dimen/main_remain_content_paddingV" />
 
 		<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
 			android:gravity="center"
-			android:paddingVertical="@dimen/main_distance_small">
+			android:paddingVertical="@dimen/main_remain_content_paddingV">
 
 			<ImageView
-				android:layout_width="@dimen/main_text_mid"
-				android:layout_height="@dimen/main_text_mid"
+				android:layout_width="@dimen/main_remain_subtime_text"
+				android:layout_height="@dimen/main_remain_subtime_text"
 				android:src="@drawable/alarm_img_remain"/>
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/daylight_210"
-				android:textSize="@dimen/main_remain_title"
+				android:textSize="@dimen/main_remain_subtime_text"
 				android:textColor="@color/text_color"
 				android:text=" 다음 알림까지 "/>
 
@@ -50,7 +51,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/bmjua"
-				android:textSize="@dimen/main_text_mid"
+				android:textSize="@dimen/main_remain_time_text"
 				android:textColor="@color/main_theme"
 				android:text="0 시간 0 분"/>
 
@@ -58,13 +59,13 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/daylight_210"
-				android:textSize="@dimen/main_remain_title"
+				android:textSize="@dimen/main_remain_subtime_text"
 				android:textColor="@color/text_color"
 				android:text=" 남았어요! "/>
 
 			<ImageView
-				android:layout_width="@dimen/main_text_mid"
-				android:layout_height="@dimen/main_text_mid"
+				android:layout_width="@dimen/main_remain_subtime_text"
+				android:layout_height="@dimen/main_remain_subtime_text"
 				android:src="@drawable/alarm_img_remain"/>
 		</LinearLayout>
 	</LinearLayout>

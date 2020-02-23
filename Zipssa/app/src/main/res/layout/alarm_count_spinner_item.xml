@@ -2,9 +2,9 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:textSize="@dimen/add_alarm_text_small"
+	android:textSize="@dimen/alarm_page_content_text"
 	style="?android:attr/spinnerItemStyle"
 	android:fontFamily="@font/daylight_210"
 	android:textColor="@color/main_theme"
 	android:gravity="right"
-	android:paddingVertical="5dp"/>
+	android:paddingVertical="@dimen/alarm_page_count_paddingV"/>

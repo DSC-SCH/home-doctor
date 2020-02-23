@@ -3,23 +3,23 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:paddingVertical="@dimen/main_distance_mid"
-	android:paddingHorizontal="@dimen/main_distance_xlarge"
+	android:paddingVertical="@dimen/main_item_paddingV"
+	android:paddingHorizontal="@dimen/main_item_paddingH"
 	android:clipToPadding="false"
 	android:elevation="@dimen/shadow_size">
 
 	<TextView
 		android:id="@+id/main_item_remain_time"
 		android:background="@drawable/main_item_remain_time"
-		android:layout_width="110dp"
+		android:layout_width="@dimen/main_item_remain_sizeH"
 		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:elevation="@dimen/shadow_size"
 		android:fontFamily="@font/bmjua"
-		android:textSize="@dimen/main_text_mid"
+		android:textSize="@dimen/main_item_remain_text"
 		android:textColor="@color/main_list_remain_time"
 		android:text="0h 00m"
-		android:paddingVertical="@dimen/main_distance_small"/>
+		android:paddingVertical="@dimen/main_item_remain_paddingV"/>
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -32,7 +32,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/split_line"
 			android:background="@color/split_line"
-			android:layout_margin="10dp"/>
+			android:layout_margin="@dimen/main_item_split_marginH"/>
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -45,14 +45,14 @@
 				android:layout_weight="1"
 				android:orientation="vertical"
 				android:gravity="center"
-				android:paddingBottom="@dimen/main_distance_mid">
+				android:paddingBottom="@dimen/main_item_times_paddingB">
 
 				<ImageView
-					android:layout_width="60dp"
-					android:layout_height="60dp"
+					android:layout_width="@dimen/main_item_icon_size"
+					android:layout_height="@dimen/main_item_icon_size"
 					android:src="@drawable/alarm_img"
-					android:layout_marginHorizontal="25dp"
-					android:paddingBottom="10dp"/>
+					android:layout_marginHorizontal="@dimen/main_item_icon_marginH"
+					android:paddingBottom="@dimen/main_item_icon_paddingB"/>
 
 				<androidx.recyclerview.widget.RecyclerView
 					android:id="@+id/main_item_time_container"
@@ -79,11 +79,12 @@
 						android:layout_height="wrap_content"
 						android:layout_gravity="left|center"
 						android:background="@drawable/main_title"
-						android:layout_marginLeft="20dp"
-						android:paddingHorizontal="@dimen/main_distance_small"
+						android:layout_marginHorizontal="@dimen/main_item_title_marginH"
+						android:paddingHorizontal="@dimen/main_item_title_paddingH"
+						android:paddingVertical="@dimen/main_item_title_paddingV"
 						android:fontFamily="@font/bmjua"
 						android:text="감기약"
-						android:textSize="@dimen/main_text_mid"
+						android:textSize="@dimen/main_item_title_text"
 						android:textColor="@color/text_color"/>
 
 					<Space
@@ -93,26 +94,26 @@
 
 					<ToggleButton
 						android:id="@+id/main_item_switch"
-						android:layout_width="40dp"
-						android:layout_height="20dp"
+						android:layout_width="@dimen/main_item_switch_sizeH"
+						android:layout_height="@dimen/main_item_switch_sizeV"
 						android:background="@drawable/alarm_btn_selector"
-						android:layout_marginVertical="3dp"
-						android:layout_marginRight="30dp"
+						android:layout_marginVertical="@dimen/main_item_switch_marginV"
+						android:layout_marginRight="@dimen/main_item_switch_marginR"
 						android:fontFamily="@font/daylight_210"
 						android:textOn="알림 on"
 						android:textOff="알림 off"
-						android:textSize="@dimen/alarm_switch"/>
+						android:textSize="@dimen/main_item_switch_text"/>
 				</LinearLayout>
 
 				<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginTop="@dimen/main_distance_mid"
+					android:layout_marginTop="@dimen/main_item_content_distanceVL"
 					android:orientation="horizontal" >
 
 					<View
-						android:layout_width="5dp"
-						android:layout_height="5dp"
+						android:layout_width="@dimen/main_item_content_circle"
+						android:layout_height="@dimen/main_item_content_circle"
 						android:background="@drawable/text_circle"
 						android:layout_gravity="center"/>
 
@@ -121,10 +122,10 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:gravity="center"
-						android:layout_marginHorizontal="10dp"
+						android:layout_marginHorizontal="@dimen/main_item_content_distanceH"
 						android:fontFamily="@font/daylight_210"
 						android:text="1회 복용"
-						android:textSize="@dimen/main_text_mid"
+						android:textSize="@dimen/main_item_content_text"
 						android:textColor="@color/text_color"/>
 
 					<LinearLayout
@@ -138,11 +139,11 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
-					android:layout_marginTop="@dimen/main_distance_small" >
+					android:layout_marginTop="@dimen/main_item_content_distanceV" >
 
 					<View
-						android:layout_width="5dp"
-						android:layout_height="5dp"
+						android:layout_width="@dimen/main_item_content_circle"
+						android:layout_height="@dimen/main_item_content_circle"
 						android:background="@drawable/text_circle"
 						android:layout_gravity="center"/>
 
@@ -151,10 +152,10 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:gravity="center"
-						android:layout_marginHorizontal="10dp"
+						android:layout_marginHorizontal="@dimen/main_item_content_distanceH"
 						android:fontFamily="@font/daylight_210"
 						android:text="D-0"
-						android:textSize="@dimen/main_text_mid"
+						android:textSize="@dimen/main_item_content_text"
 						android:textColor="@color/text_color"/>
 				</LinearLayout>
 
@@ -162,12 +163,12 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
-					android:layout_marginTop="@dimen/main_distance_small"
-					android:layout_marginBottom="@dimen/main_distance_mid" >
+					android:layout_marginTop="@dimen/main_item_content_distanceV"
+					android:layout_marginBottom="@dimen/main_item_content_distanceVL" >
 
 					<View
-						android:layout_width="5dp"
-						android:layout_height="5dp"
+						android:layout_width="@dimen/main_item_content_circle"
+						android:layout_height="@dimen/main_item_content_circle"
 						android:background="@drawable/text_circle"
 						android:layout_gravity="center"/>
 
@@ -176,10 +177,10 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:gravity="center"
-						android:layout_marginLeft="10dp"
+						android:layout_marginLeft="@dimen/main_item_content_distanceH"
 						android:fontFamily="@font/daylight_210"
 						android:text="00.00.00"
-						android:textSize="@dimen/main_item_date"
+						android:textSize="@dimen/main_date_text"
 						android:textColor="@color/text_color"/>
 
 					<TextView
@@ -188,7 +189,7 @@
 						android:gravity="center"
 						android:fontFamily="@font/daylight_210"
 						android:text=" ~ "
-						android:textSize="@dimen/main_text_mid"
+						android:textSize="@dimen/main_date_text"
 						android:textColor="@color/text_color"/>
 
 					<TextView
@@ -198,7 +199,7 @@
 						android:gravity="center"
 						android:fontFamily="@font/daylight_210"
 						android:text="00.00.00"
-						android:textSize="@dimen/main_item_date"
+						android:textSize="@dimen/main_date_text"
 						android:textColor="@color/text_color"/>
 				</LinearLayout>
 			</LinearLayout>

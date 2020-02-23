@@ -11,10 +11,10 @@
 		android:background="@drawable/label_selector"
 		android:button="@drawable/empty_selector"
 		android:gravity="center"
-		android:paddingVertical="@dimen/add_alarm_text_vinside"
-		android:layout_margin="@dimen/add_alarm_text_vinside_close"
+		android:paddingVertical="@dimen/label_paddingV"
+		android:layout_margin="@dimen/label_marginH"
 		android:fontFamily="@font/daylight_210"
-		android:textSize="@dimen/add_alarm_label_text"
+		android:textSize="@dimen/label_text"
 		android:textColor="@color/text_color"
 		android:text="+" />
 </LinearLayout>
