@@ -6,8 +6,9 @@
 Pre-Requirement
 
 - pandas
-- pdfminer3k
 - requests
 - lxml
 - BeautifulSoup4
 - selenium
+- pickle
+- json
