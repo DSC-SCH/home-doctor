@@ -1,0 +1,105 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+
+
+from lxml import etree  #xml 파일을 열 때 사용하는 코드
+import xml.etree.ElementTree as ElementTree  #xml파일을 여는 코드
+import pandas as pd
+
+from urllib.request import urlopen
+from urllib.parse import urlencode,unquote,quote_plus
+import urllib
+from bs4 import BeautifulSoup
+
+# 의약품 상세 정보
+a = []
+b = []
+c = []
+d = []
+e = []
+f = []
+g = []
+h = []
+i = []
+j = []
+
+total_ee = []
+total_ud = []
+total_nb = []
+
+for name in range(1, 511):
+
+    # api주소 열기 (url + 인증키 + 해당페이지+한 화면에 출력되는 데이터 개수)
+    # serviceKey= 다음에 인증키 입력
+    request = urllib.request.Request(
+        'http://apis.data.go.kr/1471057/MdcinPrductPrmisnInfoService/getMdcinPrductItem?serviceKey= &pageNo='
+        + str(name) + '&numOfRows=100')
+
+    request.get_method = lambda: 'GET'
+    response_body = urlopen(request).read()
+
+    # 추출된 xml형식의 text를 xml객체로 파싱
+    tree = etree.fromstring(response_body)
+
+    # 태그로부터 원하는 텍스트 추출
+    for media in tree.getiterator('item'):
+        a.append(media.findtext('ITEM_SEQ'))
+        b.append(media.findtext('ITEM_NAME'))
+        c.append(media.findtext('STORAGE_METHOD'))
+        d.append(media.findtext('VALID_TERM'))
+        e.append(media.findtext('MAKE_MATERIAL_FLAG'))
+        f.append(media.findtext('INDUSTY_TYPE'))
+        g.append(media.findtext('CANCEL_NAME'))
+        
+    tree2 = BeautifulSoup(response_body,'html.parser')
+    
+    # 태그로부터 원하는 텍스트 추출
+    for media in tree2.find_all('ee_doc_data'):
+        h.append(media.get_text('title'))
+    for media in tree2.find_all('ud_doc_data'):
+        i.append(media.get_text('title'))
+    for media in tree2.find_all('nb_doc_data'):
+        j.append(media.get_text('title'))        
+
+            # 태그로부터 원하는 텍스트 추출
+    for li in tree2.find_all('ee_doc_data'):
+        p=[]
+        for media in li.find_all('article'):
+            p.append(media.get('title'))
+        total_ee.append(p)
+
+    for de in tree2.find_all('ud_doc_data'):
+        q=[]
+        for media in de.find_all('article'):
+            q.append(media.get('title'))
+        total_ud.append(q)
+        
+    for abc in tree2.find_all('nb_doc_data'):
+        r=[]
+        for media in abc.find_all('article'):
+            r.append(media.get('title'))
+        total_nb.append(r)
+
+    # 데이터프레임으로 변환 후 저장
+df1 = pd.DataFrame(a, columns=['품목기준코드'])
+df2 = pd.DataFrame(b, columns=['품목명'])
+df3 = pd.DataFrame(c, columns=['저장방법'])
+df4 = pd.DataFrame(d, columns=['유효기간'])
+df5 = pd.DataFrame(e, columns=['완제/원료구분'])
+df6 = pd.DataFrame(f, columns=['업종구분'])
+df7 = pd.DataFram(g, columns=['상태'])
+df8 = pd.DataFrame(h, columns=['효능효과_con'])
+df9 = pd.DataFrame(i, columns=['용법용량_con'])
+df10 = pd.DataFrame(j, columns=['주의사항_con'])
+df11 = pd.DataFrame({'효능효과_tit':total_ee})
+df12 = pd.DataFrame({'용법용량_tit':total_ud})
+df13 = pd.DataFrame({'주의사항_tit':total_nb})
+
+
+medical_total = pd.concat(
+    [df1, df2, df3, df4, df5, df6, df7, df8, df10, df11, df12, df13], axis=1)
+
+
+medical_total.to_pickle('의약품 상세조회(openapi).pkl')
+
