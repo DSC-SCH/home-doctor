@@ -145,7 +145,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
-				android:text="설정"
+				android:text="마이페이지"
 				android:textColor="@color/main_bottom_bar_text"
 				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>

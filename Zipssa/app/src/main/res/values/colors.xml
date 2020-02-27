@@ -24,4 +24,6 @@
     <color name="bottom_bar_text">#FFFFFF</color>
 
     <color name="medicine_detail_warning">#FF7070</color>
+
+    <color name="mypage_background">#F7F7F7</color>
 </resources>

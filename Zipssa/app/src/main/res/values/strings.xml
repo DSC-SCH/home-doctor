@@ -9,4 +9,6 @@
 	<string name="underline_medicine_validity"><u>유효기간</u></string>
 	<string name="underline_medicine_preservation"><u>보관법</u></string>
 	<string name="underline_medicine_warning"><u>주의사항</u></string>
+
+	<string name="underline_myprofile_passwd"><u>비밀번호 변경</u></string>
 </resources>

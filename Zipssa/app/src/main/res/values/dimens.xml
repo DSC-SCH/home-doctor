@@ -204,6 +204,36 @@
 	<dimen name="medicine_content_text">15sp</dimen>
 	<dimen name="medicine_content_en_text">10sp</dimen>
 
+	<!-- my page activity -->
+	<dimen name="mypage_icon_sizeH">60dp</dimen>
+	<dimen name="mypage_icon_sizeV">50dp</dimen>
+	<dimen name="mypage_icon_padding">15dp</dimen>
+	<dimen name="mypage_menu_distance">20dp</dimen>
+	<dimen name="mypage_split_marginH">15dp</dimen>
+
+	<dimen name="mypage_content_text">15sp</dimen>
+
+	<!-- my profile activity -->
+	<dimen name="myprofile_marginV">15dp</dimen>
+	<dimen name="myprofile_paddingH">15dp</dimen>
+	<dimen name="myprofile_content_sizeV">@dimen/mypage_icon_sizeV</dimen>
+	<dimen name="myprofile_content_padding">15dp</dimen>
+
+	<dimen name="myprofile_content_text">15sp</dimen>
+
+	<!-- change password activity -->
+	<dimen name="changepw_marginV">15dp</dimen>
+	<dimen name="changepw_paddingH">15dp</dimen>
+	<dimen name="changepw_content_padding">15dp</dimen>
+	<dimen name="changepw_input_sizeH">150dp</dimen>
+	<dimen name="changepw_input_marginV">10dp</dimen>
+	<dimen name="changepw_confirm_marginV">20dp</dimen>
+	<dimen name="changepw_confirm_paddingV">15dp</dimen>
+	<dimen name="changepw_confirm_paddingH">60dp</dimen>
+
+	<dimen name="changepw_content_text">15sp</dimen>
+	<dimen name="changepw_confirm_text">13sp</dimen>
+
 	<!-- popup window -->
 	<dimen name="popup_padding">10dp</dimen>
 
