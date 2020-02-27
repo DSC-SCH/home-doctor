@@ -9,4 +9,9 @@
 		<item>8회</item>
 		<item>12회</item>
 	</string-array>
+
+	<string-array name="search_type">
+		<item>통합 검색</item>
+		<item>약물 이름</item>
+	</string-array>
 </resources>

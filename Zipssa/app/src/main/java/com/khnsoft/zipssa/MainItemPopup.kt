@@ -1,23 +1,11 @@
 package com.khnsoft.zipssa
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.DrawableContainer
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.WindowManager
-import android.widget.RadioButton
 import android.widget.TextView
-import android.widget.Toast
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import kotlinx.android.synthetic.main.add_label_popup.*
-import kotlinx.android.synthetic.main.main_item_popup.*
+import kotlinx.android.synthetic.main.list_item_popup.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,7 +17,7 @@ class MainItemPopup : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.main_item_popup)
+		setContentView(R.layout.list_item_popup)
 
 		val _intent = intent
 		val sItem = intent.getStringExtra("jItem")
@@ -53,12 +41,14 @@ class MainItemPopup : AppCompatActivity() {
 			timeView.text = sdf_time_show.format(sdf_time_save.parse(item.asString))
 		}
 
+		// TODO("Abort since current date")
+
 		confirm_btn.setOnClickListener {
 			finish()
 		}
 
 		edit_btn.setOnClickListener {
-			val intent = Intent(this@MainItemPopup, EditAlarm::class.java)
+			val intent = Intent(this@MainItemPopup, EditAlarmActivity::class.java)
 			intent.putExtra("jItem", sItem)
 			startActivity(intent)
 			finish()

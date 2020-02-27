@@ -15,11 +15,11 @@
 
 		<ImageView
 			android:id="@+id/back_btn"
-			android:layout_width="@dimen/alarm_page_back_size"
-			android:layout_height="@dimen/alarm_page_back_size"
+			android:layout_width="@dimen/titlebar_back_size"
+			android:layout_height="@dimen/titlebar_back_size"
 			android:layout_gravity="left|center"
 			android:adjustViewBounds="true"
-			android:layout_marginHorizontal="@dimen/alarm_page_back_marginH"
+			android:layout_marginHorizontal="@dimen/titlebar_back_marginH"
 			android:src="@drawable/ic_arrow_back_24px" />
 
 		<TextView
@@ -28,7 +28,7 @@
 			android:layout_gravity="center"
 			android:text="알림 수정"
 			android:fontFamily="@font/bmjua"
-			android:textSize="@dimen/alarm_page_title_text"
+			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
 	</FrameLayout>
 

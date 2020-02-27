@@ -7,6 +7,6 @@ import android.widget.LinearLayout
 class MainRemainTimeItem(context: Context) : LinearLayout(context) {
 	init {
 		val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-		inflater.inflate(R.layout.main_remain_time_item, this, true)
+		inflater.inflate(R.layout.list_remain_time_item, this, true)
 	}
 }

@@ -18,7 +18,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/main_bottom_bar_sizeH"
 		android:orientation="horizontal"
-		android:background="@color/main_theme" >
+		android:background="@color/main_bottom_bar" >
 
 		<LinearLayout
 			android:id="@+id/bar_home"
@@ -27,8 +27,9 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
-			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
+			android:padding="@dimen/main_bottom_bar_padding"
+			android:layout_marginVertical="@dimen/main_bottom_bar_marginV"
+			android:layout_marginHorizontal="@dimen/main_bottom_bar_marginH">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -43,7 +44,7 @@
 				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="홈"
-				android:textColor="@color/bottom_bar_text"
+				android:textColor="@color/main_bottom_bar_text"
 				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 
@@ -60,8 +61,9 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
-			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
+			android:padding="@dimen/main_bottom_bar_padding"
+			android:layout_marginVertical="@dimen/main_bottom_bar_marginV"
+			android:layout_marginHorizontal="@dimen/main_bottom_bar_marginH">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -76,7 +78,7 @@
 				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="촬영"
-				android:textColor="@color/bottom_bar_text"
+				android:textColor="@color/main_bottom_bar_text"
 				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 
@@ -93,8 +95,9 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
-			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
+			android:padding="@dimen/main_bottom_bar_padding"
+			android:layout_marginVertical="@dimen/main_bottom_bar_marginV"
+			android:layout_marginHorizontal="@dimen/main_bottom_bar_marginH">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -109,7 +112,7 @@
 				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="검색"
-				android:textColor="@color/bottom_bar_text"
+				android:textColor="@color/main_bottom_bar_text"
 				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 
@@ -126,8 +129,9 @@
 			android:layout_weight="1"
 			android:orientation="vertical"
 			android:gravity="center"
-			android:layout_marginTop="@dimen/main_bottom_bar_marginT"
-			android:layout_marginBottom="@dimen/main_bottom_bar_marginB">
+			android:padding="@dimen/main_bottom_bar_padding"
+			android:layout_marginVertical="@dimen/main_bottom_bar_marginV"
+			android:layout_marginHorizontal="@dimen/main_bottom_bar_marginH">
 
 			<ImageView
 				android:layout_width="wrap_content"
@@ -142,7 +146,7 @@
 				android:layout_marginTop="@dimen/main_bottom_bar_text_marginT"
 				android:fontFamily="@font/daylight_210"
 				android:text="설정"
-				android:textColor="@color/bottom_bar_text"
+				android:textColor="@color/main_bottom_bar_text"
 				android:textSize="@dimen/main_bottom_bar_text"/>
 		</LinearLayout>
 	</LinearLayout>
