@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.main_activity)
 
-		buttons = listOf(bar_home, bar_add, bar_search, bar_setting)
+		buttons = listOf(bar_home, bar_add, bar_search, bar_mypage)
 
 		bar_home.setOnClickListener {
 			callPage(FRAG_HOME)
@@ -30,6 +30,11 @@ class MainActivity : AppCompatActivity() {
 
 		bar_search.setOnClickListener {
 			callPage(FRAG_SEARCH)
+		}
+
+		bar_mypage.setOnClickListener {
+			val intent = Intent(this@MainActivity, MypageActivity::class.java)
+			startActivity(intent)
 		}
 
 		callPage(FRAG_HOME)

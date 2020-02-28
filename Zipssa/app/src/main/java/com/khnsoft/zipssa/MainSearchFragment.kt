@@ -45,9 +45,6 @@ class MainSearchFragment : Fragment() {
 			search(search_type.selectedItem.toString(), search_text.text.toString())
 		}
 
-		val intent = Intent(context, MedicineDetailActivity::class.java)
-		startActivity(intent)
-
 		callPage(FRAG_RECENT, null)
 	}
 

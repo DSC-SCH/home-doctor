@@ -32,6 +32,8 @@
 			android:name=".MainItemPopup"
 			android:theme="@style/PopupTheme" />
 		<activity android:name=".MypageChangepwActivity" />
+		<activity android:name=".MypageNoticeActivity" />
+		<activity android:name=".MypageNoticeDetailActivity" />
 	</application>
 
 </manifest>

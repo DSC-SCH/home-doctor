@@ -10,5 +10,6 @@ class MypageMyprofileActivity : AppCompatActivity() {
 		setContentView(R.layout.mypage_myprofile_activity)
 
 		// TODO("Show profile")
+		// TODO("Change passwd")
 	}
 }

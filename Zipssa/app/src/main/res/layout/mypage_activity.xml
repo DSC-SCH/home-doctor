@@ -44,9 +44,11 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="vertical"
-				android:background="@color/background_theme">
+				android:background="@color/background_theme"
+				android:layout_marginTop="@dimen/mypage_menu_distance">
 
 				<LinearLayout
+					android:id="@+id/myprofile_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -77,6 +79,7 @@
 				android:layout_marginTop="@dimen/mypage_menu_distance">
 
 				<LinearLayout
+					android:id="@+id/notice_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -107,6 +110,7 @@
 				android:layout_marginTop="@dimen/mypage_menu_distance">
 
 				<LinearLayout
+					android:id="@+id/sync_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -135,6 +139,7 @@
 					android:layout_marginHorizontal="@dimen/mypage_split_marginH"/>
 
 				<LinearLayout
+					android:id="@+id/history_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -163,6 +168,7 @@
 					android:layout_marginHorizontal="@dimen/mypage_split_marginH"/>
 
 				<LinearLayout
+					android:id="@+id/setting_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -193,6 +199,7 @@
 				android:layout_marginTop="@dimen/mypage_menu_distance">
 
 				<LinearLayout
+					android:id="@+id/account_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -221,6 +228,7 @@
 					android:layout_marginHorizontal="@dimen/mypage_split_marginH"/>
 
 				<LinearLayout
+					android:id="@+id/leave_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -252,6 +260,7 @@
 				android:layout_marginTop="@dimen/mypage_menu_distance">
 
 				<LinearLayout
+					android:id="@+id/service_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
@@ -280,6 +289,7 @@
 					android:layout_marginHorizontal="@dimen/mypage_split_marginH"/>
 
 				<LinearLayout
+					android:id="@+id/usage_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"

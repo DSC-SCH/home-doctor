@@ -123,7 +123,7 @@
 			android:layout_marginVertical="@dimen/main_bottom_bar_split_marginV"/>
 
 		<LinearLayout
-			android:id="@+id/bar_setting"
+			android:id="@+id/bar_mypage"
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="1"
@@ -137,7 +137,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="0dp"
 				android:layout_weight="1"
-				android:src="@drawable/bar_setting"
+				android:src="@drawable/bar_page"
 				android:adjustViewBounds="true"/>
 
 			<TextView

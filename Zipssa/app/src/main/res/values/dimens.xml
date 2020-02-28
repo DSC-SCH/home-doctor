@@ -234,6 +234,18 @@
 	<dimen name="changepw_content_text">15sp</dimen>
 	<dimen name="changepw_confirm_text">13sp</dimen>
 
+	<!-- my profile activity -->
+	<dimen name="notice_marginV">15dp</dimen>
+	<dimen name="notice_paddingH">15dp</dimen>
+	<dimen name="notice_content_sizeV">@dimen/mypage_icon_sizeV</dimen>
+	<dimen name="notice_content_padding">15dp</dimen>
+	<dimen name="notice_detail_padding">20dp</dimen>
+	<dimen name="notice_detail_title_paddingV">15dp</dimen>
+
+	<dimen name="notice_date_text">13sp</dimen>
+	<dimen name="notice_title_text">15sp</dimen>
+	<dimen name="notice_detail_text">18sp</dimen>
+
 	<!-- popup window -->
 	<dimen name="popup_padding">10dp</dimen>
 
