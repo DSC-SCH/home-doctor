@@ -7,10 +7,12 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.fragment.app.Fragment
@@ -20,6 +22,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.list_fragment.*
+import kotlinx.android.synthetic.main.sync_drawer.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,6 +64,19 @@ class MainListFragment : Fragment() {
 			curDateCal.add(Calendar.DAY_OF_MONTH, 1)
 			main_date.text = sdf_main_date.format(curDateCal.time)
 			refresh()
+		}
+
+		drawer_open_btn.setOnClickListener {
+			sync_drawer.openDrawer(Gravity.RIGHT)
+		}
+
+		close_btn.setOnClickListener {
+			sync_drawer.closeDrawer(Gravity.RIGHT)
+		}
+
+		edit_btn.setOnClickListener {
+			val intent = Intent(context, MypageSyncActivity::class.java)
+			startActivity(intent)
 		}
 	}
 
@@ -130,7 +146,7 @@ class MainListFragment : Fragment() {
 			val time_remain = itemView.findViewById<TextView>(R.id.main_item_remain_time)
 			val title = itemView.findViewById<TextView>(R.id.main_item_title)
 			val count = itemView.findViewById<TextView>(R.id.main_item_count)
-			val switch = itemView.findViewById<ToggleButton>(R.id.main_item_switch)
+			val switch = itemView.findViewById<Switch>(R.id.main_item_switch)
 			val time_container = itemView.findViewById<RecyclerView>(R.id.main_item_time_container)
 			val check_container = itemView.findViewById<LinearLayout>(R.id.main_item_check_container)
 			val start_date = itemView.findViewById<TextView>(R.id.main_item_start_date)
@@ -175,8 +191,7 @@ class MainListFragment : Fragment() {
 				}
 
 				title.text = jItem["ALARM_TITLE"].asString
-				val drawable = title.background as GradientDrawable
-				drawable.setColor(Color.parseColor("${jItem["LABEL_COLOR"].asString}"))
+				title.setBackgroundColor(Color.parseColor("${jItem["LABEL_COLOR"].asString}"))
 
 				count.text = "${lTimes.size()}회 복용"
 				time_container.layoutManager = lm

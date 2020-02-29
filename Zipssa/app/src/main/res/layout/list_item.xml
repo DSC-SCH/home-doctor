@@ -78,7 +78,6 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_gravity="left|center"
-						android:background="@drawable/main_title"
 						android:layout_marginHorizontal="@dimen/main_item_title_marginH"
 						android:paddingHorizontal="@dimen/main_item_title_paddingH"
 						android:paddingVertical="@dimen/main_item_title_paddingV"
@@ -92,17 +91,12 @@
 						android:layout_height="0dp"
 						android:layout_weight="1"/>
 
-					<ToggleButton
+					<Switch
 						android:id="@+id/main_item_switch"
-						android:layout_width="@dimen/main_item_switch_sizeH"
-						android:layout_height="@dimen/main_item_switch_sizeV"
-						android:background="@drawable/alarm_btn_selector"
-						android:layout_marginVertical="@dimen/main_item_switch_marginV"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
 						android:layout_marginRight="@dimen/main_item_switch_marginR"
-						android:fontFamily="@font/daylight_210"
-						android:textOn="알림 on"
-						android:textOff="알림 off"
-						android:textSize="@dimen/main_item_switch_text"/>
+						android:layout_gravity="center"/>
 				</LinearLayout>
 
 				<LinearLayout

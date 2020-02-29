@@ -34,6 +34,7 @@
 		<activity android:name=".MypageChangepwActivity" />
 		<activity android:name=".MypageNoticeActivity" />
 		<activity android:name=".MypageNoticeDetailActivity" />
+		<activity android:name=".MypageSyncActivity" />
 	</application>
 
 </manifest>

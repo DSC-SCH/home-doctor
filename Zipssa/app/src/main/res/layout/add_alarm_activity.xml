@@ -19,7 +19,7 @@
 			android:layout_height="@dimen/titlebar_back_size"
 			android:layout_gravity="left|center"
 			android:adjustViewBounds="true"
-			android:layout_marginHorizontal="@dimen/titlebar_back_marginH"
+			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
 			android:src="@drawable/ic_arrow_back_24px" />
 
 		<TextView

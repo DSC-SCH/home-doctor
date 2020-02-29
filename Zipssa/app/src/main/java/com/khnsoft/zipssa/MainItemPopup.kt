@@ -1,6 +1,9 @@
 package com.khnsoft.zipssa
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -23,9 +26,14 @@ class MainItemPopup : AppCompatActivity() {
 		val sItem = intent.getStringExtra("jItem")
 		val jItem = JsonParser.parseString(sItem).asJsonObject
 
+		val drawable = alarm_label.background as GradientDrawable
+		drawable.setColor(Color.parseColor("${jItem["LABEL_COLOR"].asString}"))
+
 		alarm_title.text = jItem["ALARM_TITLE"].asString
 		alarm_switch.isChecked = (jItem["ALARM_ENABLED"].asInt == 1)
+		start_date.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 		start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["ALARM_START_DT"].asString))
+		end_date.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 		end_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["ALARM_END_DT"].asString))
 
 		val jTimes = JsonParser.parseString(jItem["ALARM_TIMES"].asString).asJsonArray

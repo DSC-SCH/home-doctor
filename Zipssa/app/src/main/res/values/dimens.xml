@@ -7,7 +7,7 @@
 	<dimen name="popup_sizeH">250dp</dimen>
 
 	<dimen name="titlebar_back_size">20dp</dimen>
-	<dimen name="titlebar_back_marginH">20dp</dimen>
+	<dimen name="titlebar_btn_marginH">20dp</dimen>
 	<dimen name="titlebar_title_text">20sp</dimen>
 
 	<dimen name="arrow_updown_paddingR">10dp</dimen>
@@ -41,8 +41,8 @@
 	<dimen name="main_item_split_marginH">10dp</dimen>
 	<dimen name="main_item_remain_paddingV">5dp</dimen>
 	<dimen name="main_item_times_paddingB">10dp</dimen>
-	<dimen name="main_item_title_paddingV">5dp</dimen>
-	<dimen name="main_item_title_paddingH">10dp</dimen>
+	<dimen name="main_item_title_paddingV">3dp</dimen>
+	<dimen name="main_item_title_paddingH">5dp</dimen>
 	<dimen name="main_item_title_marginH">20dp</dimen>
 
 	<dimen name="main_item_icon_size">60dp</dimen>
@@ -51,7 +51,6 @@
 
 	<dimen name="main_item_switch_sizeH">40dp</dimen>
 	<dimen name="main_item_switch_sizeV">20dp</dimen>
-	<dimen name="main_item_switch_marginV">3dp</dimen>
 	<dimen name="main_item_switch_marginR">30dp</dimen>
 
 	<dimen name="main_item_content_circle">5dp</dimen>
@@ -79,7 +78,7 @@
 	<dimen name="main_remain_subtime_text">12sp</dimen>
 
 	<!-- main item popup -->
-	<dimen name="main_popup_title_padding">5dp</dimen>
+	<dimen name="main_popup_title_padding">10dp</dimen>
 
 	<dimen name="main_popup_switch_sizeH">40dp</dimen>
 	<dimen name="main_popup_switch_sizeV">20dp</dimen>
@@ -245,6 +244,38 @@
 	<dimen name="notice_date_text">13sp</dimen>
 	<dimen name="notice_title_text">15sp</dimen>
 	<dimen name="notice_detail_text">18sp</dimen>
+
+	<!-- sync activity -->
+	<dimen name="sync_editbtn_paddingV">5dp</dimen>
+	<dimen name="sync_editbtn_paddingH">10dp</dimen>
+	<dimen name="sync_tab_marginV">15dp</dimen>
+	<dimen name="sync_tab_padding">15dp</dimen>
+	<dimen name="sync_split_marginH">10dp</dimen>
+	<dimen name="sync_addbtn_paddingV">15dp</dimen>
+	<dimen name="sync_addbtn_paddingH">40dp</dimen>
+	<dimen name="sync_addbtn_margin">20dp</dimen>
+	<dimen name="sync_popup_code_padding">15dp</dimen>
+	<dimen name="sync_popup_input_marginH">40dp</dimen>
+	<dimen name="sync_item_marginH">30dp</dimen>
+	<dimen name="sync_item_marginV">15dp</dimen>
+	<dimen name="sync_item_icon_paddingV">5dp</dimen>
+
+	<dimen name="sync_editbtn_text">13sp</dimen>
+	<dimen name="sync_tabbtn_text">15sp</dimen>
+	<dimen name="sync_addbtn_text">18sp</dimen>
+
+	<dimen name="sync_popup_content_text">14sp</dimen>
+	<dimen name="sync_popup_code_text">25sp</dimen>
+	<dimen name="sync_popup_information_text">13sp</dimen>
+	<dimen name="sync_popup_button_text">13sp</dimen>
+
+	<dimen name="sync_item_text">14sp</dimen>
+
+	<!-- sync drawer -->
+	<dimen name="sync_drawer_sizeH">250dp</dimen>
+	<dimen name="sync_drawer_editbtn_size">25dp</dimen>
+
+	<dimen name="sync_drawer_title_text">15sp</dimen>
 
 	<!-- popup window -->
 	<dimen name="popup_padding">10dp</dimen>

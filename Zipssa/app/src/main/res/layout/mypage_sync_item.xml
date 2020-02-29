@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:layout_marginHorizontal="@dimen/sync_item_marginH"
+	android:layout_marginVertical="@dimen/sync_item_marginV" >
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:adjustViewBounds="true"
+		android:src="@drawable/sync_icon"
+		android:paddingVertical="@dimen/sync_item_icon_paddingV"/>
+
+	<TextView
+		android:id="@+id/sync_name"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:fontFamily="@font/nanum_square_ac"
+		android:textColor="@color/text_color"
+		android:textSize="@dimen/sync_item_text"
+		android:text="이름"/>
+
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:adjustViewBounds="true"
+		android:src="@drawable/sync_remove_icon"
+		android:visibility="gone"/>
+</LinearLayout>

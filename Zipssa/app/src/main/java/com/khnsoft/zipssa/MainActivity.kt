@@ -3,7 +3,9 @@ package com.khnsoft.zipssa
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.list_fragment.*
 import kotlinx.android.synthetic.main.main_activity.*
 
 class MainActivity : AppCompatActivity() {
@@ -12,6 +14,8 @@ class MainActivity : AppCompatActivity() {
 
 	var buttons= List<LinearLayout>(0) { LinearLayout(this@MainActivity) }
 	var cur_frag = -1;
+
+	lateinit var mMainListFragment: MainListFragment
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -49,7 +53,8 @@ class MainActivity : AppCompatActivity() {
 
 		when (no) {
 			FRAG_HOME -> {
-				transaction.replace(R.id.main_container, MainListFragment.getInstance())
+				mMainListFragment = MainListFragment.getInstance()
+				transaction.replace(R.id.main_container, mMainListFragment)
 				transaction.commit()
 			}
 
@@ -64,9 +69,13 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	override fun onBackPressed() {
-		if (cur_frag == FRAG_HOME)
-			super.onBackPressed()
-		else
+		if (cur_frag == FRAG_HOME) {
+			if (::mMainListFragment.isInitialized && mMainListFragment.sync_drawer.isDrawerOpen(Gravity.RIGHT))
+				mMainListFragment.sync_drawer.closeDrawer(Gravity.RIGHT)
+			else
+				super.onBackPressed()
+		} else {
 			callPage(FRAG_HOME)
+		}
 	}
 }
