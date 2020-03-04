@@ -205,6 +205,8 @@
 
 	<!-- my page activity -->
 	<dimen name="mypage_marginV">20dp</dimen>
+	<dimen name="mypage_menu_paddingV">13dp</dimen>
+	<dimen name="mypage_menu_paddingH">35dp</dimen>
 
 	<dimen name="mypage_icon_sizeH">60dp</dimen>
 	<dimen name="mypage_icon_sizeV">50dp</dimen>
@@ -277,8 +279,6 @@
 
 	<!-- history activity -->
 	<dimen name="history_split_paddingH">15dp</dimen>
-	<dimen name="history_menu_paddingV">13dp</dimen>
-	<dimen name="history_menu_paddingH">35dp</dimen>
 
 	<dimen name="history_menu_text">15sp</dimen>
 
@@ -311,23 +311,30 @@
 
 	<!-- setting activity -->
 	<dimen name="setting_split_marginH">15dp</dimen>
-	<dimen name="setting_menu_paddingV">13dp</dimen>
-	<dimen name="setting_menu_paddingH">35dp</dimen>
 
 	<!-- leaving activity -->
 	<dimen name="leaving_split_marginH">15dp</dimen>
-	<dimen name="leaving_item_paddingV">13dp</dimen>
-	<dimen name="leaving_item_marginH">35dp</dimen>
 	<dimen name="leaving_input_padding">5dp</dimen>
 	<dimen name="leaving_warning_marginL">10dp</dimen>
 	<dimen name="leaving_warning_marginT">20dp</dimen>
 	<dimen name="leaving_confirm_marginT">40dp</dimen>
-	<dimen name="leaving_confirm_paddingV">10dp</dimen>
+	<dimen name="leaving_confirm_paddingV">15dp</dimen>
 	<dimen name="leaving_confirm_paddingH">80dp</dimen>
 
 	<dimen name="leaving_warning_title_text">15sp</dimen>
 	<dimen name="leaving_warning_text">10sp</dimen>
 	<dimen name="leaving_confirm_text">15sp</dimen>
+
+	<!-- service activity -->
+	<dimen name="service_enquire_input_padding">10dp</dimen>
+	<dimen name="service_enquire_margin">30dp</dimen>
+	<dimen name="service_enquire_email_padding">5dp</dimen>
+	<dimen name="service_enquire_email_distance">10dp</dimen>
+	<dimen name="service_enquire_confirm_marginV">30dp</dimen>
+	<dimen name="service_enquire_confirm_paddingV">15dp</dimen>
+	<dimen name="service_enquire_confirm_paddingH">80dp</dimen>
+
+	<dimen name="service_enquire_text">15sp</dimen>
 
 	<!-- popup window -->
 	<dimen name="popup_padding">10dp</dimen>

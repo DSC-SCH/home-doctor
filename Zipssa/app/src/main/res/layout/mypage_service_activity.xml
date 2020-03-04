@@ -24,7 +24,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
-			android:text="복용 내역"
+			android:text="고객 센터"
 			android:fontFamily="@font/bmjua"
 			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
@@ -38,7 +38,7 @@
 		android:orientation="vertical">
 
 		<TextView
-			android:id="@+id/history_all_btn"
+			android:id="@+id/contract_btn"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:paddingVertical="@dimen/mypage_menu_paddingV"
@@ -46,7 +46,7 @@
 			android:fontFamily="@font/nanum_square_ac"
 			android:textSize="@dimen/mypage_content_text"
 			android:textColor="@color/text_color"
-			android:text="전체 내역"/>
+			android:text="이용약관"/>
 
 		<View
 			android:layout_width="match_parent"
@@ -55,7 +55,7 @@
 			android:layout_marginHorizontal="@dimen/history_split_paddingH"/>
 
 		<TextView
-			android:id="@+id/history_photo_btn"
+			android:id="@+id/enquire_btn"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:paddingVertical="@dimen/mypage_menu_paddingV"
@@ -63,7 +63,7 @@
 			android:fontFamily="@font/nanum_square_ac"
 			android:textSize="@dimen/mypage_content_text"
 			android:textColor="@color/text_color"
-			android:text="처방전 내역"/>
+			android:text="문의하기"/>
 
 		<View
 			android:layout_width="match_parent"

@@ -50,8 +50,8 @@
 					android:id="@+id/reason_1"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:paddingVertical="@dimen/leaving_item_paddingV"
-					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
 					android:fontFamily="@font/nanum_square_ac"
 					android:textSize="@dimen/mypage_content_text"
 					android:textColor="@color/text_color"
@@ -67,8 +67,8 @@
 					android:id="@+id/reason_2"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:paddingVertical="@dimen/leaving_item_paddingV"
-					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
 					android:fontFamily="@font/nanum_square_ac"
 					android:textSize="@dimen/mypage_content_text"
 					android:textColor="@color/text_color"
@@ -84,8 +84,8 @@
 					android:id="@+id/reason_3"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:paddingVertical="@dimen/leaving_item_paddingV"
-					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
 					android:fontFamily="@font/nanum_square_ac"
 					android:textSize="@dimen/mypage_content_text"
 					android:textColor="@color/text_color"
@@ -101,8 +101,8 @@
 					android:id="@+id/reason_4"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:paddingVertical="@dimen/leaving_item_paddingV"
-					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
 					android:fontFamily="@font/nanum_square_ac"
 					android:textSize="@dimen/mypage_content_text"
 					android:textColor="@color/text_color"
@@ -118,13 +118,13 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
-					android:layout_marginHorizontal="@dimen/leaving_item_marginH">
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH">
 
 					<CheckBox
 						android:id="@+id/reason_5"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:paddingVertical="@dimen/leaving_item_paddingV"
+						android:paddingVertical="@dimen/mypage_menu_paddingV"
 						android:fontFamily="@font/nanum_square_ac"
 						android:textSize="@dimen/mypage_content_text"
 						android:textColor="@color/text_color"
@@ -149,7 +149,7 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical"
 				android:background="@color/background_theme"
-				android:padding="@dimen/leaving_item_marginH">
+				android:padding="@dimen/mypage_menu_paddingH">
 
 				<TextView
 					android:layout_width="wrap_content"

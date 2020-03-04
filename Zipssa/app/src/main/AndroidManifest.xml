@@ -41,6 +41,9 @@
 		<activity android:name=".MypageHistoryPhotoDetailActivity" />
 		<activity android:name=".MypageSettingActivity" />
 		<activity android:name=".MypageLeavingActivity" />
+		<activity android:name=".MypageServiceActivity" />
+		<activity android:name=".MypageServiceContractActivity" />
+		<activity android:name=".MypageServiceEnquireActivity" />
 	</application>
 
 </manifest>

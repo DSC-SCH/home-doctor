@@ -40,8 +40,8 @@
 		<TextView
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingVertical="@dimen/history_menu_paddingV"
-			android:paddingHorizontal="@dimen/history_menu_paddingH"
+			android:paddingVertical="@dimen/mypage_menu_paddingV"
+			android:paddingHorizontal="@dimen/mypage_menu_paddingH"
 			android:fontFamily="@font/nanum_square_ac"
 			android:textSize="@dimen/mypage_content_text"
 			android:textColor="@color/text_color"
