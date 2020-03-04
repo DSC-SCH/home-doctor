@@ -16,6 +16,7 @@ class MypageActivity : AppCompatActivity() {
 		notice_btn.setOnClickListener(btnClickListener)
 		sync_btn.setOnClickListener(btnClickListener)
 		history_btn.setOnClickListener(btnClickListener)
+		setting_btn.setOnClickListener(btnClickListener)
 	}
 
 	val btnClickListener = View.OnClickListener {
@@ -24,6 +25,7 @@ class MypageActivity : AppCompatActivity() {
 			R.id.notice_btn -> MypageNoticeActivity::class.java
 			R.id.sync_btn -> MypageSyncActivity::class.java
 			R.id.history_btn -> MypageHistoryActivity::class.java
+			R.id.setting_btn -> MypageSettingActivity::class.java
 			else -> MypageActivity::class.java
 		})
 

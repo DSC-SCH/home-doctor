@@ -39,6 +39,7 @@
 		<activity android:name=".MypageHistoryAllActivity" />
 		<activity android:name=".MypageHistoryPhotoActivity" />
 		<activity android:name=".MypageHistoryPhotoDetailActivity" />
+		<activity android:name=".MypageSettingActivity" />
 	</application>
 
 </manifest>

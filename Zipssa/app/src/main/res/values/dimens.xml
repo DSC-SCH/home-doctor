@@ -309,6 +309,11 @@
 
 	<dimen name="history_photo_title_text">15sp</dimen>
 
+	<!-- setting activity -->
+	<dimen name="setting_split_paddingH">15dp</dimen>
+	<dimen name="setting_menu_paddingV">13dp</dimen>
+	<dimen name="setting_menu_paddingH">35dp</dimen>
+
 	<!-- popup window -->
 	<dimen name="popup_padding">10dp</dimen>
 
