@@ -35,6 +35,10 @@
 		<activity android:name=".MypageNoticeActivity" />
 		<activity android:name=".MypageNoticeDetailActivity" />
 		<activity android:name=".MypageSyncActivity" />
+		<activity android:name=".MypageHistoryActivity" />
+		<activity android:name=".MypageHistoryAllActivity" />
+		<activity android:name=".MypageHistoryPhotoActivity" />
+		<activity android:name=".MypageHistoryPhotoDetailActivity" />
 	</application>
 
 </manifest>

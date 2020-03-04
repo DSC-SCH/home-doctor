@@ -22,7 +22,6 @@ class MainItemPopup : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.list_item_popup)
 
-		val _intent = intent
 		val sItem = intent.getStringExtra("jItem")
 		val jItem = JsonParser.parseString(sItem).asJsonObject
 

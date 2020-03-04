@@ -26,4 +26,5 @@
     <color name="medicine_detail_warning">#FF7070</color>
 
     <color name="mypage_background">#F7F7F7</color>
+    <color name="history_photo_background">#F7F7F7</color>
 </resources>

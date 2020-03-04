@@ -33,13 +33,14 @@
 
 	<ScrollView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:layout_marginTop="@dimen/mypage_marginV"
+		android:background="@color/background_theme">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:layout_marginVertical="@dimen/notice_marginV"
 			android:gravity="center"
 			android:background="@color/background_theme">
 

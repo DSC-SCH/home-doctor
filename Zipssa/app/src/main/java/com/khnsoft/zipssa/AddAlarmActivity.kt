@@ -60,9 +60,9 @@ class AddAlarmActivity : AppCompatActivity() {
 
 		// Setting alarm time
 		val alarm_counts_array = resources.getStringArray(R.array.alarm_times)
-		val adapter = ArrayAdapter<String>(applicationContext, R.layout.alarm_count_spinner_item, alarm_counts_array)
-		adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-		alarm_times.adapter = adapter
+		val arrayAdapter = ArrayAdapter<String>(applicationContext, R.layout.alarm_count_spinner_item, alarm_counts_array)
+		arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+		alarm_times.adapter = arrayAdapter
 
 		alarm_times.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 			override fun onNothingSelected(parent: AdapterView<*>?) {

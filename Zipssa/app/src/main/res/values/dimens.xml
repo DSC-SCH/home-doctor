@@ -204,6 +204,8 @@
 	<dimen name="medicine_content_en_text">10sp</dimen>
 
 	<!-- my page activity -->
+	<dimen name="mypage_marginV">20dp</dimen>
+
 	<dimen name="mypage_icon_sizeH">60dp</dimen>
 	<dimen name="mypage_icon_sizeV">50dp</dimen>
 	<dimen name="mypage_icon_padding">15dp</dimen>
@@ -213,7 +215,6 @@
 	<dimen name="mypage_content_text">15sp</dimen>
 
 	<!-- my profile activity -->
-	<dimen name="myprofile_marginV">15dp</dimen>
 	<dimen name="myprofile_paddingH">15dp</dimen>
 	<dimen name="myprofile_content_sizeV">@dimen/mypage_icon_sizeV</dimen>
 	<dimen name="myprofile_content_padding">15dp</dimen>
@@ -221,12 +222,11 @@
 	<dimen name="myprofile_content_text">15sp</dimen>
 
 	<!-- change password activity -->
-	<dimen name="changepw_marginV">15dp</dimen>
 	<dimen name="changepw_paddingH">15dp</dimen>
 	<dimen name="changepw_content_padding">15dp</dimen>
 	<dimen name="changepw_input_sizeH">150dp</dimen>
 	<dimen name="changepw_input_marginV">10dp</dimen>
-	<dimen name="changepw_confirm_marginV">20dp</dimen>
+	<dimen name="changepw_confirm_marginT">30dp</dimen>
 	<dimen name="changepw_confirm_paddingV">15dp</dimen>
 	<dimen name="changepw_confirm_paddingH">60dp</dimen>
 
@@ -234,7 +234,6 @@
 	<dimen name="changepw_confirm_text">13sp</dimen>
 
 	<!-- my profile activity -->
-	<dimen name="notice_marginV">15dp</dimen>
 	<dimen name="notice_paddingH">15dp</dimen>
 	<dimen name="notice_content_sizeV">@dimen/mypage_icon_sizeV</dimen>
 	<dimen name="notice_content_padding">15dp</dimen>
@@ -248,7 +247,6 @@
 	<!-- sync activity -->
 	<dimen name="sync_editbtn_paddingV">5dp</dimen>
 	<dimen name="sync_editbtn_paddingH">10dp</dimen>
-	<dimen name="sync_tab_marginV">15dp</dimen>
 	<dimen name="sync_tab_padding">15dp</dimen>
 	<dimen name="sync_split_marginH">10dp</dimen>
 	<dimen name="sync_addbtn_paddingV">15dp</dimen>
@@ -277,6 +275,40 @@
 
 	<dimen name="sync_drawer_title_text">15sp</dimen>
 
+	<!-- history activity -->
+	<dimen name="history_split_paddingH">15dp</dimen>
+	<dimen name="history_menu_paddingV">13dp</dimen>
+	<dimen name="history_menu_paddingH">35dp</dimen>
+
+	<dimen name="history_menu_text">15sp</dimen>
+
+	<dimen name="history_item_paddingH">40dp</dimen>
+	<dimen name="history_item_paddingV">15dp</dimen>
+	<dimen name="history_all_content_paddingV">10dp</dimen>
+	<dimen name="history_all_content_paddingH">20dp</dimen>
+	<dimen name="history_all_split_marginV">5dp</dimen>
+	<dimen name="history_all_title_paddingV">3dp</dimen>
+	<dimen name="history_all_title_paddingH">5dp</dimen>
+
+	<dimen name="history_all_title_text">15sp</dimen>
+	<dimen name="history_all_content_text">15sp</dimen>
+
+	<dimen name="history_photo_padding">5dp</dimen>
+	<dimen name="history_photo_image_sizeH">120dp</dimen>
+	<dimen name="history_photo_image_sizeV">160dp</dimen>
+	<dimen name="history_photo_split_marginV">3dp</dimen>
+	<dimen name="history_photo_title_paddingH">5dp</dimen>
+	<dimen name="history_photo_title_paddingV">3dp</dimen>
+	<dimen name="history_photo_detail_content_paddingH">30dp</dimen>
+	<dimen name="history_photo_detail_content_paddingT">30dp</dimen>
+	<dimen name="history_photo_detail_content_paddingB">10dp</dimen>
+	<dimen name="history_photo_detail_split_marginV">5dp</dimen>
+
+	<dimen name="history_photo_detail_list_imageH">60dp</dimen>
+	<dimen name="history_photo_detail_list_imageV">80dp</dimen>
+
+	<dimen name="history_photo_title_text">15sp</dimen>
+
 	<!-- popup window -->
 	<dimen name="popup_padding">10dp</dimen>
 
@@ -286,5 +318,4 @@
 
 	<dimen name="popup_content_text">15sp</dimen>
 	<dimen name="popup_button_text">15sp</dimen>
-
 </resources>

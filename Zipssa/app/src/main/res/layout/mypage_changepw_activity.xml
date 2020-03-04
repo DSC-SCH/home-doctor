@@ -33,9 +33,9 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="match_parent"
 		android:orientation="vertical"
-		android:layout_marginVertical="@dimen/changepw_marginV"
+		android:layout_marginTop="@dimen/mypage_marginV"
 		android:paddingHorizontal="@dimen/changepw_paddingH"
 		android:background="@color/background_theme">
 
@@ -145,7 +145,7 @@
 			android:background="@drawable/changepw_confirm_selector"
 			android:layout_gravity="center"
 			android:gravity="center"
-			android:layout_marginVertical="@dimen/changepw_confirm_marginV"
+			android:layout_marginTop="@dimen/changepw_confirm_marginT"
 			android:paddingVertical="@dimen/changepw_confirm_paddingV"
 			android:paddingHorizontal="@dimen/changepw_confirm_paddingH"
 			android:fontFamily="@font/lotte_dream_bold"

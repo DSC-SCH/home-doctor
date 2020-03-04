@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -14,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.ToggleButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -166,8 +164,8 @@ class MainListFragment : Fragment() {
 					val nextCal = Calendar.getInstance()
 					var temp = ""
 					selectDay@ while (true) {
-						for (i in lRepeats) {
-							if (i.asInt == nextCal[Calendar.DAY_OF_WEEK]) {
+						for (weekday in lRepeats) {
+							if (weekday.asInt == nextCal[Calendar.DAY_OF_WEEK]) {
 								for (i in 0..lTimes.size() - 1) {
 									temp = lTimes[i].asString
 									if (curCal.timeInMillis < sdf_dt_next.parse("${sdf_date_save.format(nextCal.time)} ${temp}").time) {
@@ -231,10 +229,10 @@ class MainListFragment : Fragment() {
 						val nextCal = Calendar.getInstance()
 						var temp = ""
 						selectDay@ while (true) {
-							for (i in lRepeats) {
-								if (i.asInt == nextCal[Calendar.DAY_OF_WEEK]) {
-									for (i in 0..lTimes.size() - 1) {
-										temp = lTimes[i].asString
+							for (weekday in lRepeats) {
+								if (weekday.asInt == nextCal[Calendar.DAY_OF_WEEK]) {
+									for (j in 0..lTimes.size() - 1) {
+										temp = lTimes[j].asString
 										if (curCal.timeInMillis < sdf_dt_next.parse("${sdf_date_save.format(nextCal.time)} ${temp}").time) {
 											break@selectDay
 										}
