@@ -44,13 +44,14 @@
 			android:text="수정" />
 	</FrameLayout>
 
-	<RadioGroup
+	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
-		android:layout_marginVertical="@dimen/mypage_marginV">
+		android:layout_marginVertical="@dimen/mypage_marginV" >
 
 		<RadioButton
+			android:id="@+id/manage_manager"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -65,6 +66,7 @@
 			android:text="매니저 관리" />
 
 		<RadioButton
+			android:id="@+id/manage_crew"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -76,7 +78,7 @@
 			android:textSize="@dimen/sync_tabbtn_text"
 			android:textColor="@drawable/sync_tab_text_color"
 			android:text="크루 관리" />
-	</RadioGroup>
+	</LinearLayout>
 
 	<View
 		android:layout_width="match_parent"

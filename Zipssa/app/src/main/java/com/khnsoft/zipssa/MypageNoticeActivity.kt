@@ -18,6 +18,8 @@ class MypageNoticeActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_notice_activity)
 
+		back_btn.setOnClickListener { onBackPressed() }
+
 		// TODO("Get notice from server")
 		val adapter = NoticeRecyclerAdapter(this@MypageNoticeActivity, JsonArray())
 		val lm = LinearLayoutManager(this@MypageNoticeActivity)

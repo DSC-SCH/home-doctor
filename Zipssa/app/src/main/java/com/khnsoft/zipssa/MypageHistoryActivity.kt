@@ -13,6 +13,8 @@ class MypageHistoryActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_history_activity)
 
+		back_btn.setOnClickListener { onBackPressed() }
+
 		history_all_btn.setOnClickListener {
 			val intent = Intent(this@MypageHistoryActivity, MypageHistoryAllActivity::class.java)
 			startActivity(intent)

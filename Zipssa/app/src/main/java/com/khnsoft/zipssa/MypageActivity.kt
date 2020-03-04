@@ -12,14 +12,21 @@ class MypageActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_activity)
 
-		myprofile_btn.setOnClickListener {
-			val intent = Intent(this@MypageActivity, MypageMyprofileActivity::class.java)
-			startActivity(intent)
-		}
+		myprofile_btn.setOnClickListener(btnClickListener)
+		notice_btn.setOnClickListener(btnClickListener)
+		sync_btn.setOnClickListener(btnClickListener)
+		history_btn.setOnClickListener(btnClickListener)
+	}
 
-		notice_btn.setOnClickListener {
-			val intent = Intent(this@MypageActivity, MypageNoticeActivity::class.java)
-			startActivity(intent)
-		}
+	val btnClickListener = View.OnClickListener {
+		val intent = Intent(this@MypageActivity, when(it.id) {
+			R.id.myprofile_btn -> MypageMyprofileActivity::class.java
+			R.id.notice_btn -> MypageNoticeActivity::class.java
+			R.id.sync_btn -> MypageSyncActivity::class.java
+			R.id.history_btn -> MypageHistoryActivity::class.java
+			else -> MypageActivity::class.java
+		})
+
+		startActivity(intent)
 	}
 }
