@@ -26,6 +26,7 @@ class MypageActivity : AppCompatActivity() {
 			R.id.sync_btn -> MypageSyncActivity::class.java
 			R.id.history_btn -> MypageHistoryActivity::class.java
 			R.id.setting_btn -> MypageSettingActivity::class.java
+			R.id.leave_btn -> MypageLeavingActivity::class.java
 			else -> MypageActivity::class.java
 		})
 

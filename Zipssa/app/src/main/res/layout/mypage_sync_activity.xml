@@ -33,7 +33,7 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:background="@drawable/sync_edit_btn"
+			android:background="@drawable/white_btn"
 			android:layout_gravity="right|center"
 			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
 			android:paddingHorizontal="@dimen/sync_editbtn_paddingH"
@@ -101,7 +101,7 @@
 		android:layout_margin="@dimen/sync_addbtn_margin"
 		android:paddingVertical="@dimen/sync_addbtn_paddingV"
 		android:paddingHorizontal="@dimen/sync_addbtn_paddingH"
-		android:background="@drawable/sync_addbtn"
+		android:background="@drawable/theme_btn"
 		android:fontFamily="@font/lotte_dream_bold"
 		android:textSize="@dimen/sync_addbtn_text"
 		android:textColor="#FFFFFF"

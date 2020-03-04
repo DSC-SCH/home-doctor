@@ -64,6 +64,8 @@ class MainListFragment : Fragment() {
 			refresh()
 		}
 
+		// TODO("Move drawer to main_activity")
+
 		drawer_open_btn.setOnClickListener {
 			sync_drawer.openDrawer(Gravity.RIGHT)
 		}

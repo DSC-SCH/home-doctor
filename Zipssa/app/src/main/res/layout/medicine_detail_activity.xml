@@ -273,7 +273,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/lotte_dream_bold"
-					android:textColor="@color/medicine_detail_warning"
+					android:textColor="@color/warning_color"
 					android:textSize="@dimen/medicine_title_text"
 					android:text="@string/underline_medicine_warning" />
 
@@ -300,7 +300,7 @@
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/medicine_context_distance"
 					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/medicine_detail_warning"
+					android:textColor="@color/warning_color"
 					android:textSize="@dimen/medicine_content_text"
 					android:text="주의사항"/>
 			</LinearLayout>

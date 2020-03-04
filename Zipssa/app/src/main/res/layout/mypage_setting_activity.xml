@@ -52,7 +52,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/split_line"
 			android:background="@color/split_line"
-			android:layout_marginHorizontal="@dimen/setting_split_paddingH"/>
+			android:layout_marginHorizontal="@dimen/setting_split_marginH"/>
 
 		<Switch
 			android:id="@+id/alert_in_app"
@@ -69,7 +69,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/split_line"
 			android:background="@color/split_line"
-			android:layout_marginHorizontal="@dimen/setting_split_paddingH"/>
+			android:layout_marginHorizontal="@dimen/setting_split_marginH"/>
 
 		<Switch
 			android:id="@+id/sound_in_app"
@@ -86,7 +86,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/split_line"
 			android:background="@color/split_line"
-			android:layout_marginHorizontal="@dimen/setting_split_paddingH"/>
+			android:layout_marginHorizontal="@dimen/setting_split_marginH"/>
 
 		<Switch
 			android:id="@+id/vibrate_in_app"
@@ -103,6 +103,6 @@
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/split_line"
 			android:background="@color/split_line"
-			android:layout_marginHorizontal="@dimen/setting_split_paddingH"/>
+			android:layout_marginHorizontal="@dimen/setting_split_marginH"/>
 	</LinearLayout>
 </LinearLayout>

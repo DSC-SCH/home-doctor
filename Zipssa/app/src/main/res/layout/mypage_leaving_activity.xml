@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/main_theme">
+
+		<ImageView
+			android:id="@+id/back_btn"
+			android:layout_width="@dimen/titlebar_back_size"
+			android:layout_height="@dimen/titlebar_back_size"
+			android:layout_gravity="left|center"
+			android:adjustViewBounds="true"
+			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
+			android:src="@drawable/ic_arrow_back_24px" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="알림 설정"
+			android:fontFamily="@font/bmjua"
+			android:textSize="@dimen/titlebar_title_text"
+			android:textColor="#FFFFFF" />
+	</FrameLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginVertical="@dimen/mypage_marginV"
+				android:background="@color/background_theme"
+				android:orientation="vertical">
+
+				<CheckBox
+					android:id="@+id/reason_1"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/leaving_item_paddingV"
+					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="앱 서비스 이용 불편"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<CheckBox
+					android:id="@+id/reason_2"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/leaving_item_paddingV"
+					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="서비스의 필요성을 못 느낌"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<CheckBox
+					android:id="@+id/reason_3"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/leaving_item_paddingV"
+					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="개인 정보 보안 문제"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<CheckBox
+					android:id="@+id/reason_4"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/leaving_item_paddingV"
+					android:layout_marginHorizontal="@dimen/leaving_item_marginH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="유사 서비스 어플리케이션 이용"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:layout_marginHorizontal="@dimen/leaving_item_marginH">
+
+					<CheckBox
+						android:id="@+id/reason_5"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:paddingVertical="@dimen/leaving_item_paddingV"
+						android:fontFamily="@font/nanum_square_ac"
+						android:textSize="@dimen/mypage_content_text"
+						android:textColor="@color/text_color"
+						android:text="기타  " />
+
+					<EditText
+						android:id="@+id/reason_else"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:background="@drawable/stroke_box"
+						android:padding="@dimen/leaving_input_padding"
+						android:enabled="false"
+						android:fontFamily="@font/nanum_square_ac"
+						android:textSize="@dimen/mypage_content_text"
+						android:textColor="@color/text_color"
+						android:hint="기타 사유"/>
+				</LinearLayout>
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:background="@color/background_theme"
+				android:padding="@dimen/leaving_item_marginH">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/leaving_warning_title_text"
+					android:textColor="@color/warning_color"
+					android:text="주의사항"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/leaving_warning_marginT"
+					android:layout_marginLeft="@dimen/leaving_warning_marginL"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/leaving_warning_title_text"
+					android:textColor="@color/text_color"
+					android:text="불량 이용자의 부정한 이용의 재발(타인의 개인정보 이용 등)을 방지하기 위해 회원의 개인정보를 회원 탈퇴일로부터 3개월까지 보유합니다. 소셜 로그인의 경우 약손과 연결된 계정을 직접 해제해주셔야 삭제가 완료됩니다. (알아보기)\n그 후 개인정보 및 이용기록은 모두 삭제되며, 삭제된 계정은 복구할 수 없습니다."
+					android:lineSpacingExtra="5dp"/>
+
+				<TextView
+					android:id="@+id/confirm_btn"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@drawable/theme_btn"
+					android:layout_gravity="center"
+					android:layout_marginTop="@dimen/leaving_confirm_marginT"
+					android:paddingVertical="@dimen/leaving_confirm_paddingV"
+					android:paddingHorizontal="@dimen/leaving_confirm_paddingH"
+					android:fontFamily="@font/lotte_dream_bold"
+					android:textSize="@dimen/leaving_confirm_text"
+					android:textColor="#FFFFFF"
+					android:text="확인" />
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

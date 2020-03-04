@@ -63,7 +63,7 @@
 			<EditText
 				android:layout_width="@dimen/changepw_input_sizeH"
 				android:layout_height="match_parent"
-				android:background="@drawable/changepw_passwd_box"
+				android:background="@drawable/stroke_box"
 				android:layout_marginVertical="@dimen/changepw_input_marginV"
 				android:gravity="right"
 				android:inputType="textPassword"/>
@@ -98,7 +98,7 @@
 			<EditText
 				android:layout_width="@dimen/changepw_input_sizeH"
 				android:layout_height="match_parent"
-				android:background="@drawable/changepw_passwd_box"
+				android:background="@drawable/stroke_box"
 				android:layout_marginVertical="@dimen/changepw_input_marginV"
 				android:gravity="right"
 				android:inputType="textPassword"/>
@@ -133,7 +133,7 @@
 			<EditText
 				android:layout_width="@dimen/changepw_input_sizeH"
 				android:layout_height="match_parent"
-				android:background="@drawable/changepw_passwd_box"
+				android:background="@drawable/stroke_box"
 				android:layout_marginVertical="@dimen/changepw_input_marginV"
 				android:gravity="right"
 				android:inputType="textPassword"/>
