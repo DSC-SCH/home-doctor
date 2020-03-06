@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:paddingHorizontal="@dimen/login_paddingH"
+	android:background="@color/background_theme">
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="2" />
+
+	<ImageView
+		android:layout_width="@dimen/login_logo_sizeH"
+		android:layout_height="@dimen/login_logo_sizeV"
+		android:src="@drawable/app_logo"
+		android:layout_gravity="center"/>
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="2" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="center"
+		android:layout_marginVertical="@dimen/login_input_marginV">
+
+		<TextView
+			android:layout_width="@dimen/login_input_title_sizeH"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/login_content_text"
+			android:textColor="@color/text_color"
+			android:text="아이디" />
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/account_stroke_box"
+			android:padding="@dimen/login_input_padding"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/login_content_text"
+			android:textColor="@color/text_color" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:gravity="center"
+		android:layout_marginVertical="@dimen/login_input_marginV">
+
+		<TextView
+			android:layout_width="@dimen/login_input_title_sizeH"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/login_content_text"
+			android:textColor="@color/text_color"
+			android:text="비밀번호" />
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/account_stroke_box"
+			android:padding="@dimen/login_input_padding"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/login_content_text"
+			android:textColor="@color/text_color" />
+	</LinearLayout>
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/account_stroke_box"
+		android:gravity="center"
+		android:paddingVertical="@dimen/login_btn_paddingV"
+		android:layout_marginHorizontal="@dimen/login_btn_marginH"
+		android:layout_marginVertical="@dimen/login_input_marginV"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textSize="@dimen/login_content_text"
+		android:textColor="@color/text_color"
+		android:text="로그인" />
+
+	<TextView
+		android:id="@+id/join_btn"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/account_stroke_box"
+		android:gravity="center"
+		android:paddingVertical="@dimen/login_btn_paddingV"
+		android:layout_marginHorizontal="@dimen/login_btn_marginH"
+		android:layout_marginVertical="@dimen/login_input_marginV"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textSize="@dimen/login_content_text"
+		android:textColor="@color/text_color"
+		android:text="회원가입" />
+
+	<TextView
+		android:id="@+id/no_login_btn"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/account_gray_box"
+		android:gravity="center"
+		android:paddingVertical="@dimen/login_btn_paddingV"
+		android:layout_marginHorizontal="@dimen/login_btn_marginH"
+		android:layout_marginVertical="@dimen/login_input_marginV"
+		android:elevation="@dimen/shadow_size"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textSize="@dimen/login_content_text"
+		android:textColor="@color/text_color"
+		android:text="비회원으로 이용" />
+
+	<LinearLayout
+		android:id="@+id/login_kakao_btn"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginHorizontal="@dimen/login_btn_marginH"
+		android:layout_marginVertical="@dimen/login_input_marginV"
+		android:elevation="@dimen/shadow_size"
+		android:background="@drawable/kakao_btn"
+		android:gravity="center"
+		android:paddingVertical="@dimen/login_social_paddingV">
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:src="@drawable/kakao_logo"
+			android:adjustViewBounds="true" />
+
+		<View
+			android:layout_width="@dimen/split_line"
+			android:layout_height="match_parent"
+			android:background="@color/kakao_text_color"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/login_content_text"
+			android:textColor="@color/kakao_text_color"
+			android:text="카카오 로그인" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/login_google_btn"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginHorizontal="@dimen/login_btn_marginH"
+		android:layout_marginVertical="@dimen/login_input_marginV"
+		android:elevation="@dimen/shadow_size"
+		android:background="@drawable/google_btn"
+		android:gravity="center"
+		android:paddingVertical="@dimen/login_social_paddingV">
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:src="@drawable/google_logo"
+			android:adjustViewBounds="true" />
+
+		<View
+			android:layout_width="@dimen/split_line"
+			android:layout_height="match_parent"
+			android:background="@color/google_text_color"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/login_content_text"
+			android:textColor="@color/google_text_color"
+			android:text="구글 로그인" />
+	</LinearLayout>
+
+	<com.kakao.usermgmt.LoginButton
+		android:id="@+id/login_kakao_origin_btn"
+		android:layout_width="0dp"
+		android:layout_height="0dp" />
+
+	<com.google.android.gms.common.SignInButton
+		android:id="@+id/login_google_origin_btn"
+		android:layout_width="0dp"
+		android:layout_height="0dp" />
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+</LinearLayout>

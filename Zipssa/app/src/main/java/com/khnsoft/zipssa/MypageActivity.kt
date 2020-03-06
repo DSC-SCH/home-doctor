@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.medicine_detail_activity.*
 import kotlinx.android.synthetic.main.mypage_activity.*
 
 class MypageActivity : AppCompatActivity() {
@@ -12,11 +11,17 @@ class MypageActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_activity)
 
+		back_btn.setOnClickListener {
+			onBackPressed()
+		}
+
 		myprofile_btn.setOnClickListener(btnClickListener)
 		notice_btn.setOnClickListener(btnClickListener)
 		sync_btn.setOnClickListener(btnClickListener)
 		history_btn.setOnClickListener(btnClickListener)
 		setting_btn.setOnClickListener(btnClickListener)
+		leave_btn.setOnClickListener(btnClickListener)
+		service_btn.setOnClickListener(btnClickListener)
 	}
 
 	val btnClickListener = View.OnClickListener {
@@ -27,6 +32,7 @@ class MypageActivity : AppCompatActivity() {
 			R.id.history_btn -> MypageHistoryActivity::class.java
 			R.id.setting_btn -> MypageSettingActivity::class.java
 			R.id.leave_btn -> MypageLeavingActivity::class.java
+			R.id.service_btn -> MypageServiceActivity::class.java
 			else -> MypageActivity::class.java
 		})
 

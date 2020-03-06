@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
-import kotlinx.android.synthetic.main.mypage_history_activity.*
 import kotlinx.android.synthetic.main.mypage_history_all_activity.*
 
 class MypageHistoryAllActivity : AppCompatActivity() {
@@ -21,6 +20,10 @@ class MypageHistoryAllActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_history_all_activity)
+
+		back_btn.setOnClickListener {
+			onBackPressed()
+		}
 
 		val lHistory = JsonArray()
 		// TODO("Get all history from DB")

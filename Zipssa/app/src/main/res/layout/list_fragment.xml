@@ -27,7 +27,7 @@
 					android:layout_width="wrap_content"
 					android:layout_height="match_parent"
 					android:layout_gravity="center"
-					android:src="@drawable/main_logo"
+					android:src="@drawable/app_logo_horizontal"
 					android:adjustViewBounds="true"
 					android:layout_margin="@dimen/main_logo_margin"/>
 

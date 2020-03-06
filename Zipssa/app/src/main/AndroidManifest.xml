@@ -11,13 +11,7 @@
 		android:theme="@style/AppTheme"
 		android:usesCleartextTraffic="true">
 		<activity android:name=".MypageMyprofileActivity"/>
-		<activity android:name=".MainActivity">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
+		<activity android:name=".MainActivity"/>
 		<activity android:name=".AddAlarmActivity" />
 		<activity android:name=".EditAlarmActivity" />
 		<activity android:name=".MedicineDetailActivity" />
@@ -44,6 +38,14 @@
 		<activity android:name=".MypageServiceActivity" />
 		<activity android:name=".MypageServiceContractActivity" />
 		<activity android:name=".MypageServiceEnquireActivity" />
+		<activity android:name=".LoginActivity" />
+		<activity android:name=".JoinActivity" />
+		<activity android:name=".PermissionActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".ContractActivity" />
 	</application>
-
 </manifest>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:paddingHorizontal="@dimen/permission_paddingH">
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textColor="@color/text_color"
+		android:textSize="@dimen/permission_title_text"
+		android:text="원활한 서비스 사용을 위해\n아래와 같은 권한이 필요합니다."
+		android:lineSpacingExtra="@dimen/permission_content_linespacing"/>
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center">
+
+			<ImageView
+				android:layout_width="@dimen/permission_img_sizeH"
+				android:layout_height="@dimen/permission_img_sizeV"
+				android:src="@drawable/permission_camera"
+				android:adjustViewBounds="true"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/permission_content_marginL"
+				android:lines="2"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/permission_content_text"
+				android:text="처방전 저장 및 조회서비스를 활용하기 위해서 촬영이 필요합니다."/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center"
+			android:layout_marginTop="@dimen/permission_content_marginT">
+
+			<ImageView
+				android:layout_width="@dimen/permission_img_sizeH"
+				android:layout_height="@dimen/permission_img_sizeV"
+				android:src="@drawable/permission_alert"
+				android:adjustViewBounds="true"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/permission_content_marginL"
+				android:lines="2"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/permission_content_text"
+				android:text="복용할 약물과 관련하여 알림서비스를 제공합니다."/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center"
+			android:layout_marginTop="@dimen/permission_content_marginT">
+
+			<ImageView
+				android:layout_width="@dimen/permission_img_sizeH"
+				android:layout_height="@dimen/permission_img_sizeV"
+				android:src="@drawable/permission_storage"
+				android:adjustViewBounds="true"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="@dimen/permission_content_marginL"
+				android:lines="2"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/permission_content_text"
+				android:text="단말기 내에 저장된 처방전을 불러오기 위해 저장소 접근 권한이 필요합니다."/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<TextView
+		android:id="@+id/permission_confirm_btn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/permission_btn"
+		android:layout_gravity="center"
+		android:paddingVertical="@dimen/permission_btn_paddingV"
+		android:paddingHorizontal="@dimen/permission_btn_paddingH"
+		android:fontFamily="@font/nanum_square_ac"
+		android:textSize="@dimen/permission_title_text"
+		android:textColor="#FFFFFF"
+		android:text="확인"/>
+
+	<Space
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+</LinearLayout>

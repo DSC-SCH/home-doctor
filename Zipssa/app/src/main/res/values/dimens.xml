@@ -12,6 +12,50 @@
 
 	<dimen name="arrow_updown_paddingR">10dp</dimen>
 
+	<!-- loading page -->
+	<dimen name="loading_paddingV">40dp</dimen>
+
+	<!-- loading page -->
+	<dimen name="permission_paddingH">40dp</dimen>
+	<dimen name="permission_img_sizeH">50dp</dimen>
+	<dimen name="permission_img_sizeV">40dp</dimen>
+	<dimen name="permission_btn_paddingH">60dp</dimen>
+	<dimen name="permission_btn_paddingV">15dp</dimen>
+	<dimen name="permission_content_linespacing">10dp</dimen>
+	<dimen name="permission_content_marginL">10dp</dimen>
+	<dimen name="permission_content_marginT">20dp</dimen>
+
+	<dimen name="permission_title_text">20sp</dimen>
+	<dimen name="permission_content_text">13sp</dimen>
+
+	<!-- login page -->
+	<dimen name="login_paddingH">40dp</dimen>
+	<dimen name="login_logo_sizeH">120dp</dimen>
+	<dimen name="login_logo_sizeV">75dp</dimen>
+	<dimen name="login_input_padding">5dp</dimen>
+	<dimen name="login_input_title_sizeH">70sp</dimen>
+	<dimen name="login_input_marginV">8dp</dimen>
+	<dimen name="login_btn_paddingV">5dp</dimen>
+	<dimen name="login_btn_marginH">30dp</dimen>
+	<dimen name="login_social_paddingV">10dp</dimen>
+
+	<dimen name="login_content_text">15sp</dimen>
+
+	<!-- join page -->
+	<dimen name="join_padding">40dp</dimen>
+	<dimen name="join_input_padding">5dp</dimen>
+	<dimen name="join_check_paddingH">15dp</dimen>
+	<dimen name="join_check_marginL">10dp</dimen>
+	<dimen name="join_item_marginT">15dp</dimen>
+	<dimen name="join_contract_marginV">40dp</dimen>
+	<dimen name="join_btn_paddingV">15dp</dimen>
+	<dimen name="join_btn_marginH">40dp</dimen>
+
+	<dimen name="join_item_text">13sp</dimen>
+	<dimen name="join_check_text">10sp</dimen>
+	<dimen name="join_contract_text">10sp</dimen>
+	<dimen name="join_btn_text">15sp</dimen>
+
 	<!--  main page  -->
 	<dimen name="main_bottom_bar_sizeH">60dp</dimen>
 	<dimen name="main_bottom_bar_marginH">10dp</dimen>

@@ -27,4 +27,10 @@
 
     <color name="mypage_background">#F7F7F7</color>
     <color name="history_photo_background">#F7F7F7</color>
+
+    <color name="kakao_color">#FFEB00</color>
+    <color name="kakao_text_color">#472A2B</color>
+
+    <color name="google_color">#FFFFFF</color>
+    <color name="google_text_color">#6F6F6F</color>
 </resources>

@@ -78,6 +78,7 @@
 					android:layout_height="wrap_content"
 					android:background="@drawable/stroke_box"
 					android:layout_marginLeft="@dimen/service_enquire_email_distance"
+					android:padding="@dimen/service_enquire_email_padding"
 					android:fontFamily="@font/nanum_square_ac"
 					android:textColor="@color/text_color"
 					android:textSize="@dimen/service_enquire_text" />

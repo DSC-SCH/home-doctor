@@ -1,5 +1,6 @@
 package com.khnsoft.zipssa
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.mypage_myprofile_activity.*
@@ -14,5 +15,10 @@ class MypageMyprofileActivity : AppCompatActivity() {
 
 		// TODO("Show profile")
 		// TODO("Change passwd")
+
+		change_pw_btn.setOnClickListener {
+			val intent = Intent(this@MypageMyprofileActivity, MypageChangepwActivity::class.java)
+			startActivity(intent)
+		}
 	}
 }

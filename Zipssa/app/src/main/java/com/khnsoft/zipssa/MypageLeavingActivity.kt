@@ -11,13 +11,15 @@ import kotlinx.android.synthetic.main.mypage_setting_activity.*
 import kotlinx.android.synthetic.main.mypage_setting_activity.back_btn
 
 class MypageLeavingActivity : AppCompatActivity() {
-	val reasonList = arrayOf(reason_1, reason_2, reason_3, reason_4, reason_5)
+	lateinit var reasonList : Array<CheckBox>
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.mypage_setting_activity)
+		setContentView(R.layout.mypage_leaving_activity)
 
 		back_btn.setOnClickListener { onBackPressed() }
+
+		reasonList = arrayOf(reason_1, reason_2, reason_3, reason_4, reason_5)
 
 		for (reason in reasonList)
 			reason.setOnClickListener(reasonClickListener)

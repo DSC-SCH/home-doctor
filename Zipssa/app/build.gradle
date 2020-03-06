@@ -34,4 +34,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.27.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 }

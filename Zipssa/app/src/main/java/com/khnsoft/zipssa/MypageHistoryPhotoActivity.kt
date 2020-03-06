@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
-import kotlinx.android.synthetic.main.mypage_history_activity.*
+import kotlinx.android.synthetic.main.mypage_history_photo_activity.*
 
 class MypageHistoryPhotoActivity : AppCompatActivity() {
 	val PAGE_MANAGER = 0
@@ -19,6 +19,10 @@ class MypageHistoryPhotoActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_history_photo_activity)
+
+		back_btn.setOnClickListener {
+			onBackPressed()
+		}
 
 		val lPhoto = JsonArray()
 
