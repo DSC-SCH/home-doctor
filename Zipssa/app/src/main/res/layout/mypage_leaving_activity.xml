@@ -25,7 +25,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
-			android:text="알림 설정"
+			android:text="서비스 탈퇴"
 			android:fontFamily="@font/bmjua"
 			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
