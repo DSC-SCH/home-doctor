@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.account_login_activity.*
 
 class LoginActivity : AppCompatActivity() {
 	companion object {
-		const val SP_NAME = "account"
 		const val SP_LOGIN = "login"
 		const val LOGIN_INIT = -1
 		const val LOGIN_NONE = 0
@@ -21,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.account_login_activity)
 
-		val sp = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+		val sp = getSharedPreferences(SharedPreferencesSrc.SP_ACCOUNT_NAME, Context.MODE_PRIVATE)
 		val editor = sp.edit()
 
 		// TODO("Remove above line")

@@ -15,7 +15,7 @@ class DBHandler(context: Context?) {
 	}
 
 	companion object {
-		val DB_NAME = "HomeDoc.db"
+		val DB_NAME = "Zipssa.db"
 		val DB_VERSION = 1
 
 		fun open(context: Context?): DBHandler {
