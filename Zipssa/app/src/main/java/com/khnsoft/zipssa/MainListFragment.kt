@@ -43,6 +43,10 @@ class MainListFragment : Fragment() {
 		main_date.text = sdf_main_date.format(curDateCal.time)
 
 		main_date.setOnClickListener {
+			val intent = Intent(context, MainListCalendarActivity::class.java)
+			startActivity(intent)
+
+			/*
 			DatePickerDialog(context, { _, year, month, dayOfMonth ->
 				curDateCal[Calendar.YEAR] = year
 				curDateCal[Calendar.MONTH] = month
@@ -50,6 +54,8 @@ class MainListFragment : Fragment() {
 				main_date.text = sdf_main_date.format(curDateCal.time)
 				refresh()
 			}, curDateCal[Calendar.YEAR], curDateCal[Calendar.MONTH], curDateCal[Calendar.DAY_OF_MONTH]).show()
+
+			// */
 		}
 
 		main_date_before.setOnClickListener {
