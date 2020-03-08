@@ -23,16 +23,37 @@ class DBHandler(context: Context?) {
 		}
 	}
 
-	fun execNonResult(sql: String): Int{
+	fun updateTables(userId: Int) : Boolean {
+		// TODO("Get CHECK_TB from server")
+		val jServer = JsonObject()
+
+		mDB = mHelper.writableDatabase
+
+		val sql = "SELECT * FROM CHECK_TB WHERE user_id=${userId}"
+		val lRet = execResult(sql)
+		if (lRet.size() > 0) {
+			val jLocal = lRet[0] as JsonObject
+			for (tb in jLocal.keySet()) {
+				if (tb == "user_id") continue
+				if (jServer[tb].asInt != jLocal[tb].asInt) {
+					// TODO("Update table")
+				}
+			}
+			return true
+		}
+		return false
+	}
+
+	fun execNonResult(sql: String): Boolean{
 		mDB = mHelper.writableDatabase
 
 		try {
 			mDB.execSQL(sql)
-			return 0
+			return true
 		} catch (e: Exception) {
 			e.printStackTrace()
 		}
-		return 1
+		return false
 	}
 
 	fun execResult(sql: String) : JsonArray {

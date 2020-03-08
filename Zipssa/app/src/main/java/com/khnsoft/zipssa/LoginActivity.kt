@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
 		val editor = sp.edit()
 
 		// TODO("Remove above line")
-		startMain()
+		startLoading()
 
 		/*
 		if (sp.getInt(SP_LOGIN, LOGIN_INIT) != LOGIN_INIT) {
@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
 		no_login_btn.setOnClickListener {
 			editor.putInt(SP_LOGIN, LOGIN_NONE)
 			editor.apply()
-			startMain()
+			startLoading()
 		}
 
 		join_btn.setOnClickListener {
@@ -54,8 +54,8 @@ class LoginActivity : AppCompatActivity() {
 		}
 	}
 
-	fun startMain() {
-		val intent = Intent(this@LoginActivity, MainActivity::class.java)
+	fun startLoading() {
+		val intent = Intent(this@LoginActivity, LoadingActivity::class.java)
 		startActivity(intent)
 		finish()
 	}
