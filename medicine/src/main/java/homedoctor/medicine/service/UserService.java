@@ -51,7 +51,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void deleteById(User user) {
+        userRepository.deleteByUser(user);
     }
 }

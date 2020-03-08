@@ -8,8 +8,8 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ConnectionUser {
+@RequiredArgsConstructor
+public class ConnectionUser extends DateTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "care_id")
@@ -23,14 +23,17 @@ public class ConnectionUser {
     @JoinColumn(name = "careUser_id")
     private User careUser;
 
-    @Temporal(TemporalType.DATE)
-    private Date create_at;
+    @Builder
+    public ConnectionUser(User user, User careUser) {
+        this.user = user;
+        this.careUser = careUser;
+    }
 
-
-    public static ConnectionUser createConnectionUser(User user, User careUser) {
+    public static ConnectionUser createConnection(User manager , User receiver) {
         ConnectionUser connectionUser = new ConnectionUser();
-        connectionUser.setUser(user);
-        connectionUser.setCareUser(careUser);
+        connectionUser.setUser(manager);
+        connectionUser.setCareUser(receiver);
+
         return connectionUser;
     }
 }

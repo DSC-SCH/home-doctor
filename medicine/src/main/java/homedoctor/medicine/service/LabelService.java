@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class LabelService {
+public class    LabelService {
 
     private final LabelRepository labelRepository;
 
@@ -29,5 +29,10 @@ public class LabelService {
 
     public Label findOne(Long labelId) {
         return labelRepository.findOne(labelId);
+    }
+
+    @Transactional
+    public void delete(Label label) {
+        labelRepository.delete(label);
     }
 }

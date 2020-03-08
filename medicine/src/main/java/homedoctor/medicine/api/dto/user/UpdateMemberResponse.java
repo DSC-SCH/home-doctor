@@ -1,4 +1,4 @@
-package homedoctor.medicine.dto.user;
+package homedoctor.medicine.api.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

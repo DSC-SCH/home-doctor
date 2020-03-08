@@ -2,11 +2,12 @@ package homedoctor.medicine.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Getter @Setter
 public class ConnectionCode {
 
     @Id @GeneratedValue
@@ -25,5 +26,12 @@ public class ConnectionCode {
     // == 연관관계 메서드 == //
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Builder
+    public ConnectionCode(User user, String code, int life) {
+        this.user = user;
+        this.code = code;
+        this.life = life;
     }
 }

@@ -1,10 +1,6 @@
-package homedoctor.medicine.api;
+package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.domain.MockData;
-import homedoctor.medicine.dto.user.CreateMockDataRequest;
-import homedoctor.medicine.dto.user.CreateMockDataResponse;
-import homedoctor.medicine.dto.user.UpdateMockDataRequest;
-import homedoctor.medicine.dto.user.UpdateMockDataResponse;
 import homedoctor.medicine.service.MockDataService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,29 +33,29 @@ public class MockApiController {
         return new Result(collect.size(), collect);
     }
 
-    @PostMapping(value = "/api/mock")
-    public CreateMockDataResponse saveMockData(@RequestBody @Valid
-                                                       CreateMockDataRequest request) {
-        MockData mockData = new MockData();
-        mockData.setUsername(request.getUsername());
-        mockData.setStreet(request.getStreet());
-        mockData.setPhoneNumber(request.getPhoneNumber());
-        Long id = mockDataService.save(mockData);
-        return new CreateMockDataResponse(mockData.getId(), mockData.getUsername(),
-                mockData.getStreet(), mockData.getPhoneNumber());
-    }
-
-
-    @PutMapping("/api/mock/{mock_id}")
-    public UpdateMockDataResponse updateMockData(
-            @PathVariable("mock_id") Long id,
-            @RequestBody @Valid UpdateMockDataRequest request) {
-        mockDataService.update(id, request.getUsername(), request.getStreet(), request.getPhoneNumber());
-        MockData findMockData = mockDataService.findOne(id);
-
-        return new UpdateMockDataResponse(findMockData.getId(), findMockData.getUsername(),
-                findMockData.getStreet(), findMockData.getPhoneNumber());
-    }
+//    @PostMapping(value = "/api/mock")
+//    public CreateMockDataResponse saveMockData(@RequestBody @Valid
+//                                                       CreateMockDataRequest request) {
+//        MockData mockData = new MockData();
+//        mockData.setUsername(request.getUsername());
+//        mockData.setStreet(request.getStreet());
+//        mockData.setPhoneNumber(request.getPhoneNumber());
+//        Long id = mockDataService.save(mockData);
+//        return new CreateMockDataResponse(mockData.getId(), mockData.getUsername(),
+//                mockData.getStreet(), mockData.getPhoneNumber());
+//    }
+//
+//
+//    @PutMapping("/api/mock/{mock_id}")
+//    public UpdateMockDataResponse updateMockData(
+//            @PathVariable("mock_id") Long id,
+//            @RequestBody @Valid UpdateMockDataRequest request) {
+//        mockDataService.update(id, request.getUsername(), request.getStreet(), request.getPhoneNumber());
+//        MockData findMockData = mockDataService.findOne(id);
+//
+//        return new UpdateMockDataResponse(findMockData.getId(), findMockData.getUsername(),
+//                findMockData.getStreet(), findMockData.getPhoneNumber());
+//    }
 
     @DeleteMapping("/api/mock/{mock_id}")
     public void deleteMockDataResponse (

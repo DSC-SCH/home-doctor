@@ -10,25 +10,36 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class ConnectionUserService {
 
-    private final ConnectionUserRepository connectionUserRepository;
+    // 의존성 주입은 어노테이션이 해줌
+    private ConnectionUserRepository connectionUserRepository;
 
     @Transactional
-    public Long save(User user, User careUser) {
-        ConnectionUser connectionUser = ConnectionUser.createConnectionUser(user, careUser);
+    public Long save(User managerUser, User receiverUser) {
+        ConnectionUser connectionUser = ConnectionUser.createConnection(managerUser, receiverUser);
+        System.out.println("=====================");
+        System.out.println("Care User : " + connectionUser.getCareUser().getId());
+        System.out.println("manage User : " + connectionUser.getUser().getId());
+
         connectionUserRepository.save(connectionUser);
 
         return connectionUser.getId();
     }
 
-    public ConnectionUser findOne(Long careId) {
-        return connectionUserRepository.findOne(careId);
+    @Transactional
+    public void delete(ConnectionUser connectionUser) {
+        connectionUserRepository.delete(connectionUser);
     }
 
-    public List<ConnectionUser> findAllCareUsers(User user) {
-        return connectionUserRepository.findAllCareUser(user);
+    public List<User> findAllReceiverByUser(User user) {
+        return connectionUserRepository.findAllByCareUser(user);
     }
+
+    public List<User> findALlManagerByUser(User user) {
+        return connectionUserRepository.findAllByManagerUser(user);
+    }
+
 }

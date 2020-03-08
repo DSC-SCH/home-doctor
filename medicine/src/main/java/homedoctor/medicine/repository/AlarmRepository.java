@@ -23,8 +23,16 @@ public class AlarmRepository {
     }
 
     public List<Alarm> findAllByUser(User user) {
-        return em.createQuery("select a from Alarm a where a.user = :user", Alarm.class)
-                .setParameter("user", user)
+        return em.createQuery("select a from Alarm a where a.user.id = :userId", Alarm.class)
+                .setParameter("userId", user.getId())
                 .getResultList();
     }
+
+    public void delete(Alarm alarm) {
+        em.createQuery(
+                "select a from Alarm a where a.id = :id", Alarm.class)
+                .setParameter("id", alarm.getId())
+                .executeUpdate();
+    }
 }
+

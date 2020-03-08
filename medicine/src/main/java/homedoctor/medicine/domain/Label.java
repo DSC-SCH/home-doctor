@@ -2,12 +2,15 @@ package homedoctor.medicine.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-public class Label {
+@Getter @Setter
+@RequiredArgsConstructor
+public class Label extends DateTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "label_id")
@@ -26,5 +29,12 @@ public class Label {
     //== 연관관계 메서드 ==//
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Builder
+    public Label(User user, String title, String color) {
+        this.user = user;
+        this.title = title;
+        this.color = color;
     }
 }

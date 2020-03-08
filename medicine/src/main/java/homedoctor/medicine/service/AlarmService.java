@@ -17,8 +17,7 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
 
     @Transactional
-    public Long save(User user, Alarm alarm) {
-        alarm.setUser(user);
+    public Long save(Alarm alarm) {
         alarmRepository.save(alarm);
         return alarm.getId();
     }
@@ -29,5 +28,10 @@ public class AlarmService {
 
     public Alarm findAlarm(Long alarmId) {
         return alarmRepository.findOne(alarmId);
+    }
+
+    @Transactional
+    public void delete(Alarm alarm) {
+        alarmRepository.delete(alarm);
     }
 }

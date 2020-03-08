@@ -1,7 +1,8 @@
-package homedoctor.medicine.api;
+package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.user.*;
+import homedoctor.medicine.api.dto.user.*;
+import homedoctor.medicine.service.ConnectionUserService;
 import homedoctor.medicine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,9 @@ public class UserApiController {
 
     private final UserService userService;
 
-    @GetMapping("/api/v1/user/{user_id}")
+    // 엔티티 직접 노출되지 않게 바꾸기.
+    // api 스펙이 변하면 안됨.
+    @GetMapping("/user/{user_id}")
     public User findUserOne(
             @PathVariable("user_id") Long id) {
         return userService.findOne(id);
@@ -32,7 +35,7 @@ public class UserApiController {
         return new UserAllResult(collect.size(), collect);
     }
 
-    @PostMapping("/api/v1/users")
+    @PostMapping("/user")
     public CreateUserResponse saveUser(
             @RequestBody @Valid CreateUserRequest request) {
         User user = User.builder().username(request.getName())
@@ -41,7 +44,7 @@ public class UserApiController {
         return new CreateUserResponse(id);
     }
 
-    @PutMapping("/api/v1/users/{user_id}")
+    @PutMapping("/user/{user_id}")
     public UpdateMemberResponse updateMemberResponse(
             @PathVariable("user_id") Long id,
             @RequestBody @Valid UpdateMemberRequest request) {
@@ -52,10 +55,11 @@ public class UserApiController {
         return new UpdateMemberResponse(findUser.getId(), findUser.getUsername());
     }
 
-    @DeleteMapping("/api/v1/users/{user_id}")
+    @DeleteMapping("/user/{user_id}")
     public void deleteUserResponse(
             @PathVariable("user_id") Long id) {
-        userService.deleteById(id);
+        User findUser = userService.findOne(id);
+        userService.deleteById(findUser);
     }
 
 

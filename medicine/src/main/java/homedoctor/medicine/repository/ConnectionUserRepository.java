@@ -18,13 +18,27 @@ public class ConnectionUserRepository {
         em.persist(connectionUser);
     }
 
-    public ConnectionUser findOne(Long id) {
-        return em.find(ConnectionUser.class, id);
+    public void delete(ConnectionUser connectionUser) {
+        em.createQuery(
+                "select c from ConnectionUser c where c = :id", ConnectionUser.class)
+                .setParameter("id", connectionUser.getId())
+                .executeUpdate();
     }
 
-    public List<ConnectionUser> findAllCareUser(User user) {
-        return em.createQuery("select c from ConnectionUser c where c.user = :user", ConnectionUser.class)
-                .setParameter("user", user)
+    public List<User> findAllByCareUser(User user) {
+        List<User> userList = em.createQuery("select c.user from ConnectionUser c where c.user.id =: id", User.class)
+                .setParameter("id", user.getId())
                 .getResultList();
+
+        return userList;
+    }
+
+    public List<User> findAllByManagerUser(User user) {
+        List<User> managerUserList = em.createQuery(
+                "select c.user from ConnectionUser c where c.careUser.id =: id", User.class)
+                .setParameter("id", user.getId())
+                .getResultList();
+
+        return managerUserList;
     }
 }

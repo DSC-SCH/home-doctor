@@ -34,9 +34,9 @@ public class UserRepository {
 
     }
 
-    public void deleteById(Long id) {
+    public void deleteByUser(User user) {
         em.createQuery("select u from User u where u.id = :id", User.class)
-                .setParameter("id", id)
+                .setParameter("id", user.getId())
                 .executeUpdate();
     }
 }
