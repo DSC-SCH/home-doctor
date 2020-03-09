@@ -7,6 +7,8 @@ import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
+import com.khnsoft.zipssa.AccountType
+import com.khnsoft.zipssa.ServerHandler
 
 class SessionCallback : ISessionCallback {
 	override fun onSessionOpenFailed(exception: KakaoException?) {
@@ -27,6 +29,12 @@ class SessionCallback : ISessionCallback {
 					val email = kakaoAccount.email
 					val birthday = kakaoAccount.birthday
 					val gender = kakaoAccount.gender
+
+					if (ServerHandler.isUserExists(AccountType.KAKAO, "${result.id}")) {
+						// TODO("Login")
+					} else {
+						// TODO("Register")
+					}
 
 					Log.i("@@@", "${nickname}, ${email}, ${birthday}, ${gender}")
 				}

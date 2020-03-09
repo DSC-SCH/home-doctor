@@ -113,7 +113,14 @@ class LoginActivity : AppCompatActivity() {
 		FirebaseAuth.getInstance().signInWithCredential(credential)
 			.addOnCompleteListener {
 				if (it.isSuccessful) {
-					Log.i("@@@", "Sign in successful")
+					if (acct.idToken == null) {
+						return@addOnCompleteListener
+					}
+					if (ServerHandler.isUserExists(AccountType.GOOGLE, acct.idToken!!)) {
+						// TODO("Login")
+					} else {
+						// TODO("Register")
+					}
 				} else {
 					Log.i("@@@", "Sign in failed")
 				}

@@ -44,6 +44,10 @@ class DBHandler(context: Context?) {
 		return false
 	}
 
+	fun isUserExists(type: String, uid: String) {
+
+	}
+
 	fun execNonResult(sql: String): Boolean{
 		mDB = mHelper.writableDatabase
 

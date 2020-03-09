@@ -10,63 +10,32 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class HttpAsyncTask : AsyncTask<String, Void, String>() {
-	companion object {
-		const val SERVER_URL = "http://"
-		const val ERROR_CODE = -1
-		const val ERROR_MSG = """{"status": ${ERROR_CODE}}"""
-
-		const val POST = "POST"
-		const val GET = "GET"
-		const val PUT = "PUT"
-		const val DELETE = "DELETE"
-
-
-	}
 
 	/**
-	 * @param remote End of API URL
-	 * @param method One of {POST, GET, PUT, DELETE}
-	 * @param sMsg Json data in String (optional, only for POST and PUT)
+	 * @param params (end of api url, method, json data in string (for POST and PUT))
 	 */
 	override fun doInBackground(vararg params: String?): String {
-		if (params.size < 2)
-			return ERROR_MSG
-
-		val remote = params[0]
-		val method = params[1]
-		val sMsg: String?
-
-		if (remote == null || method == null)
-			return ERROR_MSG
-
-		if (method == POST || method == PUT) {
-			if (params.size < 3)
-				return ERROR_MSG
-			sMsg = params[2]
-		} else if (method == GET || method == DELETE) {
-			sMsg = null
-		} else
-			return ERROR_MSG
-
-		return getResultFromAPI(remote, method, sMsg)
+		return getResultFromAPI(params[0], HttpMethod.valueOf(params[1] as String), params[2])
 	}
 
-	fun getResultFromAPI(remote: String, method: String, sMsg: String?) : String{
-		var ret = ERROR_MSG
+	fun getResultFromAPI(remote: String?, method: HttpMethod, sMsg: String?) : String{
+		if (remote == null) return HttpAttr.ERROR_MSG
+
+		var ret = HttpAttr.ERROR_MSG
 		var httpCon: HttpURLConnection? = null
 
 		try {
-			val url = URL("${SERVER_URL}${remote}")
+			val url = URL("${HttpAttr.SERVER_URL}${remote}")
 			httpCon = url.openConnection() as HttpURLConnection
 
-			httpCon.requestMethod = method
+			httpCon.requestMethod = method.method
 			httpCon.setRequestProperty("Content-type", "application/json")
 			httpCon.setRequestProperty("Accept", "*/*")
 			httpCon.doInput = true
 
-			if (method == POST || method == PUT) {
+			if (method == HttpMethod.POST || method == HttpMethod.PUT) {
 				if (sMsg == null)
-					return ERROR_MSG
+					return HttpAttr.ERROR_MSG
 
 				val outputStream = httpCon.outputStream
 				outputStream.write(sMsg.toByteArray())
