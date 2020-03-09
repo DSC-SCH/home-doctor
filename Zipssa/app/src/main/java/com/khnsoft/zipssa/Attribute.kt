@@ -7,8 +7,8 @@ enum class HttpMethod(val method: String) {
     DELETE("DELETE")
 }
 
-enum class EndOfAPI(val remote: String) {
-
+enum class EndOfAPI(val remote: String, val method: HttpMethod) {
+    ADD_ALARM("/", HttpMethod.POST)
 }
 
 class HttpAttr {

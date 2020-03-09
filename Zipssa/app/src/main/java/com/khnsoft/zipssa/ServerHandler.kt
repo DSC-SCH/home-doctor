@@ -13,20 +13,19 @@ class ServerHandler {
             return true
         }
 
-        fun send(remote: EndOfAPI, method: HttpMethod, msg: String?) : String{
+        fun send(api: EndOfAPI, msg: String? = null) : String{
+            val remote = api.remote
+            val method = api.method
             val sMsg : String?
-            if (method == HttpMethod.POST || method == HttpMethod.PUT) {
-                if (msg == null)
-                    return HttpAttr.ERROR_MSG
-                else
-                    sMsg = msg
+            sMsg = if (method == HttpMethod.POST || method == HttpMethod.PUT) {
+                msg ?: return HttpAttr.ERROR_MSG
             } else if (method == HttpMethod.GET || method == HttpMethod.DELETE) {
-                sMsg = null
+                null
             } else {
                 return HttpAttr.ERROR_MSG
             }
 
-            return HttpAsyncTask().execute(remote.remote, method.method, sMsg).get()
+            return HttpAsyncTask().execute(remote, method.method, sMsg).get()
         }
     }
 }

@@ -180,22 +180,21 @@ class AddAlarmActivity : AppCompatActivity() {
 
 			if (add_title.text.isBlank()) add_title.setText(radioGroup.radios[radioGroup.getCheckedIndex()].text)
 
-			val sql = """
-				|INSERT INTO ALARM_TB (ALARM_TITLE, ALARM_START_DT, ALARM_END_DT, ALARM_TIMES, ALARM_REPEATS, ALARM_ENABLED, ALARM_LABEL)
-				|VALUES (
-				|'${add_title.text}',
-				|'${sdf_date_save.format(startCal.time)}',
-				|'${sdf_date_save.format(endCal.time)}',
-				|'[${lTimes.joinToString(",")}]',
-				|'[${lRepeats.joinToString(",")}]',
-				|${if (add_times_switch.isChecked) 1 else 0},
-				|${radioGroup.radios[radioGroup.getCheckedIndex()].tag}
-				|)
-			""".trimMargin()
-			Log.i("${packageName} - AddAlarm", sql)
+			val json = JsonObject()
+			json.addProperty("alarm_title", add_title.text.toString())
+			json.addProperty("alarm_label", radioGroup.radios[radioGroup.getCheckedIndex()].tag as Int)
+			json.addProperty("alarm_start_date", sdf_date_save.format(startCal.time))
+			json.addProperty("alarm_end_date", sdf_date_save.format(endCal.time))
+			json.addProperty("alarm_times", "[${lTimes.joinToString(",")}]")
+			json.addProperty("alarm_repeats", "[${lRepeats.joinToString(",")}]")
+			json.addProperty("alarm_enabled", if (add_times_switch.isChecked) 1 else 0)
+			json.addProperty("created_date", sdf_date_save.format(Calendar.getInstance()))
+			json.addProperty("last_modified_date", sdf_date_save.format(Calendar.getInstance()))
+
+			ServerHandler.send(EndOfAPI.ADD_ALARM, json.toString())
+
 			val mHandler = DBHandler.open(this@AddAlarmActivity)
-			if (mHandler.execNonResult(sql)) {
-				mHandler.close()
+			if (mHandler.updateTables(-1)) {
 				finish()
 			}
 			mHandler.close()
