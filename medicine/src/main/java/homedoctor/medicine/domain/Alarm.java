@@ -10,45 +10,45 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
+
 @Entity
 @Getter @Setter
 @RequiredArgsConstructor
-public class Alarm extends DateTimeEntity{
+public class Alarm extends DateTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "alarm_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "alarm_user", nullable = false)
     private User user;
 
-    @Column(name = "alarm_title", length = 64)
+    @Column(name = "alarm_title", length = 64, nullable = false)
     private String title;
 
-    @Column(name = "alarm_content", length = 512)
-    private String content;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "label_id")
+    @OneToOne(cascade = ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "alarm_label", nullable = false)
     private Label label;
 
-    @Column(name = "alarm_start_df", length = 10)
+    @Column(name = "alarm_start_date", length = 10, nullable = false)
     private Date startDate;
 
-    @Column(name = "alarm_end_df", length = 10)
+    @Column(name = "alarm_end_date", length = 10, nullable = false)
     private Date endDate;
 
-    @Column(name = "alarm_times", length = 128)
+    @Column(name = "alarm_times", length = 128, nullable = false)
     private String times;
 
-    @Column(name = "alarm_repeats", length = 32)
+    @Column(name = "alarm_repeats", length = 32, nullable = false)
     private String repeats;
 
-    @Column(name = "alarm_enabled")
-    private int enabled;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "alarm_enabled", nullable = false)
+    private AlarmStatus alarmStatus;
 
-    @OneToMany(mappedBy = "alarm")
+    @OneToMany(mappedBy = "alarm", cascade = ALL)
     private List<PrescriptionImage> prescriptionImageList = new ArrayList<>();
 
     //== 연관관계 메서드 ==//
@@ -58,16 +58,15 @@ public class Alarm extends DateTimeEntity{
 //    }
 
     @Builder
-    public Alarm(User user, String title, String content, Label label, Date startDate, Date endDate, String times, String repeats, int enabled, List<PrescriptionImage> prescriptionImageList) {
+    public Alarm(User user, String title, Label label, Date startDate, Date endDate, String times, String repeats, AlarmStatus alarmStatus, List<PrescriptionImage> prescriptionImageList) {
         this.user = user;
         this.title = title;
-        this.content = content;
         this.label = label;
         this.startDate = startDate;
         this.endDate = endDate;
         this.times = times;
         this.repeats = repeats;
-        this.enabled = enabled;
+        this.alarmStatus = alarmStatus;
         this.prescriptionImageList = prescriptionImageList;
     }
 }

@@ -12,15 +12,15 @@ import java.util.Date;
 public class ConnectionUser extends DateTimeEntity {
 
     @Id @GeneratedValue
-    @Column(name = "care_id")
+    @Column(name = "connection_user_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "careUser_id")
+    @JoinColumn(name = "care_user", nullable = false)
     private User careUser;
 
     @Builder

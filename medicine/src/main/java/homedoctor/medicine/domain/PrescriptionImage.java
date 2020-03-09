@@ -19,10 +19,10 @@ public class PrescriptionImage extends DateTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "alarm_id")
+    @JoinColumn(name = "alarm_id", nullable = false)
     private Alarm alarm;
 
-    @Column(name = "image")
+    @Column(name = "image", nullable = false)
     private Blob image;
 
     @Builder

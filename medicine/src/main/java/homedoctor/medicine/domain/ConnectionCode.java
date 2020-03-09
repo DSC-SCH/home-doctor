@@ -2,25 +2,28 @@ package homedoctor.medicine.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-public class ConnectionCode {
+@RequiredArgsConstructor
+public class ConnectionCode extends DateTimeEntity {
 
     @Id @GeneratedValue
-    @Column(name = "connect_id")
+    @Column(name = "code_id")
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     private String code;
 
+    @Column(nullable = false)
     private int life;
 
     // == 연관관계 메서드 == //

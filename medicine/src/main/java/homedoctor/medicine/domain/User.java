@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @RequiredArgsConstructor
 public class User extends DateTimeEntity {
 
@@ -18,30 +18,28 @@ public class User extends DateTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    private String password;
-
-    @Column(length = 20)
+    @Column(length = 20, name = "user_name", nullable = false)
     private String username;
 
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String birthday;
 
+    @Column(nullable = false)
     private String email;
 
     private String kakaoId;
 
     private String googleId;
 
-    private String facebookId;
-
-    private String naverId;
-
-    private int snsType;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SnsType snsType;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private GenderType genderType;
 
-    @Column (length = 15)
+    @Column (length = 15, nullable = false)
     private String phoneNum;
 
     @OneToMany(mappedBy = "user")
@@ -55,15 +53,12 @@ public class User extends DateTimeEntity {
 //    private List<ConnectionUser> managerUserList = new ArrayList<>();
 
     @Builder
-    public User(String password, String username, String birthday, String email, String kakaoId, String googleId, String facebookId, String naverId, int snsType, GenderType genderType, String phoneNum, List<Alarm> alarmList) {
-        this.password = password;
+    public User(String username, String birthday, String email, String kakaoId, String googleId, SnsType snsType, GenderType genderType, String phoneNum, List<Alarm> alarmList) {
         this.username = username;
         this.birthday = birthday;
         this.email = email;
         this.kakaoId = kakaoId;
         this.googleId = googleId;
-        this.facebookId = facebookId;
-        this.naverId = naverId;
         this.snsType = snsType;
         this.genderType = genderType;
         this.phoneNum = phoneNum;

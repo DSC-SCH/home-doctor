@@ -17,13 +17,13 @@ public class Label extends DateTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "label_user", nullable = false)
     private User user;
 
-    @Column(name = "label_title", length = 10)
+    @Column(name = "label_title", length = 10, nullable = false)
     private String title;
 
-    @Column(name = "label_color", length = 7)
+    @Column(name = "label_color", length = 7, nullable = false)
     private String color;
 
     //== 연관관계 메서드 ==//
