@@ -61,7 +61,7 @@ class AddLabelPopup : AppCompatActivity() {
 				|VALUES ("${label_title.text}", "${LABELS_COLORS[radioGroup.getCheckedIndex()]}")
 			""".trimMargin()
 			val mHandler = DBHandler.open(this@AddLabelPopup)
-			if (mHandler.execNonResult(sql) == 0) {
+			if (mHandler.execNonResult(sql)) {
 				mHandler.close()
 				finish()
 			}

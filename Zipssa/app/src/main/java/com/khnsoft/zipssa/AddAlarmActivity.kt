@@ -194,7 +194,7 @@ class AddAlarmActivity : AppCompatActivity() {
 			""".trimMargin()
 			Log.i("${packageName} - AddAlarm", sql)
 			val mHandler = DBHandler.open(this@AddAlarmActivity)
-			if (mHandler.execNonResult(sql) == 0) {
+			if (mHandler.execNonResult(sql)) {
 				mHandler.close()
 				finish()
 			}

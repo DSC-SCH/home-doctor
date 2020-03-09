@@ -43,7 +43,7 @@ class MyAlertPopup: AppCompatActivity() {
 			findViewById<TextView>(R.id.popup_confirm).text = data.alertConfirmBtn
 			findViewById<TextView>(R.id.popup_confirm).setOnClickListener{
 				val mHandler = DBHandler.open(this@MyAlertPopup)
-				if (mHandler.execNonResult(data.sql) == 0) {
+				if (mHandler.execNonResult(data.sql)) {
 					mHandler.close()
 					data.type = TYPE_CONFIRM
 					val intent = Intent(this@MyAlertPopup, MyAlertPopup::class.java)
