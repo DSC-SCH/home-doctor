@@ -1,54 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.khnsoft.zipssa">
+    package="com.khnsoft.zipssa">
 
-	<application
-		android:allowBackup="true"
-		android:icon="@mipmap/ic_launcher"
-		android:label="@string/app_name"
-		android:roundIcon="@mipmap/ic_launcher_round"
-		android:supportsRtl="true"
-		android:theme="@style/AppTheme"
-		android:usesCleartextTraffic="true">
-		<activity android:name=".MypageMyprofileActivity"/>
-		<activity android:name=".MainActivity"/>
-		<activity android:name=".AddAlarmActivity" />
-		<activity android:name=".EditAlarmActivity" />
-		<activity android:name=".MedicineDetailActivity" />
-		<activity android:name=".MypageActivity" />
-		<activity
-			android:name=".MyAlertPopup"
-			android:theme="@style/PopupTheme" />
-		<activity
-			android:name=".AddLabelPopup"
-			android:theme="@style/PopupTheme" />
-		<activity
-			android:name=".MainItemPopup"
-			android:theme="@style/PopupTheme" />
-		<activity android:name=".MypageChangepwActivity" />
-		<activity android:name=".MypageNoticeActivity" />
-		<activity android:name=".MypageNoticeDetailActivity" />
-		<activity android:name=".MypageSyncActivity" />
-		<activity android:name=".MypageHistoryActivity" />
-		<activity android:name=".MypageHistoryAllActivity" />
-		<activity android:name=".MypageHistoryPhotoActivity" />
-		<activity android:name=".MypageHistoryPhotoDetailActivity" />
-		<activity android:name=".MypageSettingActivity" />
-		<activity android:name=".MypageLeavingActivity" />
-		<activity android:name=".MypageServiceActivity" />
-		<activity android:name=".MypageServiceContractActivity" />
-		<activity android:name=".MypageServiceEnquireActivity" />
-		<activity android:name=".LoginActivity" />
-		<activity android:name=".JoinActivity" />
-		<activity android:name=".PermissionActivity">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<activity android:name=".ContractActivity" />
-		<activity android:name=".MainListCalendarActivity" />
-		<activity android:name=".MainListSyncActivity" />
-		<activity android:name=".LoadingActivity" />
-	</application>
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".KakaoLogin.GlobalApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
+        <activity android:name=".MypageMyprofileActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".AddAlarmActivity" />
+        <activity android:name=".EditAlarmActivity" />
+        <activity android:name=".MedicineDetailActivity" />
+        <activity android:name=".MypageActivity" />
+        <activity
+            android:name=".MyAlertPopup"
+            android:theme="@style/PopupTheme" />
+        <activity
+            android:name=".AddLabelPopup"
+            android:theme="@style/PopupTheme" />
+        <activity
+            android:name=".MainItemPopup"
+            android:theme="@style/PopupTheme" />
+        <activity android:name=".MypageChangepwActivity" />
+        <activity android:name=".MypageNoticeActivity" />
+        <activity android:name=".MypageNoticeDetailActivity" />
+        <activity android:name=".MypageSyncActivity" />
+        <activity android:name=".MypageHistoryActivity" />
+        <activity android:name=".MypageHistoryAllActivity" />
+        <activity android:name=".MypageHistoryPhotoActivity" />
+        <activity android:name=".MypageHistoryPhotoDetailActivity" />
+        <activity android:name=".MypageSettingActivity" />
+        <activity android:name=".MypageLeavingActivity" />
+        <activity android:name=".MypageServiceActivity" />
+        <activity android:name=".MypageServiceContractActivity" />
+        <activity android:name=".MypageServiceEnquireActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".JoinActivity" />
+        <activity android:name=".PermissionActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ContractActivity" />
+        <activity android:name=".MainListCalendarActivity" />
+        <activity android:name=".MainListSyncActivity" />
+        <activity android:name=".LoadingActivity" />
+    </application>
 </manifest>

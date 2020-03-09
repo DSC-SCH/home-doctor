@@ -24,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
 		val editor = sp.edit()
 
 		// TODO("Remove above line")
-		startLoading()
+		// startLoading()
 
 		/*
 		if (sp.getInt(SP_LOGIN, LOGIN_INIT) != LOGIN_INIT) {
