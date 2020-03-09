@@ -23,10 +23,12 @@ class SessionCallback : ISessionCallback {
 				val kakaoAccount = result?.kakaoAccount
 
 				if (kakaoAccount != null) {
-					val profile = kakaoAccount.profile
+					val nickname = kakaoAccount.profile.nickname
 					val email = kakaoAccount.email
 					val birthday = kakaoAccount.birthday
 					val gender = kakaoAccount.gender
+
+					Log.i("@@@", "${nickname}, ${email}, ${birthday}, ${gender}")
 				}
 			}
 

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "758568443155",
+    "firebase_url": "https://medihand-422db.firebaseio.com",
+    "project_id": "medihand-422db",
+    "storage_bucket": "medihand-422db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758568443155:android:7288569d515e3510270ee6",
+        "android_client_info": {
+          "package_name": "com.khnsoft.zipssa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758568443155-d5octdfv3qovv5d3vu4fvsr6abi81kaj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.khnsoft.zipssa",
+            "certificate_hash": "32572d182a5229d9c4cabff3f64c40e5bce059cd"
+          }
+        },
+        {
+          "client_id": "758568443155-8m6g7f1qq29nbtupjd93s8bct8di7o02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKDu4zSafFovKXgOuzQy5gH2Q3ikSsWu4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758568443155-8m6g7f1qq29nbtupjd93s8bct8di7o02.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
