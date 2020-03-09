@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
@@ -18,8 +17,14 @@ public class UserRepository {
         em.persist(user);
     }
 
-    public User findOne(Long id) {
+    public User findOneById(Long id) {
         return em.find(User.class, id);
+    }
+
+    public List<User> findByEmail(User user) {
+        return em.createQuery("select u from User u where u.email = :email", User.class)
+                .setParameter("email", user.getEmail())
+                .getResultList();
     }
 
     public List<User> findAll() {
@@ -34,9 +39,10 @@ public class UserRepository {
 
     }
 
-    public void deleteByUser(User user) {
+    public void deleteByUserId(User user) {
         em.createQuery("select u from User u where u.id = :id", User.class)
                 .setParameter("id", user.getId())
                 .executeUpdate();
+        em.clear();
     }
 }

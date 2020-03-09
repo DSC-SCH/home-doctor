@@ -44,5 +44,6 @@ public class PrescriptionImageRepository {
                 "select p from PrescriptionImage p where p.id = :id", PrescriptionImage.class)
                 .setParameter("id", prescriptionImage.getId())
                 .executeUpdate();
+        em.clear();
     }
 }

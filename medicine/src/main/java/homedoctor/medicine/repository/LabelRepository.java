@@ -32,5 +32,6 @@ public class LabelRepository {
         em.createQuery("select l from Label l where l.id = :id", Label.class)
                 .setParameter("id", label.getId())
                 .executeUpdate();
+        em.clear();
     }
 }

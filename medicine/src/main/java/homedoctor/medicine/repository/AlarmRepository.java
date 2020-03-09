@@ -23,9 +23,21 @@ public class AlarmRepository {
     }
 
     public List<Alarm> findAllByUser(User user) {
-        return em.createQuery("select a from Alarm a where a.user.id = :userId", Alarm.class)
-                .setParameter("userId", user.getId())
+        return em.createQuery("select a from Alarm a where a.user = :user", Alarm.class)
+                .setParameter("user", user)
                 .getResultList();
+    }
+
+    public List<Alarm> findAllByEnable(User user) {
+        String query = "select a from Alarm a " +
+                "where a.user = :user and " +
+                "a.alarmStatus = homedoctor.medicine.domain.AlarmStatus.ENABLE";
+
+        List<Alarm> enableAlarmList = em.createQuery(query, Alarm.class)
+                .setParameter("user", user)
+                .getResultList();
+
+        return enableAlarmList;
     }
 
     public void delete(Alarm alarm) {
@@ -33,6 +45,7 @@ public class AlarmRepository {
                 "select a from Alarm a where a.id = :id", Alarm.class)
                 .setParameter("id", alarm.getId())
                 .executeUpdate();
+        em.clear();
     }
 }
 
