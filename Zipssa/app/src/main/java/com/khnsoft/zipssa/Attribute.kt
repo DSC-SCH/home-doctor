@@ -7,8 +7,10 @@ enum class HttpMethod(val method: String) {
     DELETE("DELETE")
 }
 
-enum class EndOfAPI(val remote: String, val method: HttpMethod) {
-    ADD_ALARM("/", HttpMethod.POST)
+enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: Boolean) {
+    ADD_ALARM("/", HttpMethod.POST, false),
+    EDIT_ALARM("/", HttpMethod.PUT, true),
+    DELETE_ALARM("/", HttpMethod.DELETE, true)
 }
 
 class HttpAttr {
@@ -27,4 +29,14 @@ enum class AccountType(val type: String) {
 enum class AlarmStatus(val status: String) {
     ENABLED("ENABLE"),
     DISABLED("CANCEL")
+}
+
+enum class AlertType(val type: Int) {
+    ALERT(0),
+    CONFIRM(1)
+}
+
+enum class StatusCode(val status: Int) {
+    SUCCESS(0),
+    FAILED(1)
 }

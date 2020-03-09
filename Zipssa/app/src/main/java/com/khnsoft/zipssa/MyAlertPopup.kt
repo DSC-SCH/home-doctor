@@ -1,66 +1,54 @@
 package com.khnsoft.zipssa
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.io.Serializable
 
 class MyAlertPopup: AppCompatActivity() {
 
 	companion object {
-		val TYPE_CONFIRM = 0
-		val TYPE_ALERT = 1
-		val RESULT = 100
+		const val EXTRA_DATA = "data_id"
+		const val EXTRA_RESULT = "result"
+		const val RC = 100
+	}
 
-		class Data(var type: Int): Serializable {
-			var alertTitle: String = ""
-			var alertContent: String = ""
-			var alertConfirm: String = ""
-			var alertConfirmBtn: String = ""
-			var sql: String = ""
-		}
+	class Data(var type: AlertType) {
+		var alertTitle: String = ""
+		var alertContent: String = ""
+		var alertConfirmText: String = ""
+		var confirmListener : View.OnClickListener = View.OnClickListener { }
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		val data = intent.getSerializableExtra("data") as Data
-		val type = data.type
+		val data_id = intent.getIntExtra(EXTRA_DATA, -1)
+		val data = DataPasser.pop(data_id)
+		if (data == null) finish()
 
-		if (type == TYPE_CONFIRM) {
+		val type = data!!.type
+
+		if (type == AlertType.CONFIRM) {
 			setContentView(R.layout.popup_confirm)
 			findViewById<TextView>(R.id.popup_title).text = data.alertTitle
-			findViewById<TextView>(R.id.popup_content).text = data.alertConfirm
+			findViewById<TextView>(R.id.popup_content).text = data.alertContent
 			findViewById<TextView>(R.id.popup_confirm).setOnClickListener {
 				finish()
 			}
-		} else if (type == TYPE_ALERT) {
+		} else if (type == AlertType.ALERT) {
 			setContentView(R.layout.popup_alert)
 			findViewById<TextView>(R.id.popup_title).text = data.alertTitle
 			findViewById<TextView>(R.id.popup_content).text = data.alertContent
-			findViewById<TextView>(R.id.popup_confirm).text = data.alertConfirmBtn
-			findViewById<TextView>(R.id.popup_confirm).setOnClickListener{
-				val mHandler = DBHandler.open(this@MyAlertPopup)
-				if (mHandler.execNonResult(data.sql)) {
-					mHandler.close()
-					data.type = TYPE_CONFIRM
-					val intent = Intent(this@MyAlertPopup, MyAlertPopup::class.java)
-					intent.putExtra("data", data)
-					startActivity(intent)
-					val resultIntent = Intent().apply {
-						putExtra("result", 0)
-					}
-					setResult(RESULT, resultIntent)
-					finish()
-				}
-				mHandler.close()
-			}
+			findViewById<TextView>(R.id.popup_confirm).text = data.alertConfirmText
+			findViewById<TextView>(R.id.popup_confirm).setOnClickListener(data.confirmListener)
 			findViewById<TextView>(R.id.popup_cancel).setOnClickListener {
 				finish()
 			}
 		}
 		else finish()
+	}
+
+	override fun onBackPressed() {
+		finish()
 	}
 }

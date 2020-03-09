@@ -205,16 +205,34 @@ class EditAlarmActivity : AppCompatActivity() {
 
 		// Setting delete button
 		edit_delete_btn.setOnClickListener {
-			val data = MyAlertPopup.Companion.Data(MyAlertPopup.TYPE_ALERT).apply {
+			val data = MyAlertPopup.Data(AlertType.ALERT).apply {
 				alertTitle = edit_title.text.toString()
 				alertContent = "해당 알림 정보를 삭제하시겠습니까?"
-				alertConfirmBtn = "삭제"
-				alertConfirm = "해당 알림이 삭제되었습니다."
-				sql = "DELETE FROM ALARM_TB WHERE _ID=${_jItem["_ID"].asInt}"
+				alertConfirmText = "삭제"
+				confirmListener = View.OnClickListener {
+					ServerHandler.send(EndOfAPI.DELETE_ALARM, null, _jItem["alarm_id"].asInt)
+
+					val data = MyAlertPopup.Data(AlertType.CONFIRM)
+					data.alertTitle = alertTitle
+					data.alertContent = "해당 알림이 삭제되었습니다."
+					val dataId = DataPasser.insert(data)
+
+					val resultIntent = Intent()
+					resultIntent.putExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.SUCCESS.status)
+					setResult(MyAlertPopup.RC, resultIntent)
+
+					val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
+					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+					startActivity(intent)
+
+					finish()
+				}
 			}
+
+			val dataId = DataPasser.insert(data)
 			val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
-			intent.putExtra("data", data)
-			startActivityForResult(intent, MyAlertPopup.RESULT)
+			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+			startActivityForResult(intent, MyAlertPopup.RC)
 		}
 
 		// Setting edit button
@@ -251,27 +269,44 @@ class EditAlarmActivity : AppCompatActivity() {
 
 			if (edit_title.text.isBlank()) edit_title.setText(radioGroup.radios[radioGroup.getCheckedIndex()].text)
 
-			val data = MyAlertPopup.Companion.Data(MyAlertPopup.TYPE_ALERT).apply {
+			val data = MyAlertPopup.Data(AlertType.ALERT).apply {
 				alertTitle = edit_title.text.toString()
 				alertContent = "해당 알림 정보를 수정하시겠습니까?"
-				alertConfirmBtn = "수정"
-				alertConfirm = "해당 알림이 수정되었습니다."
-				sql = """
-					|UPDATE ALARM_TB SET 
-					|ALARM_TITLE='${edit_title.text}',
-					|ALARM_START_DT='${sdf_date_save.format(startCal.time)}',
-					|ALARM_END_DT='${sdf_date_save.format(endCal.time)}',
-					|ALARM_TIMES='[${lTimes.joinToString(",")}]',
-					|ALARM_REPEATS='[${lRepeats.joinToString(",")}]',
-					|ALARM_ENABLED=${if (edit_times_switch.isChecked) 1 else 0},
-					|ALARM_LABEL=${radioGroup.radios[radioGroup.getCheckedIndex()].tag} 
-					|WHERE _ID=${_jItem["_ID"]}
-				""".trimMargin()
+				alertConfirmText = "수정"
+				confirmListener = View.OnClickListener {
+					val json = JsonObject()
+					json.addProperty("alarm_title", edit_title.text.toString())
+					json.addProperty("alarm_label", radioGroup.radios[radioGroup.getCheckedIndex()].tag as Int)
+					json.addProperty("alarm_start_date", sdf_date_save.format(startCal.time))
+					json.addProperty("alarm_end_date", sdf_date_save.format(endCal.time))
+					json.addProperty("alarm_times", "[${lTimes.joinToString(",")}]")
+					json.addProperty("alarm_repeats", "[${lRepeats.joinToString(",")}]")
+					json.addProperty("alarm_enabled", if (edit_times_switch.isChecked) 1 else 0)
+					json.addProperty("last_modified_date", sdf_date_save.format(Calendar.getInstance()))
+
+					ServerHandler.send(EndOfAPI.EDIT_ALARM, json.toString(), _jItem["alarm_id"].asInt)
+
+					val data = MyAlertPopup.Data(AlertType.CONFIRM)
+					data.alertTitle = alertTitle
+					data.alertContent = "해당 알림이 수정되었습니다."
+					val dataId = DataPasser.insert(data)
+
+					val resultIntent = Intent()
+					resultIntent.putExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.SUCCESS.status)
+					setResult(MyAlertPopup.RC, resultIntent)
+
+					val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
+					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+					startActivity(intent)
+
+					finish()
+				}
 			}
 
+			val dataId = DataPasser.insert(data)
 			val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
-			intent.putExtra("data", data)
-			startActivityForResult(intent, MyAlertPopup.RESULT)
+			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+			startActivityForResult(intent, MyAlertPopup.RC)
 		}
 	}
 
@@ -283,8 +318,8 @@ class EditAlarmActivity : AppCompatActivity() {
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
-		if (requestCode == MyAlertPopup.RESULT) {
-			if (data != null && data.getIntExtra("result", 1) == 0)
+		if (requestCode == MyAlertPopup.RC) {
+			if (data != null && data.getIntExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
 				finish()
 		}
 	}

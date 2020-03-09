@@ -141,6 +141,9 @@
 	<dimen name="main_popup_icon_size">35dp</dimen>
 	<dimen name="main_popup_button_paddingH">10dp</dimen>
 	<dimen name="main_popup_button_text_padding">2dp</dimen>
+	<dimen name="main_popup_floating_paddingH">15dp</dimen>
+	<dimen name="main_popup_floating_paddingV">5dp</dimen>
+	<dimen name="main_popup_floating_margin">5dp</dimen>
 
 	<dimen name="main_popup_title_text">20sp</dimen>
 	<dimen name="main_popup_switch_text">8dp</dimen>
