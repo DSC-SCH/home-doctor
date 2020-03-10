@@ -27,9 +27,7 @@ public class User extends DateTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    private String kakaoId;
-
-    private String googleId;
+    private String snsId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -42,6 +40,8 @@ public class User extends DateTimeEntity {
     @Column (length = 15, nullable = false)
     private String phoneNum;
 
+    private String token;
+
     @OneToMany(mappedBy = "user")
     private List<Alarm> alarmList = new ArrayList<>();
 
@@ -53,15 +53,15 @@ public class User extends DateTimeEntity {
 //    private List<ConnectionUser> managerUserList = new ArrayList<>();
 
     @Builder
-    public User(String username, String birthday, String email, String kakaoId, String googleId, SnsType snsType, GenderType genderType, String phoneNum, List<Alarm> alarmList) {
+    public User(String username, String birthday, String email, String snsId, SnsType snsType, GenderType genderType, String phoneNum, String token, List<Alarm> alarmList) {
         this.username = username;
         this.birthday = birthday;
         this.email = email;
-        this.kakaoId = kakaoId;
-        this.googleId = googleId;
+        this.snsId = snsId;
         this.snsType = snsType;
         this.genderType = genderType;
         this.phoneNum = phoneNum;
+        this.token = token;
         this.alarmList = alarmList;
     }
 }

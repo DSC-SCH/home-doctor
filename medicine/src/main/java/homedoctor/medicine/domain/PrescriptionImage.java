@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Blob;
-import java.sql.Date;
 
 @Entity
 @Getter @Setter
@@ -30,5 +29,4 @@ public class PrescriptionImage extends DateTimeEntity {
         this.alarm = alarm;
         this.image = image;
     }
-
 }

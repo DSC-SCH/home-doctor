@@ -24,7 +24,7 @@ public class ConnectionCode extends DateTimeEntity {
     private String code;
 
     @Column(nullable = false)
-    private int life;
+    private Integer life;
 
     // == 연관관계 메서드 == //
     public void setUser(User user) {
