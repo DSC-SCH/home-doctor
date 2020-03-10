@@ -29,6 +29,7 @@ public class PrescriptionImageRepository {
                 .getResultList();
     }
 
+    // 명시적 Join 사용하기.
     public List<PrescriptionImage> findAllByUser(User user) {
         List<PrescriptionImage> prescriptionImages =
                 em.createQuery("select p from PrescriptionImage p where p.alarm.user.id = :id",
@@ -41,7 +42,7 @@ public class PrescriptionImageRepository {
 
     public void delete(PrescriptionImage prescriptionImage) {
         em.createQuery(
-                "select p from PrescriptionImage p where p.id = :id", PrescriptionImage.class)
+                "delete from PrescriptionImage p where p.id = :id", PrescriptionImage.class)
                 .setParameter("id", prescriptionImage.getId())
                 .executeUpdate();
         em.clear();

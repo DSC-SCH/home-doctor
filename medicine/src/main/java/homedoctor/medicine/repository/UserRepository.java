@@ -40,7 +40,7 @@ public class UserRepository {
     }
 
     public void deleteByUserId(User user) {
-        em.createQuery("select u from User u where u.id = :id", User.class)
+        em.createQuery("delete from User u where u.id = :id", User.class)
                 .setParameter("id", user.getId())
                 .executeUpdate();
         em.clear();

@@ -19,5 +19,4 @@ public class ConnectionCodeRepository {
     public ConnectionCode findOne(Long id) {
         return em.find(ConnectionCode.class, id);
     }
-
 }
