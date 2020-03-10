@@ -3,15 +3,15 @@ package homedoctor.medicine.api.dto.user.request;
 
 import homedoctor.medicine.domain.GenderType;
 import homedoctor.medicine.domain.SnsType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class CreateUserRequest {
 
     private String username;
@@ -20,13 +20,22 @@ public class CreateUserRequest {
 
     private String email;
 
-    private String kakaoId;
-
-    private String googleId;
+    private String snsId;
 
     private SnsType snsType;
 
     private GenderType genderType;
 
     private String phoneNum;
+
+    private String token;
+
+    public final boolean validProperties() {
+        if (username != null && birthday != null && email != null &&
+        email != null && snsId != null && snsType != null && genderType != null &&
+        phoneNum != null && token != null) {
+            return true;
+        }
+        return false;
+    }
 }
