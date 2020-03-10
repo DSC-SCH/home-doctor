@@ -4,13 +4,14 @@ import homedoctor.medicine.api.dto.DefaultApiResponse;
 import homedoctor.medicine.api.dto.alarm.request.CreateAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.request.UpdateAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.*;
+import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.User;
 import homedoctor.medicine.dto.DefaultAlarmResponse;
 import homedoctor.medicine.service.AlarmService;
 import homedoctor.medicine.service.UserService;
-import homedoctor.medicine.utils.ResponseMessage;
-import homedoctor.medicine.utils.StatusCode;
+import homedoctor.medicine.common.ResponseMessage;
+import homedoctor.medicine.common.StatusCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -31,11 +32,12 @@ public class AlarmApiController {
 
     // 예외 처리
     @GetMapping("/alarm/{alarm_id}")
+    @Auth
     public DefaultApiResponse findOneAlarm(
             @PathVariable("alarm_id") Long id) {
         try {
-            DefaultAlarmResponse defaultAlarmResponse = alarmService.findAlarm(id);
-            Alarm alarm = defaultAlarmResponse.getAlarm();
+            DefaultAlarmResponse response = alarmService.findAlarm(id);
+            Alarm alarm = response.getAlarm();
 
             AlarmDto alarmDto = AlarmDto.builder()
                     .id(alarm.getId())
@@ -48,8 +50,8 @@ public class AlarmApiController {
                     .times(alarm.getTimes())
                     .build();
 
-            return DefaultApiResponse.response(defaultAlarmResponse.getStatus(),
-                    defaultAlarmResponse.getResponseMessage(),
+            return DefaultApiResponse.response(response.getStatus(),
+                    response.getResponseMessage(),
                     alarmDto);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -62,10 +64,10 @@ public class AlarmApiController {
     @GetMapping("/alarm")
     public DefaultApiResponse getAllAlarmByUser(User user) {
         try {
-            DefaultAlarmResponse defaultAlarmResponse =
+            DefaultAlarmResponse response =
                     alarmService.findAlarmsByUser(user);
 
-            List<Alarm> findAllAlarm = defaultAlarmResponse.getAlarmList();
+            List<Alarm> findAllAlarm = response.getAlarmList();
             List<AlarmDto> alarmDtoList = findAllAlarm.stream()
                     .map(m -> AlarmDto.builder()
                             .id(m.getId())
@@ -80,9 +82,12 @@ public class AlarmApiController {
                     .collect(Collectors.toList());
             // 노출되는 알람 입력 정보중 필요한 필드만 가져오기.(엔티티 노출하지 않기!!)
 
-            return DefaultApiResponse.response(defaultAlarmResponse.getStatus(),
-                    defaultAlarmResponse.getResponseMessage(),
-                    alarmDtoList);
+            return DefaultApiResponse.response(response.getStatus(),
+                    response.getResponseMessage(),
+                    AlarmAllResult.builder()
+                                .data(alarmDtoList)
+                                .counts(alarmDtoList.size())
+                                .build());
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
@@ -124,7 +129,7 @@ public class AlarmApiController {
             User user,
             @RequestBody @Valid final CreateAlarmRequest request) {
         try {
-            CreateAlarmRequest alarm = CreateAlarmRequest.builder()
+            CreateAlarmRequest createAlarmReq = CreateAlarmRequest.builder()
                     .user(user)
                     .title(request.getTitle())
                     .label(request.getLabel())
@@ -135,10 +140,10 @@ public class AlarmApiController {
                     .alarmStatus(request.getAlarmStatus())
                     .build();
 
-            DefaultAlarmResponse defaultAlarmResponse = alarmService.save(alarm);
-            return DefaultApiResponse.response(StatusCode.CREATED,
-                    ResponseMessage.ALARM_CREATE_SUCCESS,
-                    alarm);
+            DefaultAlarmResponse response = alarmService.save(createAlarmReq);
+            return DefaultApiResponse.response(response.getStatus(),
+                    response.getResponseMessage(),
+                    createAlarmReq);
 
         } catch (HttpMessageNotReadableException ex) {
             log.error(ex.getMessage());
@@ -168,8 +173,8 @@ public class AlarmApiController {
                     .build();
 
             DefaultAlarmResponse response = alarmService.update(alarmId, updateAlarmRequest);
-            return DefaultApiResponse.response(StatusCode.OK,
-                    ResponseMessage.ALARM_UPDATE_SUCCESS,
+            return DefaultApiResponse.response(response.getStatus(),
+                    response.getResponseMessage(),
                     updateAlarmRequest);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -183,13 +188,12 @@ public class AlarmApiController {
     public DefaultApiResponse deleteAlarmResponse(
             @PathVariable("alarm_id") Long id) {
         try {
-            DefaultAlarmResponse defaultAlarmResponse = alarmService.findAlarm(id);
-            Alarm findAlarm = defaultAlarmResponse.getAlarm();
-            Long deleteId = findAlarm.getId();
-            String deleteTitle = findAlarm.getTitle();
+            DefaultAlarmResponse response = alarmService.findAlarm(id);
+            Alarm findAlarm = response.getAlarm();
             alarmService.delete(findAlarm);
 
-            return DefaultApiResponse.response(StatusCode.OK, ResponseMessage.ALARM_DELETE_SUCCESS);
+            return DefaultApiResponse.response(response.getStatus(),
+                    response.getResponseMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,

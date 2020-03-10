@@ -10,7 +10,6 @@ public class StatusCode {
     public static final int BAD_REQUEST = 400;
     public static final int UNAUTHORIZED = 401;
     public static final int FORBIDDEN = 403;
-    public static final int NOT_FOUND = 404;
 
     // The HTTP method in the request was not supported by the resource. For example, the DELETE method cannot be used with the Agent API.
     public static final int METHOD_NOT_ALLOWED = 404;
