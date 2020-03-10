@@ -1,4 +1,4 @@
-package homedoctor.medicine.utils;
+package homedoctor.medicine.common;
 
 /**
  * REF - https://documentation.commvault.com/commvault/v11/article?p=45599.htm

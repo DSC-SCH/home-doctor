@@ -1,6 +1,16 @@
-package homedoctor.medicine.utils;
+package homedoctor.medicine.common;
 
 public class ResponseMessage {
+
+    // USER RESPONSE MESSAGE
+    public static final String USER_CREATE_SUCCESS        = "유저 등록 성공";
+    public static final String USER_CREATE_FAIL           = "유저 등록 실패";
+    public static final String USER_DELETE_SUCCESS        = "유저 삭제 성공";
+    public static final String USER_DELETE_FAIL           = "유저 삭제 실패";
+    public static final String USER_SEARCH_SUCCESS        = "유저 조회 성공";
+    public static final String USER_SEARCH_FAIL           = "유저 조회 실패";
+    public static final String NOT_FOUND_USER             = "등록된 유저가 없습니다.";
+    public static final String DUPLICATED_USER            = "이미 등록된 회원입니다.";
 
     // ALARM RESPONSE MESSAGE
     public static final String ALARM_CREATE_SUCCESS        = "알람 등록 성공";
@@ -44,15 +54,19 @@ public class ResponseMessage {
     public static final String PRESCRIPTION_UPDATE_FAIL    = "처방전 수정 실패";
     public static final String PRESCRIPTION_DELETE_SUCCESS = "처방전 삭제 성공";
     public static final String PRESCRIPTION_DELETE_FAIL    = "처방전 삭제 실패";
+    public static final String PRESCRIPTION_SEARCH_SUCCESS = "처방전 조회 성공";
+    public static final String PRESCRIPTION_SEARCH_FAIL    = "처방전 조회 실패";
     public static final String NOT_FOUND_PRESCRIPTION      = "등록된 처방전이 없습니다.";
 
     // MEDICINE
     public static final String MEDICINE_SEARCH_SUCCESS     = "약품 조회 성공";
     public static final String NOT_FOUND_MEDICINE          = "입력된 정보가 포함된 약품이 없습니다.";
 
-    // OTHER ERROR
+    // OTHER MESSAGE
     public static final String DB_ERROR                    = "디비 에러";
     public static final String INTERNAL_SERVER_ERROR       = "서버 내부 에러";
     public static final String NOT_CONTENT                 = "입력 정보가 부족합니다.";
     public static final String BAD_REQUEST                 = "잘못된 요청입니다.";
+    public static final String UNAUTHORIZED                = "토큰 인증 실패.";
+    public static final String AUTHORIZED                  = "토큰 인증 성공.";
 }
