@@ -1,4 +1,4 @@
-package homedoctor.medicine.api.dto.connection.request;
+package homedoctor.medicine.api.dto.connection;
 
 import homedoctor.medicine.domain.User;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package homedoctor.medicine.api.dto.code.request;
+package homedoctor.medicine.api.dto.code;
 
 import homedoctor.medicine.domain.User;
 import lombok.AllArgsConstructor;
@@ -12,14 +12,14 @@ import lombok.Getter;
 @Getter
 public class CreateCodeRequest {
 
-    private User user;
+    private User userId;
 
     private String code;
 
     private Integer life;
 
     public final boolean validProperties() {
-        if (user != null && code != null && life != null) {
+        if (userId != null && code != null && life != null) {
             return true;
         }
 

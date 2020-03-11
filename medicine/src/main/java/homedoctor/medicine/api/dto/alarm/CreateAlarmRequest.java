@@ -1,17 +1,22 @@
-package homedoctor.medicine.api.dto.alarm.request;
+package homedoctor.medicine.api.dto.alarm;
 
 import homedoctor.medicine.domain.AlarmStatus;
 import homedoctor.medicine.domain.Label;
+import homedoctor.medicine.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
+@Getter
 @Builder
-public class UpdateAlarmRequest {
+@AllArgsConstructor
+public class CreateAlarmRequest {
+
+    private User user;
 
     private String title;
 
@@ -28,13 +33,11 @@ public class UpdateAlarmRequest {
     private AlarmStatus alarmStatus;
 
     public final boolean validProperties() {
-        if (title != null && label != null && startDate != null
-        && endDate != null && times != null && repeats != null && alarmStatus != null) {
+        if (user != null && title != null && label != null &&
+        startDate != null && endDate != null && times != null &&
+        repeats != null && alarmStatus != null) {
             return true;
         }
-
         return false;
     }
-
-
 }

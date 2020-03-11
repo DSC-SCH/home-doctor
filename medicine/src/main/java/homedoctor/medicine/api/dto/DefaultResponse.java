@@ -7,26 +7,28 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class DefaultApiResponse<T> {
+public class DefaultResponse<T> {
     private int status;
     private String message;
     private T data;
 
-    public DefaultApiResponse(int status, String message) {
+    public DefaultResponse(int status, String message) {
         this.status = status;
         this.message = message;
         this.data = null;
     }
 
-    public static<T> DefaultApiResponse<T> response(final int status, final String message) {
+    public static<T> DefaultResponse<T> response(final int status, final String message) {
         return response(status, message, null);
     }
 
-    public static<T> DefaultApiResponse<T> response(int status, String responseMessage, final T data) {
-        return DefaultApiResponse.<T>builder()
+    public static<T> DefaultResponse<T> response(int status, String responseMessage, final T data) {
+        return DefaultResponse.<T>builder()
                 .data(data)
                 .status(status)
                 .message(responseMessage)
                 .build();
     }
+
+
 }

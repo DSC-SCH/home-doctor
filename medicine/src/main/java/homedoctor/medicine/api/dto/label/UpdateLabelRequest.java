@@ -1,4 +1,4 @@
-package homedoctor.medicine.api.dto.label.reqeust;
+package homedoctor.medicine.api.dto.label;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

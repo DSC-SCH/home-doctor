@@ -1,4 +1,4 @@
-package homedoctor.medicine.api.dto.user.response;
+package homedoctor.medicine.api.dto.user;
 
 import lombok.Data;
 

@@ -14,13 +14,13 @@ import java.util.Date;
 @Builder
 public class AlarmDto {
 
-    private Long id;
+    private Long alarmId;
 
-    private User user;
+    private Long user;
 
     private String title;
 
-    private Label label;
+    private Long label;
 
     private Date startDate;
 

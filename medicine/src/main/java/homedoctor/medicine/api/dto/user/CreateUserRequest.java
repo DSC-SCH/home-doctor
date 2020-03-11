@@ -1,4 +1,4 @@
-package homedoctor.medicine.api.dto.user.request;
+package homedoctor.medicine.api.dto.user;
 
 
 import homedoctor.medicine.domain.GenderType;
@@ -32,8 +32,8 @@ public class CreateUserRequest {
 
     public final boolean validProperties() {
         if (username != null && birthday != null && email != null &&
-        email != null && snsId != null && snsType != null && genderType != null &&
-        phoneNum != null && token != null) {
+        email != null && snsType != null && genderType != null &&
+        phoneNum != null) {
             return true;
         }
         return false;

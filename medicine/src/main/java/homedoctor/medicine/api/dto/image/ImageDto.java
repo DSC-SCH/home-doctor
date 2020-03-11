@@ -12,11 +12,11 @@ import java.sql.Blob;
 @AllArgsConstructor
 public class ImageDto {
 
-    private Long id;
+    private Long imageId;
 
-    private Alarm alarm;
+    private Long alarm;
 
-    private Blob image;
+    private String image;
 
 
 }

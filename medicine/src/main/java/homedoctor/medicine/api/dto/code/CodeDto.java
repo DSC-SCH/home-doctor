@@ -14,7 +14,7 @@ public class CodeDto {
 
     private Long id;
 
-    private User user;
+    private Long user;
 
     private String code;
 

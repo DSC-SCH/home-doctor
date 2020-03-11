@@ -11,9 +11,9 @@ import lombok.Data;
 @Builder
 public class LabelDto {
 
-    private Long id;
+    private Long labelId;
 
-    private User user;
+    private Long user;
 
     private String title;
 

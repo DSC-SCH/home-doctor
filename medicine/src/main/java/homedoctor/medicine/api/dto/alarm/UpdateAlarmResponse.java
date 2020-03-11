@@ -1,4 +1,4 @@
-package homedoctor.medicine.api.dto.alarm.response;
+package homedoctor.medicine.api.dto.alarm;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
