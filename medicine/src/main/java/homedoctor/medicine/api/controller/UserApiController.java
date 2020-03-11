@@ -5,10 +5,12 @@ import homedoctor.medicine.api.dto.user.CreateUserRequest;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.common.auth.Auth;
+import homedoctor.medicine.domain.Terms;
 import homedoctor.medicine.domain.User;
 import homedoctor.medicine.api.dto.user.*;
 import homedoctor.medicine.service.AuthService;
 import homedoctor.medicine.service.JwtService;
+import homedoctor.medicine.service.TermService;
 import homedoctor.medicine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,29 @@ public class UserApiController {
     private final AuthService authService;
 
     private final JwtService jwtService;
+
+    private final TermService termService;
+
+    @GetMapping("/terms")
+    public DefaultResponse getTerms() {
+        try {
+            List<Terms> terms = (List<Terms>) termService.findTerms().getData();
+
+            List<TermsDto> termsDto = terms.stream()
+                    .map(m -> TermsDto.builder()
+                    .title(m.getTitle())
+                    .content(m.getContent())
+                    .build())
+                    .collect(Collectors.toList());
+
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.FOUND_TERMS,
+                    termsDto);
+        } catch (Exception e) {
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("login")
     public DefaultResponse login(@RequestBody final LoginRequest loginRequest) {
