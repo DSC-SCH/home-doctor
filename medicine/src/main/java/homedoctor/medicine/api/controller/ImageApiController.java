@@ -2,6 +2,7 @@ package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.image.CreateImageRequest;
+import homedoctor.medicine.api.dto.image.imageAlarmRequest;
 import homedoctor.medicine.api.dto.image.ImageDto;
 import homedoctor.medicine.api.dto.image.UpdateImageRequest;
 import homedoctor.medicine.common.ResponseMessage;
@@ -50,9 +51,10 @@ public class ImageApiController {
 
             if (request.validProperties()) {
                 for (String image : request.getImages()) {
+                    Alarm findAlarm = (Alarm) alarmService.findAlarm(request.getAlarm()).getData();
                     PrescriptionImage prescriptionImage = PrescriptionImage.builder()
                             .image(image)
-                            .alarm(request.getAlarm())
+                            .alarm(findAlarm)
                             .build();
 
                     imageService.save(prescriptionImage);
@@ -101,14 +103,19 @@ public class ImageApiController {
     }
 
     @Auth
-    @GetMapping("/image/alarm")
+    @GetMapping("/image/alarm/{alarm_id}")
     public DefaultResponse getImageByAlarm(
             @RequestHeader("Authorization") final String header,
-            Alarm alarm) {
+            @PathVariable("alarm_id") Long id) {
         try {
             if (header == null) {
                 return defaultHeaderResponse;
             }
+            System.out.println("=====Error========");
+            System.out.println(id);
+
+//            Alarm alarm = (Alarm) alarmService.findAlarm(request.getAlarmId()).getData();
+            Alarm alarm = (Alarm) alarmService.findAlarm(id).getData();
             DefaultResponse response = imageService.findImagesByAlarm(alarm);
             List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
             List<ImageDto> imageDtoList = images.stream()
@@ -137,6 +144,7 @@ public class ImageApiController {
             if (header == null) {
                 return defaultHeaderResponse;
             }
+
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
             DefaultResponse response = imageService.findImagesByUser(findUser);
             List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
@@ -171,9 +179,8 @@ public class ImageApiController {
             PrescriptionImage image = (PrescriptionImage) response.getData();
             imageService.delete(image);
 
-            return DefaultResponse.response(response.getStatus(),
-                    response.getMessage(),
-                    id);
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.ALARM_DELETE_SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
@@ -185,11 +192,15 @@ public class ImageApiController {
     @PutMapping("/image/edit")
     public DefaultResponse updateImage(
             @RequestHeader("Authorization") final String header,
-            Alarm alarm,
-            UpdateImageRequest request) {
+            @RequestBody UpdateImageRequest request) {
         try {
             if (header == null) {
                 return defaultHeaderResponse;
+            }
+
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.METHOD_NOT_ALLOWED,
+                        ResponseMessage.NOT_CONTENT);
             }
 
             if (request.getImages() == null) {
@@ -197,8 +208,10 @@ public class ImageApiController {
                         ResponseMessage.PRESCRIPTION_UPDATE_FAIL);
             }
 
+            System.out.println("====errorTrack====");
+            Alarm findAlarm = (Alarm) alarmService.findAlarm(request.getAlarm()).getData();
             List<PrescriptionImage> images =
-                    (List<PrescriptionImage>) imageService.findImagesByAlarm(alarm).getData();
+                    (List<PrescriptionImage>) imageService.findImagesByAlarm(findAlarm).getData();
 
             // 해당 알람 이미지 삭제
             for (PrescriptionImage image : images) {
@@ -206,8 +219,12 @@ public class ImageApiController {
             }
 
             // 요청 들어온 알람 등록
-            for (PrescriptionImage image : request.getImages()) {
-                imageService.save(image);
+            for (String newImage : request.getImages()) {
+                PrescriptionImage prescriptionImage = PrescriptionImage.builder()
+                        .image(newImage)
+                        .alarm(findAlarm)
+                        .build();
+                imageService.save(prescriptionImage);
             }
 
             return DefaultResponse.response(StatusCode.OK,

@@ -49,8 +49,7 @@ public class ConnectionCodeApiController {
                 DefaultResponse response = codeService.saveCode(code);
 
                 return DefaultResponse.response(response.getStatus(),
-                        response.getMessage(),
-                        code);
+                        response.getMessage());
             }
             return DefaultResponse.response(StatusCode.BAD_REQUEST,
                     ResponseMessage.CODE_CREATE_FAIL);
@@ -63,10 +62,17 @@ public class ConnectionCodeApiController {
         }
     }
 
+    @Auth
     @GetMapping("/code/{code_id}")
     public DefaultResponse getCode(
+            @RequestHeader("Authorization") final String header,
             @PathVariable("code_id") Long id) {
         try {
+            if (header == null) {
+                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
+
             DefaultResponse response = codeService.findCode(id);
             ConnectionCode code = (ConnectionCode) response.getData();
             CodeDto codeDto = CodeDto.builder()

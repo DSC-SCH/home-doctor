@@ -6,9 +6,11 @@ import homedoctor.medicine.api.dto.alarm.UpdateAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.*;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;
+import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
 import homedoctor.medicine.service.AlarmService;
 import homedoctor.medicine.service.JwtService;
+import homedoctor.medicine.service.LabelService;
 import homedoctor.medicine.service.UserService;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
@@ -32,6 +34,8 @@ public class AlarmApiController {
 
     private final JwtService jwtService;
 
+    private final LabelService labelService;
+
     @Auth
     @PostMapping("/alarm/new")
     public DefaultResponse saveAlarm(
@@ -44,12 +48,12 @@ public class AlarmApiController {
             }
             Long userId = jwtService.decode(header);
             User findUser = (User) userService.findOneById(userId).getData();
-
+            Label findLabel = (Label) labelService.findOne(request.getLabel()).getData();
             if (request.validProperties()) {
                 Alarm alarm = Alarm.builder()
                         .user(findUser)
                         .title(request.getTitle())
-                        .label(request.getLabel())
+                        .label(findLabel)
                         .startDate(request.getStartDate())
                         .endDate(request.getEndDate())
                         .times(request.getTimes())
@@ -200,10 +204,12 @@ public class AlarmApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
 
+            Label findLabel = (Label) labelService.findOne(request.getLabel()).getData();
+
             if (request.validProperties()) {
                 Alarm alarm = Alarm.builder()
                         .title(request.getTitle())
-                        .label(request.getLabel())
+                        .label(findLabel)
                         .startDate(request.getStartDate())
                         .endDate(request.getEndDate())
                         .alarmStatus(request.getAlarmStatus())

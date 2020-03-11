@@ -145,16 +145,20 @@ public class UserApiController {
 //        return new UpdateMemberResponse(findUser.getId(), findUser.getUsername());
 //    }
 
+    @Auth
     @DeleteMapping("/user")
     public DefaultResponse deleteUser(
-             Long id) { // token 인증 방식으로 변경
+             @RequestHeader("Authorization") final String header) { // token 인증 방식으로 변경
         try {
-            DefaultResponse response = userService.findOneById(id);
-            User user = (User) response.getData();
-            userService.delete(id);
+            if (header == null) {
+                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
+            User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
+            userService.delete(findUser.getId());
 
-            return DefaultResponse.response(response.getStatus(),
-                    response.getMessage());
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.USER_DELETE_SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
