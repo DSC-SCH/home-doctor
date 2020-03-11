@@ -9,12 +9,12 @@ import lombok.Data;
 @Builder
 public class DefaultApiResponse<T> {
     private int status;
-    private String responseMessage;
+    private String message;
     private T data;
 
-    public DefaultApiResponse(int status, String responseMessage) {
+    public DefaultApiResponse(int status, String message) {
         this.status = status;
-        this.responseMessage = responseMessage;
+        this.message = message;
         this.data = null;
     }
 
@@ -26,7 +26,7 @@ public class DefaultApiResponse<T> {
         return DefaultApiResponse.<T>builder()
                 .data(data)
                 .status(status)
-                .responseMessage(responseMessage)
+                .message(responseMessage)
                 .build();
     }
 }
