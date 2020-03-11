@@ -1,6 +1,5 @@
 package com.khnsoft.zipssa
 
-import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -25,9 +24,22 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainListFragment : Fragment() {
-	val sdf_time_show = SimpleDateFormat("a hh:mm", Locale.KOREA)
+
+	companion object {
+		const val RC_DATE = 200;
+		const val EXTRA_DATE = "date";
+
+		lateinit var frag: MainListFragment
+
+		fun getInstance(): MainListFragment {
+			if (!::frag.isInitialized) {
+				frag = MainListFragment().apply { arguments = Bundle() }
+				return frag
+			} else return frag
+		}
+	}
+
 	val sdf_main_date = SimpleDateFormat("yyyy / MM / dd", Locale.KOREA)
-	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
 	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,25 +49,13 @@ class MainListFragment : Fragment() {
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		val context = view.context
 
 		val curDateCal = Calendar.getInstance()
 		main_date.text = sdf_main_date.format(curDateCal.time)
 
 		main_date.setOnClickListener {
 			val intent = Intent(context, MainListCalendarActivity::class.java)
-			startActivity(intent)
-
-			/*
-			DatePickerDialog(context, { _, year, month, dayOfMonth ->
-				curDateCal[Calendar.YEAR] = year
-				curDateCal[Calendar.MONTH] = month
-				curDateCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				main_date.text = sdf_main_date.format(curDateCal.time)
-				refresh()
-			}, curDateCal[Calendar.YEAR], curDateCal[Calendar.MONTH], curDateCal[Calendar.DAY_OF_MONTH]).show()
-
-			// */
+			startActivityForResult(intent, RC_DATE)
 		}
 
 		main_date_before.setOnClickListener {
@@ -91,41 +91,30 @@ class MainListFragment : Fragment() {
 		refresh()
 	}
 
-	companion object {
-		lateinit var frag: MainListFragment
-
-		fun getInstance(): MainListFragment {
-			if (!::frag.isInitialized) {
-				frag = MainListFragment().apply { arguments = Bundle() }
-				return frag
-			} else return frag
-		}
-	}
-
 	fun refresh() {
-		main_list_container.removeAllViews()
 		val curCal = Calendar.getInstance()
-		curCal.time = sdf_main_date.parse(main_date.text.toString())
-		val curDate = sdf_date_save.format(curCal.time)
+		val curDate = main_date.text.toString()
+		curCal.time = sdf_main_date.parse(curDate)
 
-		val sql = """
-			|SELECT ALARM_TB._ID, ALARM_TITLE, ALARM_START_DT, ALARM_END_DT, ALARM_TIMES, ALARM_REPEATS, ALARM_ENABLED, ALARM_LABEL, LABEL_COLOR 
-			|FROM ALARM_TB 
-			|LEFT OUTER JOIN LABEL_TB ON ALARM_TB.ALARM_LABEL=LABEL_TB._ID
-			|WHERE ALARM_START_DT <= "${curDate}" AND ALARM_END_DT >= "${curDate}"
-		""".trimMargin()
+		val lTemp = ServerHandler.send(context, EndOfAPI.GET_ENABLED_ALARMS)["array"].asJsonArray
 
-		Log.i("${context?.packageName} - MainList", sql)
-		val myHandler = DBHandler.open(context)
-		val lAllAlarms = myHandler.execResult(sql)
-		Log.i("${context?.packageName} - MainList", lAllAlarms.toString())
+		val lAllAlarms = JsonArray()
+
+		for (item in lTemp) {
+			val jItem = ServerHandler.convertKeys(item.asJsonObject, ServerHandler.alarmToLocal)
+
+			if (sdf_date_save.parse(jItem["alarm_start_date"].asString).time <= curCal.timeInMillis &&
+				curCal.timeInMillis <= sdf_date_save.parse(jItem["alarm_end_date"].asString).time &&
+				!jItem["alarm_times"].asString.isBlank()
+			)
+				lAllAlarms.add(jItem)
+		}
 
 		val lAlarms = JsonArray()
 		lAlarms.add(JsonObject())
-		var jItem: JsonObject
 		for (item in lAllAlarms) {
-			jItem = item.asJsonObject
-			if (jItem["ALARM_REPEATS"].asString.contains("${curCal[Calendar.DAY_OF_WEEK]}"))
+			val jItem = item.asJsonObject
+			if (jItem["alarm_repeats"].asString.contains("${curCal[Calendar.DAY_OF_WEEK]}"))
 				lAlarms.add(jItem)
 		}
 
@@ -133,8 +122,15 @@ class MainListFragment : Fragment() {
 		val lm = LinearLayoutManager(context)
 		main_list_container.layoutManager = lm
 		main_list_container.adapter = adapter
+	}
 
-		myHandler.close()
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+
+		if (requestCode == RC_DATE) {
+			val retDate = data?.getStringExtra(EXTRA_DATE) ?: return
+			main_date.text = retDate
+		}
 	}
 
 	class MainItemRecyclerAdapter(val context: Context?, val lItems: JsonArray, val lAllItems: JsonArray) :
@@ -160,9 +156,9 @@ class MainListFragment : Fragment() {
 			val dday = itemView.findViewById<TextView>(R.id.main_item_dday)
 
 			fun setItemDetails(jItem: JsonObject) {
-				val lTimes = JsonParser.parseString(jItem["ALARM_TIMES"]?.asString).asJsonArray
-				val lRepeats = JsonParser.parseString(jItem["ALARM_REPEATS"].asString).asJsonArray
-				val endDate = sdf_date_save.parse(jItem["ALARM_END_DT"].asString)
+				val lTimes = AlarmParser.parseTimes(jItem["alarm_times"].asString)
+				val lRepeats = AlarmParser.parseRepeats(jItem["alarm_repeats"].asString)
+				val endDate = sdf_date_save.parse(jItem["alarm_end_date"].asString)
 				val day_dday =
 					endDate.time / DAY_IN_MILLIS - sdf_date_save.parse(sdf_date_save.format(curCal.time)).time / DAY_IN_MILLIS
 				val lm = LinearLayoutManager(context)
@@ -185,6 +181,7 @@ class MainListFragment : Fragment() {
 						nextCal.add(Calendar.DAY_OF_MONTH, 1)
 					}
 
+					// TODO("Null if next time is after the end")
 					val timeLeft =
 						sdf_dt_next.parse("${sdf_date_save.format(nextCal.time)} ${temp}").time - curCal.timeInMillis
 					time_remain.text =
@@ -196,14 +193,14 @@ class MainListFragment : Fragment() {
 					time_remain.text = "필요 시"
 				}
 
-				title.text = jItem["ALARM_TITLE"].asString
-				title.setBackgroundColor(Color.parseColor("${jItem["LABEL_COLOR"].asString}"))
+				title.text = jItem["alarm_title"].asString
+				title.setBackgroundColor(Color.parseColor("${jItem["label_color"].asString}"))
 
 				count.text = "${lTimes.size()}회 복용"
 				time_container.layoutManager = lm
 				time_container.adapter = adapter
-				switch.isChecked = if (jItem["ALARM_ENABLED"].asInt == 0) false else true
-				start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["ALARM_START_DT"].asString))
+				switch.isChecked = AlarmParser.parseStatus(jItem["alarm_enabled"].asString) == AlarmStatus.ENABLED
+				start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["alarm_start_date"].asString))
 				end_date.text = sdf_date_show.format(endDate)
 				dday.text = "D-${day_dday}"
 
@@ -230,9 +227,10 @@ class MainListFragment : Fragment() {
 
 				for (i in 0..lAllItems.size() - 1) {
 					jItem = lAllItems[i].asJsonObject
-					lTimes = JsonParser.parseString(jItem["ALARM_TIMES"]?.asString).asJsonArray
-					lRepeats = JsonParser.parseString(jItem["ALARM_REPEATS"].asString).asJsonArray
+					lTimes = AlarmParser.parseTimes(jItem["alarm_times"].asString)
+					lRepeats = AlarmParser.parseRepeats(jItem["alarm_repeats"].asString)
 
+					Log.i("@@@", jItem.toString())
 					if (lTimes.size() > 0 && lRepeats.size() > 0) {
 						val nextCal = Calendar.getInstance()
 						var temp = ""
@@ -263,7 +261,7 @@ class MainListFragment : Fragment() {
 
 				if (nextIndex != -1) {
 					val jNextItem = lAllItems[nextIndex].asJsonObject
-					title.text = jNextItem["ALARM_TITLE"].asString
+					title.text = jNextItem["alarm_title"].asString
 					time_remain.text = "${if (nextTime > DAY_IN_MILLIS)
 						"${nextTime / DAY_IN_MILLIS}일 ${nextTime % DAY_IN_MILLIS / (60 * 60 * 1000)}시간 ${nextTime / (60 * 1000) % 60}분"
 					else

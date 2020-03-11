@@ -37,16 +37,16 @@ class MainItemPopup : AppCompatActivity() {
         val jItem = JsonParser.parseString(sItem).asJsonObject
 
         val drawable = alarm_label.background as GradientDrawable
-        drawable.setColor(Color.parseColor("${jItem["LABEL_COLOR"].asString}"))
+        drawable.setColor(Color.parseColor("${jItem["label_color"].asString}"))
 
-        alarm_title.text = jItem["ALARM_TITLE"].asString
-        alarm_switch.isChecked = (jItem["ALARM_ENABLED"].asInt == 1)
+        alarm_title.text = jItem["alarm_title"].asString
+        alarm_switch.isChecked = AlarmParser.parseStatus(jItem["alarm_enabled"].asString) == AlarmStatus.ENABLED
         start_date.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["ALARM_START_DT"].asString))
+        start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["alarm_start_date"].asString))
         end_date.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        end_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["ALARM_END_DT"].asString))
+        end_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["alarm_end_date"].asString))
 
-        val jTimes = JsonParser.parseString(jItem["ALARM_TIMES"].asString).asJsonArray
+        val jTimes = AlarmParser.parseTimes(jItem["alarm_times"].asString)
         alarm_count.text = "${jTimes.size()}"
 
         var timeBox: MainRemainTimeItem
@@ -92,7 +92,7 @@ class MainItemPopup : AppCompatActivity() {
             calYesterday.add(Calendar.DAY_OF_MONTH, -1)
             val json = JsonObject()
             json.addProperty("alarm_end_date", sdf_date_save.format(calYesterday))
-            ServerHandler.send(EndOfAPI.EDIT_ALARM, json.toString(), jItem["ALARM_ID"].asInt)
+            ServerHandler.send(this@MainItemPopup, EndOfAPI.EDIT_ALARM, json, jItem["ALARM_ID"].asInt)
 
 			val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {
 				alertTitle = jItem["alarm_title"].asString

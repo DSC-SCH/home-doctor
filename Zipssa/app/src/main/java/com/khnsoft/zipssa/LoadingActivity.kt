@@ -10,11 +10,12 @@ class LoadingActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.loading_activity)
 
-		val mHandler = DBHandler.open(this@LoadingActivity)
-		mHandler.updateTables(-1)
+		val mHandler = DatabaseHandler.open(this@LoadingActivity)
+		mHandler.updateTables(UserData.id)
 		mHandler.close()
 
 		val intent = Intent(this@LoadingActivity, MainActivity::class.java)
 		startActivity(intent)
+		finish()
 	}
 }

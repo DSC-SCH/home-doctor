@@ -159,7 +159,7 @@ class AddAlarmActivity : AppCompatActivity() {
 			for (i in 0..count - 1) {
 				val holder =
 					add_time_container.getChildViewHolder(add_time_container[i]) as AddTimeRecyclerAdapter.ViewHolder
-				lTimes.add("\"${sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString()))}\"")
+				lTimes.add(sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString())))
 			}
 			lTimes.sort()
 			lTimes.toString()
@@ -180,24 +180,25 @@ class AddAlarmActivity : AppCompatActivity() {
 
 			if (add_title.text.isBlank()) add_title.setText(radioGroup.radios[radioGroup.getCheckedIndex()].text)
 
+			val curCal = Calendar.getInstance()
+
 			val json = JsonObject()
 			json.addProperty("alarm_title", add_title.text.toString())
+			json.addProperty("alarm_user", UserData.id)
 			json.addProperty("alarm_label", radioGroup.radios[radioGroup.getCheckedIndex()].tag as Int)
 			json.addProperty("alarm_start_date", sdf_date_save.format(startCal.time))
 			json.addProperty("alarm_end_date", sdf_date_save.format(endCal.time))
-			json.addProperty("alarm_times", "[${lTimes.joinToString(",")}]")
-			json.addProperty("alarm_repeats", "[${lRepeats.joinToString(",")}]")
-			json.addProperty("alarm_enabled", if (add_times_switch.isChecked) 1 else 0)
-			json.addProperty("created_date", sdf_date_save.format(Calendar.getInstance()))
-			json.addProperty("last_modified_date", sdf_date_save.format(Calendar.getInstance()))
+			json.addProperty("alarm_times", lTimes.joinToString("/"))
+			json.addProperty("alarm_repeats", lRepeats.joinToString("/"))
+			json.addProperty("alarm_enabled", if (add_times_switch.isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
+			json.addProperty("created_date", sdf_date_save.format(curCal.time))
+			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
-			ServerHandler.send(EndOfAPI.ADD_ALARM, json.toString())
+			ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_ALARM, json)
 
-			val mHandler = DBHandler.open(this@AddAlarmActivity)
-			if (mHandler.updateTables(-1)) {
+			if (DatabaseHandler.update(this)) {
 				finish()
 			}
-			mHandler.close()
 		}
 	}
 
@@ -207,15 +208,10 @@ class AddAlarmActivity : AppCompatActivity() {
 	}
 
 	fun setupLabels() {
-		val sql = """
-			|SELECT _ID, LABEL_TITLE, LABEL_COLOR FROM LABEL_TB
-		""".trimMargin()
-
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		val myHandler = DBHandler.open(this@AddAlarmActivity)
-		val lLabels = myHandler.execResult(sql)
+		val lLabels = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)["array"].asJsonArray
 		val labelSize = lLabels.size()
 		var count = 0
 		var labelLine: AlarmLabelLine
@@ -242,18 +238,18 @@ class AddAlarmActivity : AppCompatActivity() {
 				labelRadioBtn.id = 0
 				radioGroup.add(labelRadioBtn)
 
-				jLabel = lLabels[count].asJsonObject
-				labelRadioBtn.tag = jLabel["_ID"].asInt
-				labelRadioBtn.text = jLabel["LABEL_TITLE"].asString
+				jLabel = ServerHandler.convertKeys(lLabels[count].asJsonObject, ServerHandler.labelToLocal)
+				labelRadioBtn.tag = jLabel["label_id"].asInt
+				labelRadioBtn.text = jLabel["label_title"].asString
 
 				// Setting colors
 				drawable = labelRadioBtn.background as StateListDrawable
 				drawableState = drawable.constantState as DrawableContainer.DrawableContainerState
 				children = drawableState.children
 				selected = children[0] as GradientDrawable
-				selected.setColor(Color.parseColor("${jLabel["LABEL_COLOR"].asString}"))
+				selected.setColor(Color.parseColor("${jLabel["label_color"].asString}"))
 				unselected = children[1] as GradientDrawable
-				unselected.setColor(Color.parseColor("${jLabel["LABEL_COLOR"].asString}"))
+				unselected.setColor(Color.parseColor("${jLabel["label_color"].asString}"))
 
 				count++
 				when (count) {

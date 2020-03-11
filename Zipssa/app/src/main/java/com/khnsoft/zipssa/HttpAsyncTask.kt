@@ -19,9 +19,9 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 	}
 
 	fun getResultFromAPI(remote: String?, method: HttpMethod, sMsg: String?) : String{
-		if (remote == null) return HttpAttr.ERROR_MSG
+		if (remote == null) return HttpAttr.ERROR_MSG.toString()
 
-		var ret = HttpAttr.ERROR_MSG
+		var ret = HttpAttr.ERROR_MSG.toString()
 		var httpCon: HttpURLConnection? = null
 
 		try {
@@ -29,13 +29,13 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 			httpCon = url.openConnection() as HttpURLConnection
 
 			httpCon.requestMethod = method.method
-			httpCon.setRequestProperty("Content-type", "application/json")
-			httpCon.setRequestProperty("Accept", "*/*")
+			httpCon.setRequestProperty("Content-Type", "application/json")
+			httpCon.setRequestProperty("Authorization", UserData.token)
 			httpCon.doInput = true
 
 			if (method == HttpMethod.POST || method == HttpMethod.PUT) {
 				if (sMsg == null)
-					return HttpAttr.ERROR_MSG
+					return HttpAttr.ERROR_MSG.toString()
 
 				val outputStream = httpCon.outputStream
 				outputStream.write(sMsg.toByteArray())

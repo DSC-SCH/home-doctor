@@ -3,6 +3,7 @@ package com.khnsoft.zipssa
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import java.lang.Exception
 
 class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) :
@@ -22,8 +23,7 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 		createTableAlarm(db)
 		createTableImage(db)
 		createTableCare(db)
-
-		insertDefaultLabels(db)
+		createTableCheck(db)
 	}
 
 	override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -33,16 +33,14 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 	fun createTableUser(db: SQLiteDatabase) {
 		val sql = """
 			|CREATE TABLE IF NOT EXISTS USER_TB (
-			|_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			|user_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			|user_name VARCHAR(20) NOT NULL,
-			|birthday CHAR(10),
-			|email VARCHAR(255),
-			|join_dt CHAR(10) NOT NULL,
-			|sns_type INTEGER(1) NOT NULL,
-			|gender INTEGER(1),
-			|phone_num VARCHAR(15)
+			|created_date CHAR(10) NOT NULL,
+			|last_modified_date CHAR(10) NOT NULL
 			|)
 		""".trimMargin()
+
+		Log.i("Initialize USER_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -54,13 +52,17 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 	fun createTableLabel(db: SQLiteDatabase) {
 		val sql = """
 			|CREATE TABLE IF NOT EXISTS LABEL_TB (
-			|_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			|label_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			|label_user INTEGER NOT NULL,
 			|label_title VARCHAR(10) NOT NULL,
 			|label_color CHAR(7) NOT NULL,
-			|FOREIGN KEY (label_user) REFERENCES USER_TB(_id) ON DELETE CASCADE
+			|created_date CHAR(10) NOT NULL,
+			|last_modified_date CHAR(10) NOT NULL,
+			|FOREIGN KEY (label_user) REFERENCES USER_TB(user_id) ON DELETE CASCADE
 			|)
 		""".trimMargin()
+
+		Log.i("Initialize LABEL_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -72,21 +74,23 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 	fun createTableAlarm(db: SQLiteDatabase) {
 		val sql = """
 			|CREATE TABLE IF NOT EXISTS ALARM_TB (
-			|_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			|alarm_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			|alarm_title VARCHAR(64) NOT NULL,
 			|alarm_user INTEGER NOT NULL,
 			|alarm_label INTEGER NOT NULL,
-			|alarm_start_dt CHAR(10) NOT NULL,
-			|alarm_end_dt CHAR(10) NOT NULL,
+			|alarm_start_date CHAR(10) NOT NULL,
+			|alarm_end_date CHAR(10) NOT NULL,
 			|alarm_times VARCHAR(128) NOT NULL,
 			|alarm_repeats VARCHAR(32) NOT NULL,
-			|alarm_enabled INTEGER(1) NOT NULL,
-			|alarm_created_dt CHAR(10) NOT NULL,
-			|alarm_edited_dt CHAR(10) NOT NULL,
-			|FOREIGN KEY (alarm_user) REFERENCES USER_TB(_id) ON DELETE CASCADE,
-			|FOREIGN KEY (alarm_label) REFERENCES ALARM_TB(_id) ON DELETE CASCADE
+			|alarm_enabled VARCHAR(32) NOT NULL,
+			|created_date CHAR(10) NOT NULL,
+			|last_modified_date CHAR(10) NOT NULL,
+			|FOREIGN KEY (alarm_user) REFERENCES USER_TB(user_id) ON DELETE CASCADE,
+			|FOREIGN KEY (alarm_label) REFERENCES LABEL_TB(label_id) ON DELETE CASCADE
 			|)
 		""".trimMargin()
+
+		Log.i("Initialize ALARM_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -98,13 +102,16 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 	fun createTableImage(db: SQLiteDatabase) {
 		val sql = """
 			|CREATE TABLE IF NOT EXISTS IMAGE_TB (
-			|_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			|img_alarm INTEGER NOT NULL,
-			|img LONGBLOB NOT NULL,
-			|img_created_dt CHAR(10) NOT NULL,
-			|FOREIGN KEY (img_alarm) REFERENCES ALARM_TB(_id) ON DELETE CASCADE
+			|image_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			|alarm_id INTEGER NOT NULL,
+			|image LONGBLOB NOT NULL,
+			|created_date CHAR(10) NOT NULL,
+			|last_modified_date CHAR(10) NOT NULL,
+			|FOREIGN KEY (alarm_id) REFERENCES ALARM_TB(alarm_id) ON DELETE CASCADE
 			|)
 		""".trimMargin()
+
+		Log.i("Initialize IMAGE_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -116,14 +123,17 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 	fun createTableCare(db: SQLiteDatabase) {
 		val sql = """
 			|CREATE TABLE IF NOT EXISTS CARE_TB (
-			|_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			|connection_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			|user_id INTEGER NOT NULL,
-			|care_user INTEGER NOT NULL，
-			|care_start_dt CHAR(10) NOT NULL,
-			|FOREIGN KEY (user_id) REFERENCES USER_TB(_id) ON DELETE CASCADE,
-			|FOREIGN KEY (care_user) REFERENCES USER_TB(_id) ON DELETE CASCADE
+			|care_user INTEGER NOT NULL,
+			|created_date CHAR(10) NOT NULL,
+			|last_modified_date CHAR(10) NOT NULL,
+			|FOREIGN KEY (user_id) REFERENCES USER_TB(user_id) ON DELETE CASCADE,
+			|FOREIGN KEY (care_user) REFERENCES USER_TB(user_id) ON DELETE CASCADE
 			|)
 		""".trimMargin()
+
+		Log.i("Initialize CARE_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -132,32 +142,25 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 		}
 	}
 
-	fun insertDefaultLabels(db: SQLiteDatabase) {
+	fun createTableCheck(db: SQLiteDatabase) {
+		val sql = """
+			|CREATE TABLE IF NOT EXISTS CHECK_TB (
+			|user_id INTEGER PRIMARY KEY,
+			|user INTEGER NOT NULL DEFAULT 0,
+			|label INTEGER NOT NULL DEFAULT 0,
+			|alarm INTEGER NOT NULL DEFAULT 0,
+			|image INTEGER NOT NULL DEFAULT 0,
+			|care INTEGER NOT NULL DEFAULT 0,
+			|FOREIGN KEY (user_id) REFERENCES USER_TB(user_id) ON DELETE CASCADE
+			|)
+		""".trimMargin()
+
+		Log.i("Initialize CHECK_TB", sql)
+
 		try {
-			var sql = """
-			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
-			|VALUES (1, "없음","#FFFFFF")
-			""".trimMargin()
-			db.execSQL(sql)
-
-			sql = """
-			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
-			|VALUES (2, "감기","#FFD5D5")
-			""".trimMargin()
-			db.execSQL(sql)
-
-			sql = """
-			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
-			|VALUES (3, "비염","#B6F6B2")
-			""".trimMargin()
-			db.execSQL(sql)
-
-			sql = """
-			|INSERT INTO LABEL_TB (_ID, LABEL_TITLE, LABEL_COLOR) 
-			|VALUES (4, "알레르기","#D6D6FF")
-			""".trimMargin()
 			db.execSQL(sql)
 		} catch (e: Exception) {
+			e.printStackTrace()
 		}
 	}
 }

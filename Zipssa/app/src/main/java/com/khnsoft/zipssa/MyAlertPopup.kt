@@ -1,6 +1,8 @@
 package com.khnsoft.zipssa
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,10 @@ class MyAlertPopup: AppCompatActivity() {
 		var alertContent: String = ""
 		var alertConfirmText: String = ""
 		var confirmListener : View.OnClickListener = View.OnClickListener { }
+
+		fun finishAlert() {
+
+		}
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +33,8 @@ class MyAlertPopup: AppCompatActivity() {
 		if (data == null) finish()
 
 		val type = data!!.type
+
+		Log.i("@@@", "Open")
 
 		if (type == AlertType.CONFIRM) {
 			setContentView(R.layout.popup_confirm)
@@ -40,7 +48,15 @@ class MyAlertPopup: AppCompatActivity() {
 			findViewById<TextView>(R.id.popup_title).text = data.alertTitle
 			findViewById<TextView>(R.id.popup_content).text = data.alertContent
 			findViewById<TextView>(R.id.popup_confirm).text = data.alertConfirmText
-			findViewById<TextView>(R.id.popup_confirm).setOnClickListener(data.confirmListener)
+			findViewById<TextView>(R.id.popup_confirm).setOnClickListener {
+				data.confirmListener.onClick(it)
+
+				val resultIntent = Intent()
+				resultIntent.putExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.SUCCESS.status)
+				setResult(RC, resultIntent)
+
+				finish()
+			}
 			findViewById<TextView>(R.id.popup_cancel).setOnClickListener {
 				finish()
 			}

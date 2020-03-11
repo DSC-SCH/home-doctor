@@ -10,25 +10,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.gson.JsonObject
 import com.kakao.auth.AuthType
 import com.kakao.auth.Session
+import com.kakao.usermgmt.response.model.User
 import com.khnsoft.zipssa.KakaoLogin.SessionCallback
 import kotlinx.android.synthetic.main.account_login_activity.*
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 	companion object {
 		const val SP_LOGIN = "login"
-		const val LOGIN_INIT = -1
-		const val LOGIN_NONE = 0
-		const val LOGIN_ID = 1
-		const val LOGIN_KAKAO = 2
-		const val LOGIN_GOOGLE = 3
+		const val SP_USER_ID = "user_id"
 
-		val REQUEST_CODE_GOOGLE = 9001
+		val RC_GOOGLE = 9001
 	}
 
 	lateinit var mAuth : FirebaseAuth
@@ -44,15 +43,36 @@ class LoginActivity : AppCompatActivity() {
 		// TODO("Remove above line")
 		// startLoading()
 
-		/*
-		if (sp.getInt(SP_LOGIN, LOGIN_INIT) != LOGIN_INIT) {
-			startMain()
+		//*
+		val accountType = AccountType.valueOf(sp.getString(SP_LOGIN, AccountType.NO_LOGIN.type)!!)
+		if (accountType != AccountType.NO_LOGIN) {
+			when (accountType) {
+				AccountType.OFFLINE -> {
+					UserData.accountType = AccountType.OFFLINE
+					UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
+				}
+				else -> {}
+			}
+			startLoading()
 		}
 		// */
 
-		no_login_btn.setOnClickListener {
-			editor.putInt(SP_LOGIN, LOGIN_NONE)
+		offline_btn.setOnClickListener {
+			editor.putString(SP_LOGIN, AccountType.OFFLINE.type)
 			editor.apply()
+			UserData.accountType = AccountType.OFFLINE
+			UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
+
+			val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+			val curCal = Calendar.getInstance()
+
+			val json = JsonObject()
+			json.addProperty("user_id", UserData.id)
+			json.addProperty("user_name", "약타미")
+			json.addProperty("created_date", sdf_date_save.format(curCal.time))
+			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
+
+			ServerHandler.send(this@LoginActivity, EndOfAPI.USER_REGISTER, json)
 			startLoading()
 		}
 
@@ -71,7 +91,6 @@ class LoginActivity : AppCompatActivity() {
 			signIn()
 		}
 
-		// TODO("Social login")
 		val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
 			.requestIdToken(getString(R.string.default_web_client_id))
 			.requestEmail()
@@ -87,13 +106,13 @@ class LoginActivity : AppCompatActivity() {
 
 	fun signIn() {
 		val signInIntent = mGoogleSignInClient.signInIntent
-		startActivityForResult(signInIntent, REQUEST_CODE_GOOGLE)
+		startActivityForResult(signInIntent, RC_GOOGLE)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
-		if (requestCode == REQUEST_CODE_GOOGLE) {
+		if (requestCode == RC_GOOGLE) {
 			val task = GoogleSignIn.getSignedInAccountFromIntent(data)
 			try {
 				val account = task.getResult(ApiException::class.java)

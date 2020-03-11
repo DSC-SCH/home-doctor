@@ -11,6 +11,7 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +63,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		}
 
 		// Setting title
-		edit_title.setText(_jItem["ALARM_TITLE"].asString)
+		edit_title.setText(_jItem["alarm_title"].asString)
 
 		// Setting alarm time
 		val alarm_counts_array = resources.getStringArray(R.array.alarm_times)
@@ -70,9 +71,9 @@ class EditAlarmActivity : AppCompatActivity() {
 		arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
 		alarm_times.adapter = arrayAdapter
 
-		edit_times_switch.isChecked = (_jItem["ALARM_ENABLED"].asInt == 1)
+		edit_times_switch.isChecked = AlarmParser.parseStatus(_jItem["alarm_enabled"].asString) == AlarmStatus.ENABLED
 
-		val _jTimesRaw = JsonParser.parseString(_jItem["ALARM_TIMES"].asString).asJsonArray
+		val _jTimesRaw = AlarmParser.parseTimes(_jItem["alarm_times"].asString)
 		val _jTimes = JsonArray()
 		for (item in _jTimesRaw) {
 			_jTimes.add(sdf_time_show.format(sdf_time_save.parse(item.asString)))
@@ -119,9 +120,9 @@ class EditAlarmActivity : AppCompatActivity() {
 
 		// Setting start and end date
 		val startCal = Calendar.getInstance()
-		startCal.time = sdf_date_save.parse(_jItem["ALARM_START_DT"].asString)
+		startCal.time = sdf_date_save.parse(_jItem["alarm_start_date"].asString)
 		val endCal = Calendar.getInstance()
-		endCal.time = sdf_date_save.parse(_jItem["ALARM_END_DT"].asString)
+		endCal.time = sdf_date_save.parse(_jItem["alarm_end_date"].asString)
 		edit_start_date.text = sdf_date_show.format(startCal.time)
 		edit_end_date.text = sdf_date_show.format(endCal.time)
 
@@ -174,7 +175,7 @@ class EditAlarmActivity : AppCompatActivity() {
 				}
 			}
 		}
-		val _jRepeats = JsonParser.parseString(_jItem["ALARM_REPEATS"].asString).asJsonArray
+		val _jRepeats = AlarmParser.parseRepeats(_jItem["alarm_repeats"].asString)
 
 		if (_jRepeats.size() == 7) {
 			edit_repeat_group.check(R.id.edit_repeat_everyday)
@@ -201,7 +202,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		}
 
 		// Setting labels
-		labelSelected = _jItem["ALARM_LABEL"].asInt
+		labelSelected = _jItem["alarm_label"].asInt
 
 		// Setting delete button
 		edit_delete_btn.setOnClickListener {
@@ -210,22 +211,19 @@ class EditAlarmActivity : AppCompatActivity() {
 				alertContent = "해당 알림 정보를 삭제하시겠습니까?"
 				alertConfirmText = "삭제"
 				confirmListener = View.OnClickListener {
-					ServerHandler.send(EndOfAPI.DELETE_ALARM, null, _jItem["alarm_id"].asInt)
+					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.DELETE_ALARM, null, _jItem["alarm_id"].asInt)
+					if (!HttpAttr.isOK(result)) {
+						return@OnClickListener
+					}
 
 					val data = MyAlertPopup.Data(AlertType.CONFIRM)
 					data.alertTitle = alertTitle
 					data.alertContent = "해당 알림이 삭제되었습니다."
 					val dataId = DataPasser.insert(data)
 
-					val resultIntent = Intent()
-					resultIntent.putExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.SUCCESS.status)
-					setResult(MyAlertPopup.RC, resultIntent)
-
 					val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
 					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
 					startActivity(intent)
-
-					finish()
 				}
 			}
 
@@ -248,7 +246,7 @@ class EditAlarmActivity : AppCompatActivity() {
 			for (i in 0..count - 1) {
 				val holder =
 					edit_time_container.getChildViewHolder(edit_time_container[i]) as EditTimeRecyclerAdapter.ViewHolder
-				lTimes.add("\"${sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString()))}\"")
+				lTimes.add(sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString())))
 			}
 			lTimes.sort()
 			lTimes.toString()
@@ -274,32 +272,28 @@ class EditAlarmActivity : AppCompatActivity() {
 				alertContent = "해당 알림 정보를 수정하시겠습니까?"
 				alertConfirmText = "수정"
 				confirmListener = View.OnClickListener {
+					val curCal = Calendar.getInstance()
 					val json = JsonObject()
 					json.addProperty("alarm_title", edit_title.text.toString())
 					json.addProperty("alarm_label", radioGroup.radios[radioGroup.getCheckedIndex()].tag as Int)
 					json.addProperty("alarm_start_date", sdf_date_save.format(startCal.time))
 					json.addProperty("alarm_end_date", sdf_date_save.format(endCal.time))
-					json.addProperty("alarm_times", "[${lTimes.joinToString(",")}]")
-					json.addProperty("alarm_repeats", "[${lRepeats.joinToString(",")}]")
-					json.addProperty("alarm_enabled", if (edit_times_switch.isChecked) 1 else 0)
-					json.addProperty("last_modified_date", sdf_date_save.format(Calendar.getInstance()))
+					json.addProperty("alarm_times", lTimes.joinToString("/"))
+					json.addProperty("alarm_repeats", lRepeats.joinToString("/"))
+					json.addProperty("alarm_enabled", if (edit_times_switch.isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
+					json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
-					ServerHandler.send(EndOfAPI.EDIT_ALARM, json.toString(), _jItem["alarm_id"].asInt)
+					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_ALARM, json, _jItem["alarm_id"].asInt)
+					if (!HttpAttr.isOK(result)) return@OnClickListener
 
 					val data = MyAlertPopup.Data(AlertType.CONFIRM)
 					data.alertTitle = alertTitle
 					data.alertContent = "해당 알림이 수정되었습니다."
 					val dataId = DataPasser.insert(data)
 
-					val resultIntent = Intent()
-					resultIntent.putExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.SUCCESS.status)
-					setResult(MyAlertPopup.RC, resultIntent)
-
 					val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
 					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
 					startActivity(intent)
-
-					finish()
 				}
 			}
 
@@ -332,8 +326,8 @@ class EditAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		val myHandler = DBHandler.open(this@EditAlarmActivity)
-		val lLabels = myHandler.execResult(sql)
+		val lLabels = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)["array"].asJsonArray
+
 		val labelSize = lLabels.size()
 		var count = 0
 		var labelLine: AlarmLabelLine
@@ -360,18 +354,18 @@ class EditAlarmActivity : AppCompatActivity() {
 				labelRadioBtn.id = 0
 				radioGroup.add(labelRadioBtn)
 
-				jLabel = lLabels[count].asJsonObject
-				labelRadioBtn.tag = jLabel["_ID"].asInt
-				labelRadioBtn.text = jLabel["LABEL_TITLE"].asString
+				jLabel = ServerHandler.convertKeys(lLabels[count].asJsonObject, ServerHandler.labelToLocal)
+				labelRadioBtn.tag = jLabel["label_id"].asInt
+				labelRadioBtn.text = jLabel["label_title"].asString
 
 				// Setting colors
 				drawable = labelRadioBtn.background as StateListDrawable
 				drawableState = drawable.constantState as DrawableContainer.DrawableContainerState
 				children = drawableState.children
 				selected = children[0] as GradientDrawable
-				selected.setColor(Color.parseColor("${jLabel["LABEL_COLOR"].asString}"))
+				selected.setColor(Color.parseColor("${jLabel["label_color"].asString}"))
 				unselected = children[1] as GradientDrawable
-				unselected.setColor(Color.parseColor("${jLabel["LABEL_COLOR"].asString}"))
+				unselected.setColor(Color.parseColor("${jLabel["label_color"].asString}"))
 
 				count++
 				when (count) {
