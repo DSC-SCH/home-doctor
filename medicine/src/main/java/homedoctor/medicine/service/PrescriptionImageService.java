@@ -1,13 +1,11 @@
 package homedoctor.medicine.service;
 
-import homedoctor.medicine.api.dto.image.CreateImageRequest;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.PrescriptionImage;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultAlarmResponse;
-import homedoctor.medicine.dto.DefaultImageResponse;
 import homedoctor.medicine.repository.PrescriptionImageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,137 +27,125 @@ public class PrescriptionImageService {
 
 
     @Transactional
-    public DefaultImageResponse save(CreateImageRequest request) {
+    public DefaultResponse save(PrescriptionImage image) {
         try {
+            prescriptionImageRepository.save(image);
 
-            if (request.validProperties()) {
-                PrescriptionImage image = PrescriptionImage.builder()
-                        .image(request.getImage())
-                        .alarm(request.getAlarm())
-                        .build();
-                prescriptionImageRepository.save(image);
-
-                return DefaultImageResponse.builder()
-                        .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.PRESCRIPTION_CREATE_SUCCESS)
-                        .image(image)
-                        .build();
-            }
-
-            return DefaultImageResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.PRESCRIPTION_CREATE_FAIL)
+            return DefaultResponse.builder()
+                    .status(StatusCode.OK)
+                    .message(ResponseMessage.PRESCRIPTION_CREATE_SUCCESS)
                     .build();
+
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             log.error(e.getMessage());
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
-    public DefaultImageResponse findOneImage(Long id) {
+    public DefaultResponse findOneImage(Long id) {
         try {
-            PrescriptionImage response = prescriptionImageRepository.findOne(id);
+            PrescriptionImage findImage = prescriptionImageRepository.findOne(id);
 
-            if (response == null) {
-                return DefaultImageResponse.builder()
+            if (findImage == null) {
+                return DefaultResponse.builder()
                         .status(StatusCode.METHOD_NOT_ALLOWED)
-                        .responseMessage(ResponseMessage.PRESCRIPTION_SEARCH_FAIL)
+                        .message(ResponseMessage.PRESCRIPTION_SEARCH_FAIL)
                         .build();
             }
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .responseMessage(ResponseMessage.PRESCRIPTION_SEARCH_SUCCESS)
-                    .image(response)
+                    .message(ResponseMessage.PRESCRIPTION_SEARCH_SUCCESS)
+                    .data(findImage)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.NOT_FOUND_PRESCRIPTION)
+                    .message(ResponseMessage.NOT_FOUND_PRESCRIPTION)
                     .build();
         }
     }
 
-    public DefaultImageResponse findImagesByAlarm(Alarm alarm) {
+    public DefaultResponse findImagesByAlarm(Alarm alarm) {
         try {
-            DefaultAlarmResponse alarmResponse = alarmService.findAlarm(alarm.getId());
-            Alarm findAlarm = alarmResponse.getAlarm();
+            DefaultResponse alarmResponse = alarmService.findAlarm(alarm.getId());
+            Alarm findAlarm = (Alarm) alarmResponse.getData();
             List<PrescriptionImage> images = prescriptionImageRepository.findAllByAlarm(alarm);
 
             if (findAlarm == null || images.isEmpty()) {
-                return DefaultImageResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.METHOD_NOT_ALLOWED)
-                        .responseMessage(ResponseMessage.NOT_FOUND_PRESCRIPTION)
+                        .message(ResponseMessage.PRESCRIPTION_SEARCH_FAIL)
                         .build();
             }
 
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .responseMessage(ResponseMessage.PRESCRIPTION_SEARCH_SUCCESS)
-                    .imageList(images)
+                    .message(ResponseMessage.PRESCRIPTION_SEARCH_SUCCESS)
+                    .data(images)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
-    public DefaultImageResponse findImagesByUser(User user) {
+    public DefaultResponse findImagesByUser(User user) {
         try {
             List<PrescriptionImage> images = prescriptionImageRepository.findAllByUser(user);
 
             if (user == null || images.isEmpty()) {
-                return DefaultImageResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.METHOD_NOT_ALLOWED)
-                        .responseMessage(ResponseMessage.PRESCRIPTION_SEARCH_FAIL)
+                        .message(ResponseMessage.PRESCRIPTION_SEARCH_FAIL)
                         .build();
             }
 
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .responseMessage(ResponseMessage.PRESCRIPTION_SEARCH_SUCCESS)
-                    .imageList(images)
+                    .message(ResponseMessage.PRESCRIPTION_SEARCH_SUCCESS)
+                    .data(images)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
     @Transactional
-    public DefaultImageResponse delete(PrescriptionImage prescriptionImage) {
+    public DefaultResponse delete(PrescriptionImage prescriptionImage) {
         try {
             PrescriptionImage image = prescriptionImageRepository.findOne(prescriptionImage.getId());
 
             if (prescriptionImage == null || image == null) {
-                return DefaultImageResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.METHOD_NOT_ALLOWED)
-                        .responseMessage(ResponseMessage.PRESCRIPTION_DELETE_FAIL)
+                        .message(ResponseMessage.PRESCRIPTION_DELETE_FAIL)
                         .build();
             }
 
             prescriptionImageRepository.delete(prescriptionImage);
 
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .responseMessage(ResponseMessage.PRESCRIPTION_DELETE_SUCCESS)
+                    .message(ResponseMessage.PRESCRIPTION_DELETE_SUCCESS)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return DefaultImageResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }

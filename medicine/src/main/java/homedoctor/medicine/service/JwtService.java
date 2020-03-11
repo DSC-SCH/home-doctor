@@ -21,6 +21,7 @@ import static com.auth0.jwt.JWT.require;
 public class JwtService {
 
 //    @Value("${jwt.issuer}")
+    // 배포 서버에 저장해놓기
     private String ISSUER = "Test";
 
 //    @Value("${jwt.secret}")
@@ -63,7 +64,7 @@ public class JwtService {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        return 0L;
+        return -1L;
     }
 
     public int isUser(final String header, final Long user_id) { //userIdx 내가 수정하려는!!

@@ -1,10 +1,9 @@
 package homedoctor.medicine.service;
 
-import homedoctor.medicine.api.dto.alarm.request.CreateAlarmRequest;
-import homedoctor.medicine.api.dto.alarm.request.UpdateAlarmRequest;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.domain.Alarm;
+import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultAlarmResponse;
 import homedoctor.medicine.repository.AlarmRepository;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
@@ -25,214 +24,162 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
 
     @Transactional
-    public DefaultAlarmResponse save(CreateAlarmRequest request) {
+    public DefaultResponse save(Alarm alarm) {
         try {
-            if (request.validProperties()) {
-                Alarm alarm = Alarm.builder()
-                        .user(request.getUser())
-                        .title(request.getTitle())
-                        .label(request.getLabel())
-                        .startDate(request.getStartDate())
-                        .endDate(request.getEndDate())
-                        .times(request.getTimes())
-                        .repeats(request.getRepeats())
-                        .alarmStatus(request.getAlarmStatus())
-                        .build();
-                alarmRepository.save(alarm);
-                return DefaultAlarmResponse.builder()
-                        .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.ALARM_CREATE_SUCCESS)
-                        .alarm(alarm)
-                        .alarmList(null)
-                        .build();
-            }
-
-            return DefaultAlarmResponse.builder()
-                        .status(StatusCode.METHOD_NOT_ALLOWED)
-                        .responseMessage(ResponseMessage.NOT_CONTENT)
-                        .alarm(null)
-                        .alarmList(null)
-                        .build();
+            alarmRepository.save(alarm);
+            return DefaultResponse.builder()
+                    .status(StatusCode.OK)
+                    .message(ResponseMessage.ALARM_CREATE_SUCCESS)
+                    .build();
         } catch (Exception e) {
             //Rollback
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             log.error(e.getMessage());
-            return DefaultAlarmResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .alarm(null)
-                    .alarmList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
-    public DefaultAlarmResponse findAlarmsByUser(User user) {
+    public DefaultResponse findAlarmsByUser(User user) {
         try {
             List<Alarm> findAllAlarmList = alarmRepository.findAllByUser(user);
 
             if (!findAllAlarmList.isEmpty()) {
-                return DefaultAlarmResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.ALARM_SEARCH_SUCCESS)
-                        .alarmList(findAllAlarmList)
-                        .alarm(null)
+                        .message(ResponseMessage.ALARM_SEARCH_SUCCESS)
+                        .data(findAllAlarmList)
                         .build();
             }
 
-            return DefaultAlarmResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.ALARM_SEARCH_FAIL)
+                    .message(ResponseMessage.ALARM_SEARCH_FAIL)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultAlarmResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .alarm(null)
-                    .alarmList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
-    public DefaultAlarmResponse findEnableAlarm(User user) {
+    public DefaultResponse findEnableAlarm(User user) {
         try {
             List<Alarm> enableAlarmList = alarmRepository.findAllByEnable(user);
             if (!enableAlarmList.isEmpty()) {
-                return DefaultAlarmResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.ALARM_SEARCH_SUCCESS)
-                        .alarm(null)
-                        .alarmList(enableAlarmList)
+                        .message(ResponseMessage.ALARM_SEARCH_SUCCESS)
+                        .data(enableAlarmList)
                         .build();
             }
 
-            return DefaultAlarmResponse.builder()
-                                .status(StatusCode.OK)
-                                .responseMessage(ResponseMessage.NOT_FOUND_ALARM)
-                                .alarm(null)
-                                .alarmList(null)
+            return DefaultResponse.builder()
+                                .status(StatusCode.METHOD_NOT_ALLOWED)
+                                .message(ResponseMessage.ALARM_SEARCH_FAIL)
                                 .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultAlarmResponse.builder()
+
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .alarm(null)
-                    .alarmList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
-    public DefaultAlarmResponse findAlarm(Long alarmId) {
+    public DefaultResponse findAlarm(Long alarmId) {
         try {
             Alarm findAlarm = alarmRepository.findOne(alarmId);
 
             if (findAlarm != null) {
-                return DefaultAlarmResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.ALARM_SEARCH_SUCCESS)
-                        .alarm(findAlarm)
-                        .alarmList(null)
+                        .message(ResponseMessage.ALARM_SEARCH_SUCCESS)
+                        .data(findAlarm)
                         .build();
             }
 
-            return DefaultAlarmResponse.builder()
-                    .status(StatusCode.OK)
-                    .responseMessage(ResponseMessage.ALARM_SEARCH_FAIL)
-                    .alarm(null)
-                    .alarmList(null)
+            return DefaultResponse.builder()
+                    .status(StatusCode.METHOD_NOT_ALLOWED)
+                    .message(ResponseMessage.ALARM_SEARCH_FAIL)
+                    .data(null)
                     .build();
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultAlarmResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .alarm(null)
-                    .alarmList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
     @Transactional
-    public DefaultAlarmResponse update(Long alarmId, UpdateAlarmRequest updateAlarmRequest) {
+    public DefaultResponse update(Long alarmId, Alarm alarm) {
         try {
             Alarm findAlarm = alarmRepository.findOne(alarmId);
 
             if (findAlarm == null) {
-                return DefaultAlarmResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.NOT_FOUND_ALARM)
-                        .alarm(null)
-                        .alarmList(null)
+                        .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
 
-            if (updateAlarmRequest.validProperties() == true) {
-                findAlarm.setTitle(updateAlarmRequest.getTitle());
-                findAlarm.setLabel(updateAlarmRequest.getLabel());
-                findAlarm.setStartDate(updateAlarmRequest.getStartDate());
-                findAlarm.setEndDate(updateAlarmRequest.getEndDate());
-                findAlarm.setAlarmStatus(updateAlarmRequest.getAlarmStatus());
-                findAlarm.setRepeats(updateAlarmRequest.getRepeats());
-                findAlarm.setTimes(updateAlarmRequest.getTimes());
-                alarmRepository.save(findAlarm);
 
-                return DefaultAlarmResponse.builder()
-                        .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.ALARM_UPDATE_SUCCESS)
-                        .alarm(findAlarm)
-                        .alarmList(null)
-                        .build();
-            }
+            findAlarm.setTitle(alarm.getTitle());
+            findAlarm.setLabel(alarm.getLabel());
+            findAlarm.setStartDate(alarm.getStartDate());
+            findAlarm.setEndDate(alarm.getEndDate());
+            findAlarm.setAlarmStatus(alarm.getAlarmStatus());
+            findAlarm.setRepeats(alarm.getRepeats());
+            findAlarm.setTimes(alarm.getTimes());
+            alarmRepository.save(findAlarm);
 
-            return DefaultAlarmResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.NOT_CONTENT)
-                    .alarm(null)
-                    .alarmList(null)
+            return DefaultResponse.builder()
+                    .status(StatusCode.OK)
+                    .message(ResponseMessage.ALARM_UPDATE_SUCCESS)
                     .build();
+
         } catch (Exception e) {
             log.error(e.getMessage());
             // RollBack
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
-            return DefaultAlarmResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .alarm(null)
-                    .alarmList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
     @Transactional
-    public DefaultAlarmResponse delete(Alarm alarm) {
+    public DefaultResponse delete(Alarm alarm) {
         try {
             Alarm findAlarm = alarmRepository.findOne(alarm.getId());
             if (findAlarm == null) {
-                return DefaultAlarmResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.METHOD_NOT_ALLOWED)
-                        .responseMessage(ResponseMessage.NOT_FOUND_ALARM)
-                        .alarm(null)
-                        .alarmList(null)
+                        .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
-            return DefaultAlarmResponse.builder()
+            alarmRepository.delete(findAlarm);
+            return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .responseMessage(ResponseMessage.ALARM_DELETE_SUCCESS)
-                    .alarm(null)
-                    .alarmList(null)
+                    .message(ResponseMessage.ALARM_DELETE_SUCCESS)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
             // RollBack
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return DefaultAlarmResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .alarm(null)
-                    .alarmList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }

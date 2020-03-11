@@ -1,13 +1,15 @@
 package homedoctor.medicine.service;
 
-import homedoctor.medicine.api.dto.user.request.CreateUserRequest;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
+import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultUserResponse;
+import homedoctor.medicine.repository.LabelRepository;
 import homedoctor.medicine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -22,48 +24,37 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final LabelService labelService;
+
+    private final JwtService jwtService;
+
     /**
      * 회원 가입
      */
     @Transactional
-    public DefaultUserResponse join(CreateUserRequest request) {
+    public DefaultResponse save(User user) {
         try {
-            if (request.validProperties()) {
-                User user = User.builder()
-                        .username(request.getUsername())
-                        .birthday(request.getBirthday())
-                        .email(request.getEmail())
-                        .snsId(request.getSnsId())
-                        .genderType(request.getGenderType())
-                        .phoneNum(request.getPhoneNum())
-                        .snsType(request.getSnsType())
-                        .token(request.getToken())
-                        .build();
-
-                if (!validateDuplicateUser(user)) {
-                    return DefaultUserResponse.builder()
-                            .status(StatusCode.METHOD_NOT_ALLOWED)
-                            .responseMessgae(ResponseMessage.DUPLICATED_USER)
-                            .build();
-                };
-
-                userRepository.save(user);
-                return DefaultUserResponse.builder()
-                        .status(StatusCode.OK)
-                        .responseMessgae(ResponseMessage.USER_CREATE_SUCCESS)
+            if (!validateDuplicateUser(user)) {
+                return DefaultResponse.builder()
+                        .status(StatusCode.CONFLICT)
+                        .message(ResponseMessage.DUPLICATED_USER)
                         .build();
             }
+            userRepository.save(user);
 
-            return DefaultUserResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessgae(ResponseMessage.NOT_CONTENT)
+            // Create Default Label
+            labelService.createDefaultLabel(user);
+
+            return DefaultResponse.builder()
+                    .status(StatusCode.OK)
+                    .message(ResponseMessage.USER_CREATE_SUCCESS)
                     .build();
-        } catch (Exception e) {
+     } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             log.error(e.getMessage());
-            return DefaultUserResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessgae(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
@@ -79,50 +70,51 @@ public class UserService {
     }
 
     // 회원 전체 조회
-    public DefaultUserResponse findAllUsers() {
+    public DefaultResponse findAllUsers() {
         try {
             List<User> findAllUser = userRepository.findAll();
 
             if (!findAllUser.isEmpty()) {
-                return DefaultUserResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessgae(ResponseMessage.USER_SEARCH_SUCCESS)
-                        .userList(findAllUser)
+                        .message(ResponseMessage.USER_SEARCH_SUCCESS)
+                        .data(findAllUser)
                         .build();
             }
-            return DefaultUserResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessgae(ResponseMessage.USER_SEARCH_FAIL)
+                    .message(ResponseMessage.USER_SEARCH_FAIL)
                     .build();
+
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultUserResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessgae(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
-    public DefaultUserResponse findOneById(Long id) {
+    public DefaultResponse findOneById(Long id) {
         try {
             User findUser = userRepository.findOneById(id);
 
             if (findUser != null) {
-                return DefaultUserResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessgae(ResponseMessage.USER_SEARCH_SUCCESS)
-                        .user(findUser)
+                        .message(ResponseMessage.USER_SEARCH_SUCCESS)
+                        .data(findUser)
                         .build();
             }
-            return DefaultUserResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessgae(ResponseMessage.USER_SEARCH_FAIL)
+            return DefaultResponse.builder()
+                    .status(StatusCode.UNAUTHORIZED)
+                    .message(ResponseMessage.UNAUTHORIZED)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultUserResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessgae(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
@@ -133,29 +125,29 @@ public class UserService {
 //    }
 
     @Transactional
-    public DefaultUserResponse deleteById(Long id) {
+    public DefaultResponse delete(Long id) {
         try {
             User findUser = userRepository.findOneById(id);
             if (findUser != null) {
                 userRepository.deleteByUserId(findUser);
 
-                return DefaultUserResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessgae(ResponseMessage.USER_DELETE_SUCCESS)
+                        .message(ResponseMessage.USER_DELETE_SUCCESS)
                         .build();
             }
-            return DefaultUserResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessgae(ResponseMessage.USER_DELETE_FAIL)
+            return DefaultResponse.builder()
+                    .status(StatusCode.UNAUTHORIZED)
+                    .message(ResponseMessage.UNAUTHORIZED)
                     .build();
 
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             log.error(e.getMessage());
 
-            return DefaultUserResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessgae(ResponseMessage.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
 
