@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class LogInResponse {
 
-    Long userId;
+    private Long userId;
 
-    String token;
+    private String token;
 
     public LogInResponse(Long userId, String token) {
         this.userId = userId;

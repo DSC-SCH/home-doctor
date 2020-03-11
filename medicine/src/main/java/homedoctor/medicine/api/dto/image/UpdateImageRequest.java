@@ -13,7 +13,16 @@ import java.util.List;
 @Builder @Getter
 public class UpdateImageRequest {
 
-    private List<PrescriptionImage> images;
+    private List<String> images;
 
-    private Alarm alarm;
+    private Long alarm;
+
+
+    public final boolean validProperties() {
+        if (images != null && alarm != null) {
+            return true;
+        }
+
+        return false;
+    }
 }

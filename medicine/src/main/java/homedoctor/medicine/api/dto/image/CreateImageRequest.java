@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class CreateImageRequest {
 
-    private Alarm alarm;
+    private Long alarm;
 
     private List<String> images;
 
