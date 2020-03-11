@@ -2,7 +2,7 @@ package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.code.CodeDto;
-import homedoctor.medicine.api.dto.code.request.CreateCodeRequest;
+import homedoctor.medicine.api.dto.code.CreateCodeRequest;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.ConnectionCode;
 import homedoctor.medicine.domain.User;

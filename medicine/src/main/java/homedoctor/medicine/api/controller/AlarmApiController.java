@@ -1,8 +1,8 @@
 package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
-import homedoctor.medicine.api.dto.alarm.request.CreateAlarmRequest;
-import homedoctor.medicine.api.dto.alarm.request.UpdateAlarmRequest;
+import homedoctor.medicine.api.dto.alarm.CreateAlarmRequest;
+import homedoctor.medicine.api.dto.alarm.UpdateAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.*;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;

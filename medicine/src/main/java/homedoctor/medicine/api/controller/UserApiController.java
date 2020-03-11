@@ -1,7 +1,7 @@
 package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
-import homedoctor.medicine.api.dto.user.request.CreateUserRequest;
+import homedoctor.medicine.api.dto.user.CreateUserRequest;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.common.auth.Auth;

@@ -3,11 +3,10 @@ package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.connection.ConnectionUserDto;
-import homedoctor.medicine.api.dto.connection.request.CreateConnectionRequest;
+import homedoctor.medicine.api.dto.connection.CreateConnectionRequest;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.ConnectionUser;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultConnectionResponse;
 import homedoctor.medicine.service.ConnectionUserService;
 import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.UserService;

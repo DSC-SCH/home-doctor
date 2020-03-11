@@ -2,8 +2,8 @@ package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.label.LabelDto;
-import homedoctor.medicine.api.dto.label.reqeust.CreateLabelRequest;
-import homedoctor.medicine.api.dto.label.reqeust.UpdateLabelRequest;
+import homedoctor.medicine.api.dto.label.CreateLabelRequest;
+import homedoctor.medicine.api.dto.label.UpdateLabelRequest;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
