@@ -15,7 +15,7 @@ public class UpdateAlarmDto {
 
     private String title;
 
-    private Label label;
+    private Long label;
 
     private Date startDate;
 

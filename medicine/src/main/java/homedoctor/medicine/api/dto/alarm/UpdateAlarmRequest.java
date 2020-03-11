@@ -15,7 +15,7 @@ public class UpdateAlarmRequest {
 
     private String title;
 
-    private Label label;
+    private Long label;
 
     private Date startDate;
 

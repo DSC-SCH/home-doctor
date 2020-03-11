@@ -16,11 +16,11 @@ import java.util.Date;
 @AllArgsConstructor
 public class CreateAlarmRequest {
 
-    private User user;
+    private Long user;
 
     private String title;
 
-    private Label label;
+    private Long label;
 
     private Date startDate;
 
