@@ -37,13 +37,13 @@ class SearchResultFragment : Fragment() {
 		super.onViewCreated(view, savedInstanceState)
 
 		// TODO("Page when there is no result")
-		val adapter = SearchResultRecyclerAdapter(context, lResult)
+		val adapter = SearchResultRecyclerAdapter(lResult)
 		val lm = LinearLayoutManager(context)
 		search_result_container.layoutManager = lm
 		search_result_container.adapter = adapter
 	}
 
-	class SearchResultRecyclerAdapter(val context: Context?, val lResult: JsonArray) :
+	inner class SearchResultRecyclerAdapter(val lResult: JsonArray) :
 		RecyclerView.Adapter<SearchResultRecyclerAdapter.ViewHolder>(){
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -9,15 +9,7 @@ import java.lang.Exception
 class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int) :
 	SQLiteOpenHelper(context, name, factory, version) {
 
-	companion object {
-		const val SP_UID = "user_id"
-		const val UID_DEFAULT = -1
-	}
-
 	override fun onCreate(db: SQLiteDatabase) {
-		val sp = context?.getSharedPreferences(SharedPreferencesSrc.SP_DATABASE_NAME, Context.MODE_PRIVATE)
-		val user_id = sp?.getInt(SP_UID, UID_DEFAULT) ?: -1
-
 		createTableUser(db)
 		createTableLabel(db)
 		createTableAlarm(db)

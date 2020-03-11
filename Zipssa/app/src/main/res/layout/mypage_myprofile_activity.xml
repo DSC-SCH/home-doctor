@@ -84,7 +84,7 @@
 				android:fontFamily="@font/nanum_square_ac"
 				android:textColor="@color/text_color"
 				android:textSize="@dimen/myprofile_content_text"
-				android:text="아이디" />
+				android:text="이메일" />
 
 			<Space
 				android:layout_width="0dp"
@@ -97,7 +97,7 @@
 				android:fontFamily="@font/nanum_square_ac"
 				android:textColor="@color/text_color"
 				android:textSize="@dimen/myprofile_content_text"
-				android:text="ID" />
+				android:text="이메일" />
 		</LinearLayout>
 
 		<View
@@ -106,7 +106,6 @@
 			android:background="@color/split_line" />
 
 		<LinearLayout
-			android:id="@+id/change_pw_btn"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
@@ -118,7 +117,20 @@
 				android:fontFamily="@font/nanum_square_ac"
 				android:textColor="@color/text_color"
 				android:textSize="@dimen/myprofile_content_text"
-				android:text="@string/underline_myprofile_passwd" />
+				android:text="전화번호" />
+
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1" />
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/myprofile_content_text"
+				android:text="전화번호" />
 		</LinearLayout>
 
 		<View

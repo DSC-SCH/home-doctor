@@ -14,11 +14,5 @@ class MypageMyprofileActivity : AppCompatActivity() {
 		back_btn.setOnClickListener { onBackPressed() }
 
 		// TODO("Show profile")
-		// TODO("Change passwd")
-
-		change_pw_btn.setOnClickListener {
-			val intent = Intent(this@MypageMyprofileActivity, MypageChangepwActivity::class.java)
-			startActivity(intent)
-		}
 	}
 }

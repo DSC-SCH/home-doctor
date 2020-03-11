@@ -142,3 +142,8 @@ class Checker() {
         }
     }
 }
+
+enum class PhotoAttr(val rc: Int) {
+    CAMERA(301),
+    GALLERY(300)
+}

@@ -168,6 +168,35 @@
 					android:layout_marginHorizontal="@dimen/mypage_split_marginH"/>
 
 				<LinearLayout
+					android:id="@+id/label_btn"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:gravity="left|center" >
+
+					<ImageView
+						android:layout_width="@dimen/mypage_icon_sizeH"
+						android:layout_height="@dimen/mypage_icon_sizeV"
+						android:padding="@dimen/mypage_icon_padding"
+						android:src="@drawable/mypage_label_icon"
+						android:adjustViewBounds="true"/>
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/nanum_square_ac"
+						android:textSize="@dimen/mypage_content_text"
+						android:textColor="@color/text_color"
+						android:text="라벨 관리"/>
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/mypage_split_marginH"/>
+
+				<LinearLayout
 					android:id="@+id/setting_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"

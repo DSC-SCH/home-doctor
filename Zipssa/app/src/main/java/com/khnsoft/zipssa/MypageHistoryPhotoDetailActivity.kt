@@ -24,7 +24,7 @@ class MypageHistoryPhotoDetailActivity : AppCompatActivity() {
 
 	}
 
-	class PhotoRecyclerAdapter(val context: Context?, val lPhoto: JsonArray) :
+	inner class PhotoRecyclerAdapter(val lPhoto: JsonArray) :
 		RecyclerView.Adapter<PhotoRecyclerAdapter.ViewHolder>() {
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,7 +32,7 @@ class MypageHistoryPhotoDetailActivity : AppCompatActivity() {
 		}
 
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-			val view = LayoutInflater.from(context).inflate(R.layout.mypage_history_photo_detail_list_item, parent, false)
+			val view = LayoutInflater.from(this@MypageHistoryPhotoDetailActivity).inflate(R.layout.mypage_history_photo_detail_list_item, parent, false)
 			return ViewHolder(view)
 		}
 

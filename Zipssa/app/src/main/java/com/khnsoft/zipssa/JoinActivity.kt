@@ -44,7 +44,7 @@ class JoinActivity : AppCompatActivity() {
 		// TODO("Get contracts from API")
 		val lContract = JsonArray()
 
-		val adapter = ContractRecyclerAdapter(this@JoinActivity, lContract)
+		val adapter = ContractRecyclerAdapter(lContract)
 		val lm = LinearLayoutManager(this@JoinActivity)
 		contract_container.layoutManager = lm
 		contract_container.adapter = adapter
@@ -134,6 +134,14 @@ class JoinActivity : AppCompatActivity() {
 					val intent = Intent(this@JoinActivity, MyAlertPopup::class.java)
 					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
 					startActivity(intent)
+
+					val sp = getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+					val editor = sp.edit()
+					editor.putString(LoginActivity.SP_LOGIN, _sns_type)
+					editor.apply()
+
+					val intent2 = Intent(this@JoinActivity, MainActivity::class.java)
+					startActivity(intent)
 					finish()
 				}
 			}
@@ -151,7 +159,7 @@ class JoinActivity : AppCompatActivity() {
 		return true
 	}
 
-	inner class ContractRecyclerAdapter(val context: Context?, val lContract: JsonArray) :
+	inner class ContractRecyclerAdapter(val lContract: JsonArray) :
 		RecyclerView.Adapter<ContractRecyclerAdapter.ViewHolder>() {
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -160,7 +168,7 @@ class JoinActivity : AppCompatActivity() {
 		}
 
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-			val view = LayoutInflater.from(context).inflate(R.layout.account_join_contract_item, parent, false)
+			val view = LayoutInflater.from(this@JoinActivity).inflate(R.layout.account_join_contract_item, parent, false)
 			return ViewHolder(view)
 		}
 

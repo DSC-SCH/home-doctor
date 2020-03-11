@@ -165,6 +165,18 @@
 	<dimen name="alarm_page_box_paddingH">15dp</dimen>
 	<dimen name="alarm_page_box_paddingV">10dp</dimen>
 
+	<dimen name="alarm_page_image_size">15dp</dimen>
+	<dimen name="alarm_page_image_margin">3dp</dimen>
+	<dimen name="alarm_page_image_paddingH">5dp</dimen>
+	<dimen name="alarm_page_image_btn_margin">3dp</dimen>
+
+	<dimen name="alarm_page_image_split_marginH">10dp</dimen>
+
+	<dimen name="alarm_page_imagecontainer_padding">5dp</dimen>
+	<dimen name="alarm_page_imagecontainer_image_marginH">5dp</dimen>
+
+	<dimen name="alarm_page_image_remove_size">10dp</dimen>
+
 	<dimen name="alarm_page_content_marginH">20dp</dimen>
 	<dimen name="alarm_page_content_paddingV">10dp</dimen>
 	<dimen name="alarm_page_content_distanceV">5dp</dimen>
@@ -253,6 +265,10 @@
 	<dimen name="medicine_content_en_text">10sp</dimen>
 
 	<!-- my page activity -->
+	<dimen name="mypage_tab_padding">15dp</dimen>
+	<dimen name="mypage_tab_split_marginH">10dp</dimen>
+	<dimen name="mypage_tabbtn_text">15sp</dimen>
+
 	<dimen name="mypage_marginV">20dp</dimen>
 	<dimen name="mypage_menu_paddingV">13dp</dimen>
 	<dimen name="mypage_menu_paddingH">35dp</dimen>
@@ -298,8 +314,6 @@
 	<!-- sync activity -->
 	<dimen name="sync_editbtn_paddingV">5dp</dimen>
 	<dimen name="sync_editbtn_paddingH">10dp</dimen>
-	<dimen name="sync_tab_padding">15dp</dimen>
-	<dimen name="sync_split_marginH">10dp</dimen>
 	<dimen name="sync_addbtn_paddingV">15dp</dimen>
 	<dimen name="sync_addbtn_paddingH">40dp</dimen>
 	<dimen name="sync_addbtn_margin">20dp</dimen>
@@ -310,7 +324,6 @@
 	<dimen name="sync_item_icon_paddingV">5dp</dimen>
 
 	<dimen name="sync_editbtn_text">13sp</dimen>
-	<dimen name="sync_tabbtn_text">15sp</dimen>
 	<dimen name="sync_addbtn_text">18sp</dimen>
 
 	<dimen name="sync_popup_content_text">14sp</dimen>
@@ -360,6 +373,20 @@
 
 	<!-- setting activity -->
 	<dimen name="setting_split_marginH">15dp</dimen>
+
+	<!-- label activity -->
+	<dimen name="label_paddingH">15dp</dimen>
+	<dimen name="label_color_size">30dp</dimen>
+	<dimen name="label_btn_paddingV">5dp</dimen>
+	<dimen name="label_btn_paddingH">10dp</dimen>
+	<dimen name="label_content_marginH">15dp</dimen>
+	<dimen name="label_content_marginV">15dp</dimen>
+	<dimen name="label_addbtn_marginV">30dp</dimen>
+	<dimen name="label_addbtn_paddingV">15dp</dimen>
+	<dimen name="label_addbtn_paddingH">40dp</dimen>
+
+	<dimen name="label_content_text">15sp</dimen>
+	<dimen name="label_addbtn_text">23sp</dimen>
 
 	<!-- leaving activity -->
 	<dimen name="leaving_split_marginH">15dp</dimen>

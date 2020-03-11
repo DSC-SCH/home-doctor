@@ -4,6 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@color/mypage_background"
 	android:orientation="vertical">
 
 	<FrameLayout
@@ -24,7 +25,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
-			android:text="복용 내역"
+			android:text="라벨관리"
 			android:fontFamily="@font/bmjua"
 			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
@@ -33,28 +34,28 @@
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_marginTop="@dimen/mypage_marginV"
 		android:background="@color/background_theme"
+		android:layout_marginTop="@dimen/mypage_marginV"
 		android:orientation="vertical">
 
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:paddingVertical="@dimen/mypage_menu_paddingV"
-			android:paddingHorizontal="@dimen/mypage_menu_paddingH"
-			android:fontFamily="@font/nanum_square_ac"
-			android:textSize="@dimen/history_menu_text"
-			android:textColor="@color/text_color"
-			android:text="처방전 내역"/>
-
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/split_line"
-			android:background="@color/split_line"
-			android:layout_marginHorizontal="@dimen/history_split_paddingH"/>
-
 		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/label_container"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:paddingHorizontal="@dimen/label_paddingH" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/label_edit_btn"
+			android:layout_gravity="center"
+			android:paddingVertical="@dimen/label_addbtn_paddingV"
+			android:paddingHorizontal="@dimen/label_addbtn_paddingH"
+			android:layout_marginVertical="@dimen/label_addbtn_marginV"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="#FFFFFF"
+			android:textSize="@dimen/label_addbtn_text"
+			android:text="라벨 추가"/>
 	</LinearLayout>
 </LinearLayout>

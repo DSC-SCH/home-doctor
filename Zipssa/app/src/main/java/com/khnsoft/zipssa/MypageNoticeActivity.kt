@@ -21,13 +21,13 @@ class MypageNoticeActivity : AppCompatActivity() {
 		back_btn.setOnClickListener { onBackPressed() }
 
 		// TODO("Get notice from server")
-		val adapter = NoticeRecyclerAdapter(this@MypageNoticeActivity, JsonArray())
+		val adapter = NoticeRecyclerAdapter(JsonArray())
 		val lm = LinearLayoutManager(this@MypageNoticeActivity)
 		notice_container.layoutManager = lm
 		notice_container.adapter = adapter
 	}
 
-	class NoticeRecyclerAdapter(val context: Context?, val lNotice: JsonArray) :
+	inner class NoticeRecyclerAdapter(val lNotice: JsonArray) :
 			RecyclerView.Adapter<NoticeRecyclerAdapter.ViewHolder>() {
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,7 +36,7 @@ class MypageNoticeActivity : AppCompatActivity() {
 		}
 
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-			val view = LayoutInflater.from(context).inflate(R.layout.mypage_notice_item, parent, false)
+			val view = LayoutInflater.from(this@MypageNoticeActivity).inflate(R.layout.mypage_notice_item, parent, false)
 			return ViewHolder(view)
 		}
 

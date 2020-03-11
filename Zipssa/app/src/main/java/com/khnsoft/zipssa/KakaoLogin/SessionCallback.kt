@@ -43,6 +43,14 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 							UserData.accountType = AccountType.KAKAO
 							UserData.token = userData["token"].asString
 							UserData.id = userData["userId"].asInt
+
+							val sp = context.getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+							if (sp.getInt(LoginActivity.SP_USER_ID, UserData.DEFAULT_ID) != UserData.id) {
+								val editor = sp.edit()
+								editor.putInt(LoginActivity.SP_USER_ID, UserData.id)
+								editor.apply()
+							}
+
 							context.startLoading()
 						}
 						HttpAttr.NO_USER_CODE -> {

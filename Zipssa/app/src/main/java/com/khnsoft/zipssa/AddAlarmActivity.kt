@@ -1,16 +1,23 @@
 package com.khnsoft.zipssa
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.DrawableContainer
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +30,9 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.add_alarm_activity.*
+import java.io.File
+import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -47,6 +57,8 @@ class AddAlarmActivity : AppCompatActivity() {
 	lateinit var radioGroup: MyRadioGroup
 	var labelSelected = -1
 
+	val images = mutableListOf<Bitmap>()
+
 	// TODO("Camera and photo")
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +68,18 @@ class AddAlarmActivity : AppCompatActivity() {
 		// Setting back button
 		back_btn.setOnClickListener {
 			onBackPressed()
+		}
+
+		// Setting image button
+		image_from_camera.setOnClickListener {
+			val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+			startActivityForResult(intent, PhotoAttr.CAMERA.rc)
+		}
+
+		image_from_gallery.setOnClickListener {
+			val intent = Intent(Intent.ACTION_PICK)
+			intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
+			startActivityForResult(intent, PhotoAttr.GALLERY.rc)
 		}
 
 		// Setting alarm time
@@ -82,7 +106,7 @@ class AddAlarmActivity : AppCompatActivity() {
 				}
 				add_times_switch.tag = count
 
-				val adapter = AddTimeRecyclerAdapter(this@AddAlarmActivity, DEFAULT_TIMES[position].asJsonArray)
+				val adapter = AddTimeRecyclerAdapter(DEFAULT_TIMES[position].asJsonArray)
 				val lm = LinearLayoutManager(this@AddAlarmActivity)
 				add_time_container.layoutManager = lm
 				add_time_container.adapter = adapter
@@ -194,11 +218,57 @@ class AddAlarmActivity : AppCompatActivity() {
 			json.addProperty("created_date", sdf_date_save.format(curCal.time))
 			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
-			ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_ALARM, json)
+			val result = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_ALARM, json)
 
-			if (DatabaseHandler.update(this)) {
+			if (HttpAttr.isOK(result)) {
+				// TODO("Send image if sent alarm successful")
+
 				finish()
 			}
+		}
+	}
+
+	fun refreshImages() {
+		Log.i("@@@", "Refresh images")
+		val adapter = PhotoRecyclerAdapter()
+		val lm = LinearLayoutManager(this@AddAlarmActivity, LinearLayoutManager.HORIZONTAL, false)
+		image_container.layoutManager = lm
+		image_container.adapter = adapter
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+
+		if (requestCode == PhotoAttr.CAMERA.rc) {
+			if (resultCode == Activity.RESULT_OK) {
+				val img = (data?.extras?.get("data") ?: return) as Bitmap
+				images.add(img)
+				refreshImages()
+			}
+		} else if (requestCode == PhotoAttr.GALLERY.rc) {
+			if (data == null) return
+			val photoUri = data.data
+			var cursor: Cursor? = null
+			val tempFile: File?
+
+			try {
+				val proj = arrayOf(MediaStore.Images.Media.DATA)
+
+				cursor = contentResolver.query(photoUri ?: return, proj, null, null, null)
+
+				val column_index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA) ?: return
+
+				cursor.moveToFirst()
+				tempFile = File(cursor.getString(column_index))
+			} finally {
+				cursor?.close()
+			}
+
+			val options = BitmapFactory.Options()
+			val img = BitmapFactory.decodeFile(tempFile?.absolutePath ?: return, options)
+			images.add(img)
+
+			refreshImages()
 		}
 	}
 
@@ -284,7 +354,7 @@ class AddAlarmActivity : AppCompatActivity() {
 		}
 	}
 
-	class AddTimeRecyclerAdapter(val context: Context?, val lTimes: JsonArray) :
+	inner class AddTimeRecyclerAdapter(val lTimes: JsonArray) :
 		RecyclerView.Adapter<AddTimeRecyclerAdapter.ViewHolder>() {
 		val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 
@@ -293,7 +363,7 @@ class AddAlarmActivity : AppCompatActivity() {
 		}
 
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-			val view = LayoutInflater.from(context).inflate(R.layout.alarm_time_item, parent, false)
+			val view = LayoutInflater.from(this@AddAlarmActivity).inflate(R.layout.alarm_time_item, parent, false)
 			return ViewHolder(view)
 		}
 
@@ -306,11 +376,38 @@ class AddAlarmActivity : AppCompatActivity() {
 			holder.time.setOnClickListener {
 				val cal = Calendar.getInstance()
 				cal.time = sdf_time_show.parse(holder.time.text.toString())
-				TimePickerDialog(context, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
+				TimePickerDialog(this@AddAlarmActivity, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
 					cal[Calendar.HOUR_OF_DAY] = hourOfDay
 					cal[Calendar.MINUTE] = minute
 					holder.time.text = sdf_time_show.format(cal.time)
 				}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
+			}
+		}
+	}
+
+	inner class PhotoRecyclerAdapter() :
+		RecyclerView.Adapter<PhotoRecyclerAdapter.ViewHolder>() {
+
+		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+			val image = itemView.findViewById<ImageView>(R.id.image_item)
+			val remove = itemView.findViewById<ImageView>(R.id.image_remove)
+		}
+
+		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+			val view = LayoutInflater.from(this@AddAlarmActivity).inflate(R.layout.alarm_page_photo_item, parent, false)
+			return ViewHolder(view)
+		}
+
+		override fun getItemCount(): Int {
+			return images.size
+		}
+
+		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+			val bitmap = images[position]
+			holder.image.setImageBitmap(bitmap)
+			holder.remove.setOnClickListener {
+				images.removeAt(position)
+				refreshImages()
 			}
 		}
 	}

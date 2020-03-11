@@ -15,7 +15,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.gson.JsonObject
 import com.kakao.auth.AuthType
 import com.kakao.auth.Session
-import com.kakao.usermgmt.response.model.User
 import com.khnsoft.zipssa.KakaoLogin.SessionCallback
 import kotlinx.android.synthetic.main.account_login_activity.*
 import java.lang.Exception
@@ -30,14 +29,13 @@ class LoginActivity : AppCompatActivity() {
 		val RC_GOOGLE = 9001
 	}
 
-	lateinit var mAuth : FirebaseAuth
 	lateinit var mGoogleSignInClient : GoogleSignInClient
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.account_login_activity)
 
-		val sp = getSharedPreferences(SharedPreferencesSrc.SP_ACCOUNT_NAME, Context.MODE_PRIVATE)
+		val sp = getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
 		val editor = sp.edit()
 
 		// TODO("Remove above line")
@@ -142,6 +140,14 @@ class LoginActivity : AppCompatActivity() {
 							UserData.accountType = AccountType.GOOGLE
 							UserData.token = userData["token"].asString
 							UserData.id = userData["id"].asInt
+
+							val sp = getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+							if (sp.getInt(SP_USER_ID, UserData.DEFAULT_ID) != UserData.id) {
+								val editor = sp.edit()
+								editor.putInt(SP_USER_ID, UserData.id)
+								editor.apply()
+							}
+
 							startLoading()
 						}
 						HttpAttr.NO_USER_CODE -> {

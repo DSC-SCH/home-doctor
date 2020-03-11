@@ -118,7 +118,7 @@ class MainListFragment : Fragment() {
 				lAlarms.add(jItem)
 		}
 
-		val adapter = MainItemRecyclerAdapter(context, lAlarms, lAllAlarms)
+		val adapter = MainItemRecyclerAdapter(lAlarms, lAllAlarms)
 		val lm = LinearLayoutManager(context)
 		main_list_container.layoutManager = lm
 		main_list_container.adapter = adapter
@@ -133,7 +133,7 @@ class MainListFragment : Fragment() {
 		}
 	}
 
-	class MainItemRecyclerAdapter(val context: Context?, val lItems: JsonArray, val lAllItems: JsonArray) :
+	inner class MainItemRecyclerAdapter(val lItems: JsonArray, val lAllItems: JsonArray) :
 		RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 		val TYPE_REMAIN = 1
 		val TYPE_ITEM = 2
@@ -162,7 +162,7 @@ class MainListFragment : Fragment() {
 				val day_dday =
 					endDate.time / DAY_IN_MILLIS - sdf_date_save.parse(sdf_date_save.format(curCal.time)).time / DAY_IN_MILLIS
 				val lm = LinearLayoutManager(context)
-				val adapter = MainItemTimeRecyclerAdapter(context, lTimes)
+				val adapter = MainItemTimeRecyclerAdapter(lTimes)
 
 				if (lTimes.size() > 0 && lRepeats.size() > 0) {
 					val nextCal = Calendar.getInstance()
@@ -300,7 +300,7 @@ class MainListFragment : Fragment() {
 		}
 	}
 
-	class MainItemTimeRecyclerAdapter(val context: Context?, val lTimes: JsonArray) :
+	inner class MainItemTimeRecyclerAdapter(val lTimes: JsonArray) :
 		RecyclerView.Adapter<MainItemTimeRecyclerAdapter.ViewHolder>() {
 		val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
 		val sdf_time_show = SimpleDateFormat("a h:mm", Locale.ENGLISH)

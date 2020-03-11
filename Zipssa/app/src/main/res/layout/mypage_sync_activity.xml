@@ -56,13 +56,13 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:checked="true"
-			android:background="@drawable/sync_tab_selector"
+			android:background="@drawable/mypage_tab_selector"
 			android:button="@drawable/empty_selector"
 			android:gravity="center"
-			android:padding="@dimen/sync_tab_padding"
+			android:padding="@dimen/mypage_tab_padding"
 			android:fontFamily="@font/lotte_dream_bold"
-			android:textSize="@dimen/sync_tabbtn_text"
-			android:textColor="@drawable/sync_tab_text_color"
+			android:textSize="@dimen/mypage_tabbtn_text"
+			android:textColor="@drawable/mypage_tab_text_color"
 			android:text="매니저 관리" />
 
 		<RadioButton
@@ -70,13 +70,13 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:background="@drawable/sync_tab_selector"
+			android:background="@drawable/mypage_tab_selector"
 			android:button="@drawable/empty_selector"
 			android:gravity="center"
-			android:padding="@dimen/sync_tab_padding"
+			android:padding="@dimen/mypage_tab_padding"
 			android:fontFamily="@font/lotte_dream_bold"
-			android:textSize="@dimen/sync_tabbtn_text"
-			android:textColor="@drawable/sync_tab_text_color"
+			android:textSize="@dimen/mypage_tabbtn_text"
+			android:textColor="@drawable/mypage_tab_text_color"
 			android:text="크루 관리" />
 	</LinearLayout>
 
@@ -84,7 +84,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/split_line"
 		android:background="@color/split_line"
-		android:layout_marginHorizontal="@dimen/sync_split_marginH"/>
+		android:layout_marginHorizontal="@dimen/mypage_tab_split_marginH"/>
 
 
 	<androidx.recyclerview.widget.RecyclerView

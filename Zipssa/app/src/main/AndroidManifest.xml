@@ -3,6 +3,9 @@
     package="com.khnsoft.zipssa">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".KakaoLogin.GlobalApplication"
@@ -33,13 +36,10 @@
         <activity
             android:name=".MainItemPopup"
             android:theme="@style/PopupTheme" />
-        <activity android:name=".MypageChangepwActivity" />
         <activity android:name=".MypageNoticeActivity" />
         <activity android:name=".MypageNoticeDetailActivity" />
         <activity android:name=".MypageSyncActivity" />
         <activity android:name=".MypageHistoryActivity" />
-        <activity android:name=".MypageHistoryAllActivity" />
-        <activity android:name=".MypageHistoryPhotoActivity" />
         <activity android:name=".MypageHistoryPhotoDetailActivity" />
         <activity android:name=".MypageSettingActivity" />
         <activity android:name=".MypageLeavingActivity" />

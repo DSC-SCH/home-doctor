@@ -108,9 +108,9 @@ class EditAlarmActivity : AppCompatActivity() {
 
 				val adapter: EditTimeRecyclerAdapter
 				if (!timesInitialized) {
-					adapter = EditTimeRecyclerAdapter(this@EditAlarmActivity, _jTimes)
+					adapter = EditTimeRecyclerAdapter(_jTimes)
 				} else {
-					adapter = EditTimeRecyclerAdapter(this@EditAlarmActivity, DEFAULT_TIMES[position].asJsonArray)
+					adapter = EditTimeRecyclerAdapter(DEFAULT_TIMES[position].asJsonArray)
 				}
 				val lm = LinearLayoutManager(this@EditAlarmActivity)
 				edit_time_container.layoutManager = lm
@@ -400,7 +400,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		}
 	}
 
-	class EditTimeRecyclerAdapter(val context: Context?, val lTimes: JsonArray) :
+	inner class EditTimeRecyclerAdapter(val lTimes: JsonArray) :
 		RecyclerView.Adapter<EditTimeRecyclerAdapter.ViewHolder>() {
 		val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 
@@ -409,7 +409,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		}
 
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-			val view = LayoutInflater.from(context).inflate(R.layout.alarm_time_item, parent, false)
+			val view = LayoutInflater.from(this@EditAlarmActivity).inflate(R.layout.alarm_time_item, parent, false)
 			return ViewHolder(view)
 		}
 
@@ -422,7 +422,7 @@ class EditAlarmActivity : AppCompatActivity() {
 			holder.time.setOnClickListener {
 				val cal = Calendar.getInstance()
 				cal.time = sdf_time_show.parse(holder.time.text.toString())
-				TimePickerDialog(context, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
+				TimePickerDialog(this@EditAlarmActivity, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
 					cal[Calendar.HOUR_OF_DAY] = hourOfDay
 					cal[Calendar.MINUTE] = minute
 					holder.time.text = sdf_time_show.format(cal.time)
