@@ -91,14 +91,5 @@ class ServerHandler {
 
             return JsonParser.parseString(HttpAsyncTask().execute(remote, method.method, json.toString()).get()).asJsonObject
         }
-
-        fun isUserExists(type: AccountType, uid: String): Boolean {
-            // TODO("Check whether the user is registered in server")
-            val jAuth = JsonObject()
-            jAuth.addProperty("type", type.type)
-            jAuth.addProperty("uid", uid)
-
-            return true
-        }
     }
 }

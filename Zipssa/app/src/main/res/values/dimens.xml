@@ -47,7 +47,9 @@
 	<dimen name="join_check_paddingH">15dp</dimen>
 	<dimen name="join_check_marginL">10dp</dimen>
 	<dimen name="join_item_marginT">15dp</dimen>
-	<dimen name="join_contract_marginV">40dp</dimen>
+	<dimen name="join_contract_marginT">40dp</dimen>
+	<dimen name="join_contract_warning_marginT">20dp</dimen>
+	<dimen name="join_btn_marginT">15dp</dimen>
 	<dimen name="join_btn_paddingV">15dp</dimen>
 	<dimen name="join_btn_marginH">40dp</dimen>
 

@@ -13,6 +13,11 @@ enum class HttpMethod(val method: String) {
 }
 
 enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: Boolean) {
+    // ONLINE only
+    USER_REGISTER("/user", HttpMethod.POST, false),
+    USER_LOGIN("/login", HttpMethod.POST, false),
+
+    // Both of OFFLINE and ONLINE
     GET_ENABLED_ALARMS("/alarm/enable", HttpMethod.GET, false),
     ADD_ALARM("/alarm/new", HttpMethod.POST, false),
     ADD_LABEL("/label/new", HttpMethod.POST, false),
@@ -20,9 +25,7 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     DELETE_ALARM("/alarm", HttpMethod.DELETE, true),
     EDIT_ALARM("/alarm", HttpMethod.PUT, true),
 
-    USER_REGISTER("/user", HttpMethod.POST, false),
     USER_GET("/user", HttpMethod.GET, true),
-    USER_LOGIN("/login", HttpMethod.POST, false),
     USER_DELETE("/user", HttpMethod.DELETE, false),
     GET_ALL_ALARMS("/alarm/all", HttpMethod.GET, false),
     GET_ALARM("/alarm", HttpMethod.GET, true),
@@ -44,6 +47,7 @@ class HttpAttr {
         const val SERVER_URL = "http://"
         const val ERROR_CODE = -1
         const val OK_CODE = 200
+        const val NO_USER_CODE = 401
         val ERROR_MSG = JsonParser.parseString("""{"status": ${ERROR_CODE}}""").asJsonObject
         val OK_MSG = JsonParser.parseString("""{"status": ${OK_CODE}}""").asJsonObject
 
@@ -91,12 +95,50 @@ enum class AlarmStatus(val status: String) {
     DISABLED("CANCEL")
 }
 
-enum class AlertType(val type: Int) {
-    ALERT(0),
-    CONFIRM(1)
+enum class AlertType() {
+    ALERT,
+    CONFIRM
 }
 
 enum class StatusCode(val status: Int) {
     SUCCESS(0),
     FAILED(1)
+}
+
+enum class Gender(val gender: String) {
+    MEN("MEN"),
+    WOMEN("WOMEN")
+}
+
+class Checker() {
+    companion object {
+        fun checkEmail(email: String) : Boolean {
+            val etIdx = email.indexOf('@')
+            val dotIdx = email.indexOf('.')
+
+            return when {
+                // No '@'
+                etIdx == -1 -> false
+                // No '.'
+                dotIdx == -1 -> false
+                // No letters before '@'
+                etIdx == 0 -> false
+                // No letters between '@' and '.'
+                dotIdx == etIdx + 1 -> false
+                // No letters after '.'
+                email.length == dotIdx + 1 -> false
+                else -> true
+            }
+        }
+
+        fun checkPhone(phone: String) : String? {
+            val elseStr = phone.replace("[0-9|-]".toRegex(), "")
+            if (elseStr.isNotEmpty()) return null
+
+            val onlyNum = phone.replace("[^0-9]".toRegex(), "")
+            if (onlyNum.length < 8) return null
+
+            return onlyNum
+        }
+    }
 }

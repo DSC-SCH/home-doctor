@@ -23,97 +23,13 @@
 		android:layout_height="0dp"
 		android:layout_weight="2" />
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="center"
-		android:layout_marginVertical="@dimen/login_input_marginV">
-
-		<TextView
-			android:layout_width="@dimen/login_input_title_sizeH"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:fontFamily="@font/lotte_dream_bold"
-			android:textSize="@dimen/login_content_text"
-			android:textColor="@color/text_color"
-			android:text="아이디" />
-
-		<EditText
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:background="@drawable/account_stroke_box"
-			android:padding="@dimen/login_input_padding"
-			android:fontFamily="@font/lotte_dream_bold"
-			android:textSize="@dimen/login_content_text"
-			android:textColor="@color/text_color" />
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="center"
-		android:layout_marginVertical="@dimen/login_input_marginV">
-
-		<TextView
-			android:layout_width="@dimen/login_input_title_sizeH"
-			android:layout_height="wrap_content"
-			android:gravity="center"
-			android:fontFamily="@font/lotte_dream_bold"
-			android:textSize="@dimen/login_content_text"
-			android:textColor="@color/text_color"
-			android:text="비밀번호" />
-
-		<EditText
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:background="@drawable/account_stroke_box"
-			android:padding="@dimen/login_input_padding"
-			android:fontFamily="@font/lotte_dream_bold"
-			android:textSize="@dimen/login_content_text"
-			android:textColor="@color/text_color" />
-	</LinearLayout>
-
-	<Space
-		android:layout_width="0dp"
-		android:layout_height="0dp"
-		android:layout_weight="1" />
-
-	<TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="@drawable/account_stroke_box"
-		android:gravity="center"
-		android:paddingVertical="@dimen/login_btn_paddingV"
-		android:layout_marginHorizontal="@dimen/login_btn_marginH"
-		android:layout_marginVertical="@dimen/login_input_marginV"
-		android:fontFamily="@font/lotte_dream_bold"
-		android:textSize="@dimen/login_content_text"
-		android:textColor="@color/text_color"
-		android:text="로그인" />
-
-	<TextView
-		android:id="@+id/join_btn"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="@drawable/account_stroke_box"
-		android:gravity="center"
-		android:paddingVertical="@dimen/login_btn_paddingV"
-		android:layout_marginHorizontal="@dimen/login_btn_marginH"
-		android:layout_marginVertical="@dimen/login_input_marginV"
-		android:fontFamily="@font/lotte_dream_bold"
-		android:textSize="@dimen/login_content_text"
-		android:textColor="@color/text_color"
-		android:text="회원가입" />
-
 	<TextView
 		android:id="@+id/offline_btn"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:background="@drawable/account_gray_box"
 		android:gravity="center"
-		android:paddingVertical="@dimen/login_btn_paddingV"
+		android:paddingVertical="@dimen/login_social_paddingV"
 		android:layout_marginHorizontal="@dimen/login_btn_marginH"
 		android:layout_marginVertical="@dimen/login_input_marginV"
 		android:elevation="@dimen/shadow_size"

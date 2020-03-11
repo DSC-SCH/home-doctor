@@ -55,7 +55,7 @@
 					android:fontFamily="@font/nanum_square_ac"
 					android:textColor="@color/text_color"
 					android:textSize="@dimen/join_item_text"
-					android:text="아이디"/>
+					android:text="이름 *"/>
 
 				<Space
 					android:layout_width="0dp"
@@ -63,34 +63,143 @@
 					android:layout_weight="1" />
 
 				<TextView
-					android:id="@+id/join_id_warning"
+					android:id="@+id/join_name_check_warning"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:padding="@dimen/join_input_padding"
-					android:visibility="invisible"
 					android:fontFamily="@font/lotte_dream_bold"
 					android:textColor="@color/warning_color"
-					android:textSize="@dimen/join_check_text"
-					android:text="중복된 아이디입니다" />
+					android:textSize="@dimen/join_check_text" />
+			</LinearLayout>
+
+			<EditText
+				android:id="@+id/name_input"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/account_stroke_box"
+				android:padding="@dimen/join_input_padding"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/join_item_text" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_marginTop="@dimen/join_item_marginT"
+				android:gravity="center">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/join_input_padding"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textColor="@color/text_color"
+					android:textSize="@dimen/join_item_text"
+					android:text="성별 *"/>
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+				<TextView
+					android:id="@+id/join_gender_check_warning"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/join_input_padding"
+					android:fontFamily="@font/lotte_dream_bold"
+					android:textColor="@color/warning_color"
+					android:textSize="@dimen/join_check_text" />
+			</LinearLayout>
+
+			<RadioGroup
+				android:id="@+id/gender_group"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal" >
+
+				<RadioButton
+					android:id="@+id/gender_m"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textColor="@color/text_color"
+					android:textSize="@dimen/join_item_text"
+					android:text="남"/>
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:layout_weight="1"/>
+
+				<RadioButton
+					android:id="@+id/gender_f"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textColor="@color/text_color"
+					android:textSize="@dimen/join_item_text"
+					android:text="여"/>
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:layout_weight="3"/>
+			</RadioGroup>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_marginTop="@dimen/join_item_marginT"
+				android:gravity="center">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/join_input_padding"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textColor="@color/text_color"
+					android:textSize="@dimen/join_item_text"
+					android:text="생년월일 *"/>
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="0dp"
+					android:layout_weight="1" />
+
+				<TextView
+					android:id="@+id/join_birthday_check_warning"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/join_input_padding"
+					android:fontFamily="@font/lotte_dream_bold"
+					android:textColor="@color/warning_color"
+					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:orientation="horizontal"
-				android:gravity="center">
+				android:gravity="center" >
 
-				<EditText
+				<TextView
+					android:id="@+id/birthday_input"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:background="@drawable/account_stroke_box"
 					android:padding="@dimen/join_input_padding"
+					android:gravity="center"
 					android:fontFamily="@font/nanum_square_ac"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text" />
+					android:textSize="@dimen/join_item_text"
+					android:text="생년월일을 선택해주세요"/>
 
 				<TextView
+					android:id="@+id/birthday_select"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:background="@drawable/account_check_box"
@@ -100,7 +209,7 @@
 					android:fontFamily="@font/nanum_square_ac"
 					android:textColor="@color/text_color"
 					android:textSize="@dimen/join_item_text"
-					android:text="중복확인"/>
+					android:text="날짜 선택"/>
 			</LinearLayout>
 
 			<LinearLayout
@@ -117,110 +226,7 @@
 					android:fontFamily="@font/nanum_square_ac"
 					android:textColor="@color/text_color"
 					android:textSize="@dimen/join_item_text"
-					android:text="비밀번호"/>
-
-				<Space
-					android:layout_width="0dp"
-					android:layout_height="0dp"
-					android:layout_weight="1" />
-
-				<TextView
-					android:id="@+id/join_pw_warning"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
-					android:visibility="invisible"
-					android:fontFamily="@font/lotte_dream_bold"
-					android:textColor="@color/warning_color"
-					android:textSize="@dimen/join_check_text"
-					android:text="비밀번호가 규정에 맞지 않습니다" />
-			</LinearLayout>
-
-			<EditText
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:background="@drawable/account_stroke_box"
-				android:padding="@dimen/join_input_padding"
-				android:fontFamily="@font/nanum_square_ac"
-				android:textColor="@color/text_color"
-				android:textSize="@dimen/join_item_text" />
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="비밀번호 확인"/>
-
-				<Space
-					android:layout_width="0dp"
-					android:layout_height="0dp"
-					android:layout_weight="1" />
-
-				<TextView
-					android:id="@+id/join_pw_check_warning"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
-					android:visibility="invisible"
-					android:fontFamily="@font/lotte_dream_bold"
-					android:textColor="@color/warning_color"
-					android:textSize="@dimen/join_check_text"
-					android:text="비밀번호가 일치하지 않습니다" />
-			</LinearLayout>
-
-			<EditText
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:background="@drawable/account_stroke_box"
-				android:padding="@dimen/join_input_padding"
-				android:fontFamily="@font/nanum_square_ac"
-				android:textColor="@color/text_color"
-				android:textSize="@dimen/join_item_text" />
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/join_item_marginT"
-				android:padding="@dimen/join_input_padding"
-				android:fontFamily="@font/nanum_square_ac"
-				android:textColor="@color/text_color"
-				android:textSize="@dimen/join_item_text"
-				android:text="이름"/>
-
-			<EditText
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:background="@drawable/account_stroke_box"
-				android:padding="@dimen/join_input_padding"
-				android:fontFamily="@font/nanum_square_ac"
-				android:textColor="@color/text_color"
-				android:textSize="@dimen/join_item_text" />
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="이메일"/>
+					android:text="이메일 *"/>
 
 				<Space
 					android:layout_width="0dp"
@@ -232,14 +238,13 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:padding="@dimen/join_input_padding"
-					android:visibility="invisible"
 					android:fontFamily="@font/lotte_dream_bold"
 					android:textColor="@color/warning_color"
-					android:textSize="@dimen/join_check_text"
-					android:text="이메일이 규정에 맞지 않습니다" />
+					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
 
 			<EditText
+				android:id="@+id/email_input"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:background="@drawable/account_stroke_box"
@@ -263,7 +268,7 @@
 					android:fontFamily="@font/nanum_square_ac"
 					android:textColor="@color/text_color"
 					android:textSize="@dimen/join_item_text"
-					android:text="전화번호"/>
+					android:text="전화번호 *"/>
 
 				<Space
 					android:layout_width="0dp"
@@ -275,148 +280,39 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:padding="@dimen/join_input_padding"
-					android:visibility="invisible"
 					android:fontFamily="@font/lotte_dream_bold"
 					android:textColor="@color/warning_color"
-					android:textSize="@dimen/join_check_text"
-					android:text="중복된 전화번호입니다" />
+					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
 
-			<LinearLayout
+			<EditText
+				android:id="@+id/ph_input"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:gravity="center">
+				android:background="@drawable/account_stroke_box"
+				android:padding="@dimen/join_input_padding"
+				android:inputType="numberSigned"
+				android:digits="0123456789-"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/join_item_text" />
 
-				<EditText
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:background="@drawable/account_stroke_box"
-					android:padding="@dimen/join_input_padding"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text" />
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:background="@drawable/account_check_box"
-					android:layout_marginLeft="@dimen/join_check_marginL"
-					android:paddingVertical="@dimen/join_input_padding"
-					android:paddingHorizontal="@dimen/join_check_paddingH"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="인증번호 전송"/>
-			</LinearLayout>
-
-			<LinearLayout
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/contract_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
+				android:overScrollMode="never"
+				android:layout_marginTop="@dimen/join_contract_marginT"/>
 
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="인증번호"/>
-
-				<Space
-					android:layout_width="0dp"
-					android:layout_height="0dp"
-					android:layout_weight="1" />
-
-				<TextView
-					android:id="@+id/join_ph_remain_time"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
-					android:fontFamily="@font/lotte_dream_bold"
-					android:textColor="@color/warning_color"
-					android:textSize="@dimen/join_check_text"
-					android:text="남은 시간 : 3:00" />
-			</LinearLayout>
-
-			<LinearLayout
-				android:layout_width="match_parent"
+			<TextView
+				android:id="@+id/join_contract_warning"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:gravity="center">
-
-				<EditText
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:background="@drawable/account_stroke_box"
-					android:padding="@dimen/join_input_padding"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text" />
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:background="@drawable/account_check_box"
-					android:layout_marginLeft="@dimen/join_check_marginL"
-					android:paddingVertical="@dimen/join_input_padding"
-					android:paddingHorizontal="@dimen/join_check_paddingH"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="인증번호 확인"/>
-			</LinearLayout>
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:layout_marginVertical="@dimen/join_contract_marginV">
-
-				<CheckBox
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:fontFamily="@font/lotte_dream_bold"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_contract_text"
-					android:text="이용약관 동의" />
-
-				<TextView
-					android:id="@+id/contract1_content"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:background="@drawable/account_stroke_box"
-					android:padding="@dimen/join_input_padding"
-					android:minLines="3"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_contract_text" />
-
-				<CheckBox
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="@dimen/join_item_marginT"
-					android:fontFamily="@font/lotte_dream_bold"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_contract_text"
-					android:text="개인정보 처리 방침 동의" />
-
-				<TextView
-					android:id="@+id/contract2_content"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:background="@drawable/account_stroke_box"
-					android:padding="@dimen/join_input_padding"
-					android:minLines="3"
-					android:fontFamily="@font/nanum_square_ac"
-					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_contract_text" />
-			</LinearLayout>
+				android:layout_marginTop="@dimen/join_contract_warning_marginT"
+				android:padding="@dimen/join_input_padding"
+				android:fontFamily="@font/lotte_dream_bold"
+				android:textColor="@color/warning_color"
+				android:textSize="@dimen/join_check_text" />
 
 			<TextView
 				android:id="@+id/join_confirm_btn"
@@ -425,6 +321,7 @@
 				android:gravity="center"
 				android:background="@drawable/account_stroke_box"
 				android:paddingVertical="@dimen/join_btn_paddingV"
+				android:layout_marginTop="@dimen/join_btn_marginT"
 				android:layout_marginHorizontal="@dimen/join_btn_marginH"
 				android:fontFamily="@font/lotte_dream_bold"
 				android:textColor="@color/text_color"

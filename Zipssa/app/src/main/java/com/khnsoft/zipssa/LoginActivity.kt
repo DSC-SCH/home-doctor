@@ -76,14 +76,9 @@ class LoginActivity : AppCompatActivity() {
 			startLoading()
 		}
 
-		join_btn.setOnClickListener {
-			val intent = Intent(this@LoginActivity, JoinActivity::class.java)
-			startActivity(intent)
-		}
-
 		login_kakao_btn.setOnClickListener {
 			val session = Session.getCurrentSession()
-			session.addCallback(SessionCallback())
+			session.addCallback(SessionCallback(this@LoginActivity))
 			session.open(AuthType.KAKAO_TALK, this@LoginActivity)
 		}
 
@@ -135,10 +130,33 @@ class LoginActivity : AppCompatActivity() {
 					if (acct.idToken == null) {
 						return@addOnCompleteListener
 					}
-					if (ServerHandler.isUserExists(AccountType.GOOGLE, acct.idToken!!)) {
-						// TODO("Login")
-					} else {
-						// TODO("Register")
+
+					val json = JsonObject()
+					json.addProperty("snsType", AccountType.GOOGLE.type)
+					json.addProperty("userId", acct.idToken)
+					val loginResult = ServerHandler.send(null, EndOfAPI.USER_LOGIN, json)
+
+					when (loginResult["status"].asInt) {
+						HttpAttr.OK_CODE -> {
+							val userData = loginResult["data"].asJsonObject
+							UserData.accountType = AccountType.GOOGLE
+							UserData.token = userData["token"].asString
+							UserData.id = userData["id"].asInt
+							startLoading()
+						}
+						HttpAttr.NO_USER_CODE -> {
+							val intent = Intent(this@LoginActivity, JoinActivity::class.java)
+							intent.putExtra("sns_type", AccountType.GOOGLE.type)
+							intent.putExtra("sns_id", acct.idToken)
+							intent.putExtra("name", "${acct.familyName}${acct.givenName}")
+							intent.putExtra("email", acct.email)
+							startActivity(intent)
+							finish()
+						}
+						else -> {
+							UserData.accountType = AccountType.NO_NETWORK
+							startLoading()
+						}
 					}
 				} else {
 					Log.i("@@@", "Sign in failed")

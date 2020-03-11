@@ -20,10 +20,6 @@ class MyAlertPopup: AppCompatActivity() {
 		var alertContent: String = ""
 		var alertConfirmText: String = ""
 		var confirmListener : View.OnClickListener = View.OnClickListener { }
-
-		fun finishAlert() {
-
-		}
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +48,7 @@ class MyAlertPopup: AppCompatActivity() {
 				data.confirmListener.onClick(it)
 
 				val resultIntent = Intent()
-				resultIntent.putExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.SUCCESS.status)
+				resultIntent.putExtra(EXTRA_RESULT, StatusCode.SUCCESS.status)
 				setResult(RC, resultIntent)
 
 				finish()
