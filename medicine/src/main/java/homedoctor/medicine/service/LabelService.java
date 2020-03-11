@@ -171,6 +171,7 @@ public class LabelService {
             Label findLabel = labelRepository.findOne(labelId);
 
             if (findLabel != null) {
+                labelRepository.delete(findLabel);
                 return DefaultResponse.builder()
                         .status(StatusCode.OK)
                         .message(ResponseMessage.LABEL_DELETE_SUCCESS)

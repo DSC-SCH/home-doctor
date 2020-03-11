@@ -48,6 +48,7 @@ public class ConnectionCodeService {
                 return DefaultResponse.builder()
                         .status(StatusCode.OK)
                         .message(ResponseMessage.CODE_SEARCH_SUCCESS)
+                        .data(findCode)
                         .build();
             }
 
