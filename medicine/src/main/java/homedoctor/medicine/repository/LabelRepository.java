@@ -29,9 +29,10 @@ public class LabelRepository {
     }
 
     public void delete(Label label) {
-        em.createQuery("delete from Label l where l.id = :id", Label.class)
+        em.createQuery("delete from Label l where l.id = :id")
                 .setParameter("id", label.getId())
                 .executeUpdate();
         em.clear();
     }
+
 }

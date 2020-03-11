@@ -42,7 +42,7 @@ public class AlarmRepository {
 
     public void delete(Alarm alarm) {
         em.createQuery(
-                "delete from Alarm a where a.id = :id", Alarm.class)
+                "delete from Alarm a where a.id = :id")
                 .setParameter("id", alarm.getId())
                 .executeUpdate();
         em.clear();

@@ -42,7 +42,7 @@ public class PrescriptionImageRepository {
 
     public void delete(PrescriptionImage prescriptionImage) {
         em.createQuery(
-                "delete from PrescriptionImage p where p.id = :id", PrescriptionImage.class)
+                "delete from PrescriptionImage p where p.id = :id")
                 .setParameter("id", prescriptionImage.getId())
                 .executeUpdate();
         em.clear();

@@ -24,7 +24,7 @@ public class ConnectionUserRepository {
 
     public void delete(ConnectionUser connectionUser) {
         em.createQuery(
-                "delete from ConnectionUser c where c = :connectionUser", ConnectionUser.class)
+                "delete from ConnectionUser c where c = :connectionUser")
                 .setParameter("connectionUser", connectionUser)
                 .executeUpdate();
     }
