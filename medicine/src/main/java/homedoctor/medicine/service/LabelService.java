@@ -1,10 +1,8 @@
 package homedoctor.medicine.service;
 
-import homedoctor.medicine.api.dto.label.reqeust.CreateLabelRequest;
-import homedoctor.medicine.api.dto.label.reqeust.UpdateLabelRequest;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultLabelResponse;
 import homedoctor.medicine.repository.LabelRepository;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
@@ -13,196 +11,186 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
 import java.util.List;
 
 @Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class    LabelService {
+public class LabelService {
 
     private final LabelRepository labelRepository;
 
     @Transactional
-    public DefaultLabelResponse saveLabel(CreateLabelRequest request) {
+    public DefaultResponse save(Label label) {
         try {
-            if (request.validProperties()) {
-                Label label = Label.builder()
-                        .user(request.getUser())
-                        .title(request.getTitle())
-                        .color(request.getColor())
-                        .build();
+            labelRepository.save(label);
 
-                labelRepository.save(label);
-
-                return DefaultLabelResponse.builder()
-                        .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.LABEL_CREATE_SUCCESS)
-                        .label(label)
-                        .labelList(null)
-                        .build();
-            }
-
-            return DefaultLabelResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.NOT_CONTENT)
-                    .label(null)
-                    .labelList(null)
+            return DefaultResponse.builder()
+                    .status(StatusCode.OK)
+                    .message(ResponseMessage.LABEL_CREATE_SUCCESS)
                     .build();
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             log.error(e.getMessage());
 
-            return DefaultLabelResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .label(null)
-                    .labelList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
-
     }
 
-    public DefaultLabelResponse fineLabelsByUser(User user) {
+    @Transactional
+    public DefaultResponse createDefaultLabel(User user) {
+        try {
+            Label labelOnce = Label.builder()
+                    .user(user)
+                    .title("없음")
+                    .color("#FFFFFF")
+                    .build();
+
+            Label labelTwice = Label.builder()
+                    .user(user)
+                    .title("감기")
+                    .color("#FFD5D5")
+                    .build();
+
+            Label labelThird = Label.builder()
+                    .user(user)
+                    .title("비염")
+                    .color("#B6F6B2")
+                    .build();
+
+            Label labelFourth = Label.builder()
+                    .user(user)
+                    .title("알레르기")
+                    .color("#D6D6FF")
+                    .build();
+            labelRepository.save(labelOnce);
+            labelRepository.save(labelTwice);
+            labelRepository.save(labelThird);
+            labelRepository.save(labelFourth);
+
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.LABEL_CREATE_SUCCESS);
+        } catch (Exception e) {
+            return DefaultResponse.response(StatusCode.DB_ERROR,
+                    ResponseMessage.DB_ERROR);
+        }
+    }
+
+    public DefaultResponse fineLabelsByUser(User user) {
         try {
             List<Label> labels = labelRepository.findAllByUser(user);
 
             if (!labels.isEmpty()) {
-                return DefaultLabelResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.LABEL_SEARCH_SUCCESS)
-                        .labelList(labels)
-                        .label(null)
+                        .message(ResponseMessage.LABEL_SEARCH_SUCCESS)
+                        .data(labels)
                         .build();
             }
 
-            return DefaultLabelResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.NOT_FOUND_LABEL)
-                    .label(null)
-                    .labelList(null)
+                    .message(ResponseMessage.NOT_FOUND_LABEL)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
 
-            return DefaultLabelResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .label(null)
-                    .labelList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
-    public DefaultLabelResponse findOne(Long labelId) {
+    public DefaultResponse findOne(Long labelId) {
         try {
             Label findLabel = labelRepository.findOne(labelId);
 
             if (findLabel != null) {
-                return DefaultLabelResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.LABEL_SEARCH_SUCCESS)
-                        .labelList(null)
-                        .label(findLabel)
+                        .message(ResponseMessage.LABEL_SEARCH_SUCCESS)
+                        .data(findLabel)
                         .build();
             }
 
-            return DefaultLabelResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.NOT_FOUND_LABEL)
-                    .label(null)
-                    .labelList(null)
+                    .message(ResponseMessage.NOT_FOUND_LABEL)
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultLabelResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .label(null)
-                    .labelList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
 
     @Transactional
-    public DefaultLabelResponse delete(Label label) {
-
-        try {
-            Label findLabel = labelRepository.findOne(label.getId());
-
-            if (findLabel != null) {
-                return DefaultLabelResponse.builder()
-                        .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.LABEL_DELETE_SUCCESS)
-                        .labelList(null)
-                        .label(null)
-                        .build();
-            }
-
-            return DefaultLabelResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.NOT_FOUND_LABEL)
-                    .label(null)
-                    .labelList(null)
-                    .build();
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            // RollBack
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return DefaultLabelResponse.builder()
-                    .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .label(null)
-                    .labelList(null)
-                    .build();
-        }
-    }
-
-    @Transactional
-    public DefaultLabelResponse update(Long labelId, UpdateLabelRequest request) {
+    public DefaultResponse update(Long labelId, Label label) {
         try {
             Label findLabel = labelRepository.findOne(labelId);
 
             if (findLabel == null) {
-                return DefaultLabelResponse.builder()
+                return DefaultResponse.builder()
                         .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.NOT_FOUND_ALARM)
-                        .label(null)
-                        .labelList(null)
+                        .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
 
-            if (request.validProperties() == true) {
-                findLabel.setTitle(request.getTitle());
-                findLabel.setColor(request.getColor());
-                labelRepository.save(findLabel);
+            findLabel.setTitle(label.getTitle());
+            findLabel.setColor(label.getColor());
+            labelRepository.save(findLabel);
 
-                return DefaultLabelResponse.builder()
-                        .status(StatusCode.OK)
-                        .responseMessage(ResponseMessage.ALARM_UPDATE_SUCCESS)
-                        .label(findLabel)
-                        .labelList(null)
-                        .build();
-            }
-
-            return DefaultLabelResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
-                    .responseMessage(ResponseMessage.NOT_CONTENT)
-                    .label(null)
-                    .labelList(null)
+            return DefaultResponse.builder()
+                    .status(StatusCode.OK)
+                    .message(ResponseMessage.ALARM_UPDATE_SUCCESS)
                     .build();
+
         } catch (Exception e) {
             log.error(e.getMessage());
             // RollBack
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
-            return DefaultLabelResponse.builder()
+            return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
-                    .responseMessage(ResponseMessage.DB_ERROR)
-                    .label(null)
-                    .labelList(null)
+                    .message(ResponseMessage.DB_ERROR)
                     .build();
         }
     }
+
+    @Transactional
+    public DefaultResponse delete(Long labelId) {
+
+        try {
+            Label findLabel = labelRepository.findOne(labelId);
+
+            if (findLabel != null) {
+                return DefaultResponse.builder()
+                        .status(StatusCode.OK)
+                        .message(ResponseMessage.LABEL_DELETE_SUCCESS)
+                        .build();
+            }
+
+            return DefaultResponse.builder()
+                    .status(StatusCode.METHOD_NOT_ALLOWED)
+                    .message(ResponseMessage.LABEL_DELETE_FAIL)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            // RollBack
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return DefaultResponse.builder()
+                    .status(StatusCode.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
+                    .build();
+        }
+    }
+
+
 }
