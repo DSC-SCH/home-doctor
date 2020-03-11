@@ -3,15 +3,13 @@ package homedoctor.medicine;
 import homedoctor.medicine.domain.*;
 import homedoctor.medicine.repository.AlarmRepository;
 import homedoctor.medicine.repository.LabelRepository;
-import homedoctor.medicine.repository.UserRepository;
-import homedoctor.medicine.service.LabelService;
+import homedoctor.medicine.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -33,12 +31,19 @@ public class InitDB {
     @RequiredArgsConstructor
     static class InitService {
         private final EntityManager em;
-        private final UserRepository userRepository;
 
-        private final LabelRepository labelRepository;
+        private final UserService userService;
+
         private final AlarmRepository alarmRepository;
 
         private final LabelService labelService;
+
+        private final ConnectionCodeService connectionCodeService;
+
+        private final ConnectionUserService connectionUserService;
+
+        private final PrescriptionImageService prescriptionImageService;
+
 
         public void dbInit() {
             User nathan = User.builder()
@@ -72,9 +77,9 @@ public class InitDB {
                     .build();
 
             //User Save
-            userRepository.save(nathan);
-            userRepository.save(seongA);
-            userRepository.save(Park);
+            userService.save(nathan);
+            userService.save(seongA);
+            userService.save(Park);
 
             Label nathanLabel1 = Label.builder()
                     .user(nathan)
@@ -203,6 +208,53 @@ public class InitDB {
             alarmRepository.save(seongAlarm1);
             alarmRepository.save(seongAlarm1);
             alarmRepository.save(parkAlarm);
+
+            PrescriptionImage image1 = PrescriptionImage.builder()
+                    .image("test")
+                    .alarm(nathanAlarm1)
+                    .build();
+
+            PrescriptionImage image2 = PrescriptionImage.builder()
+                    .image("test2")
+                    .alarm(nathanAlarm1)
+                    .build();
+
+            PrescriptionImage image3 = PrescriptionImage.builder()
+                    .image("test3")
+                    .alarm(nathanAlarm1)
+                    .build();
+
+            prescriptionImageService.save(image1);
+            prescriptionImageService.save(image2);
+            prescriptionImageService.save(image3);
+
+
+            ConnectionCode code1 = ConnectionCode.builder()
+                    .user(nathan)
+                    .code("2211")
+                    .life(100)
+                    .build();
+
+            connectionCodeService.saveCode(code1);
+
+//            ConnectionUser connectionUser1 = ConnectionUser.builder()
+//                    .user(nathan)
+//                    .careUser(seongA)
+//                    .build();
+//
+//            ConnectionUser connectionUser2 = ConnectionUser.builder()
+//                    .user(nathan)
+//                    .careUser(Park)
+//                    .build();
+//
+//            ConnectionUser connectionUser3 = ConnectionUser.builder()
+//                    .user(Park)
+//                    .careUser(seongA)
+//                    .build();
+//
+//            connectionUserService.save(connectionUser1);
+//            connectionUserService.save(connectionUser2);
+//            connectionUserService.save(connectionUser3);
         }
 
 
