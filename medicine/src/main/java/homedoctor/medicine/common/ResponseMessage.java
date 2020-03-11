@@ -75,4 +75,6 @@ public class ResponseMessage {
     public static final String BAD_REQUEST                 = "잘못된 요청입니다.";
     public static final String UNAUTHORIZED                = "인증 실패.";
     public static final String AUTHORIZED                  = "인증 성공.";
+    public static final String FOUND_TERMS                 = "약관 조회 성공.";
+    public static final String NOT_FOUND_TERMS             = "약관 조회 실패.";
 }
