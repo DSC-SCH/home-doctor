@@ -1,14 +1,19 @@
 package homedoctor.medicine.api.controller;
 
-import homedoctor.medicine.api.dto.DefaultApiResponse;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.image.CreateImageRequest;
 import homedoctor.medicine.api.dto.image.ImageDto;
+import homedoctor.medicine.api.dto.image.UpdateImageRequest;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
+import homedoctor.medicine.common.auth.Auth;
+import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.PrescriptionImage;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultImageResponse;
+import homedoctor.medicine.service.AlarmService;
+import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.PrescriptionImageService;
+import homedoctor.medicine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -24,91 +29,192 @@ public class ImageApiController {
 
     private final PrescriptionImageService imageService;
 
+    private final UserService userService;
+
+    private final JwtService jwtService;
+
+    private final AlarmService alarmService;
+
+    private final DefaultResponse defaultHeaderResponse =
+            DefaultResponse.response(StatusCode.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED);
+
+    @Auth
+    @PostMapping("/image/new")
+    public DefaultResponse saveImage(
+            @RequestHeader("Authorization") final String header,
+            @RequestBody @Valid CreateImageRequest request) {
+        try {
+            if (header == null) {
+                return defaultHeaderResponse;
+            }
+
+            if (request.validProperties()) {
+                for (String image : request.getImages()) {
+                    PrescriptionImage prescriptionImage = PrescriptionImage.builder()
+                            .image(image)
+                            .alarm(request.getAlarm())
+                            .build();
+
+                    imageService.save(prescriptionImage);
+                }
+
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.PRESCRIPTION_CREATE_SUCCESS);
+            }
+
+            return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                    ResponseMessage.PRESCRIPTION_CREATE_FAIL);
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
     @GetMapping("/image/{image_id}")
-    public DefaultApiResponse findUserOne(
+    public DefaultResponse getImageOne(
+            @RequestHeader("Authorization") final String header,
             @PathVariable("image_id") Long id) {
         try {
-            DefaultImageResponse response = imageService.findOneImage(id);
-            PrescriptionImage image = response.getImage();
-
+            if (header == null) {
+                return defaultHeaderResponse;
+            }
+            DefaultResponse response = imageService.findOneImage(id);
+            PrescriptionImage image = (PrescriptionImage) response.getData();
             ImageDto imageDto = ImageDto.builder()
-                    .id(image.getId())
-                    .alarm(image.getAlarm())
+                    .imageId(image.getId())
+                    .alarm(image.getAlarm().getId())
                     .image(image.getImage())
                     .build();
 
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
                     imageDto);
         } catch (Exception e) {
             log.error(e.getMessage());
 
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/image/user")
-    public DefaultApiResponse findAllImageByUser(User user) {
+    @Auth
+    @GetMapping("/image/alarm")
+    public DefaultResponse getImageByAlarm(
+            @RequestHeader("Authorization") final String header,
+            Alarm alarm) {
         try {
-            DefaultImageResponse response = imageService.findImagesByUser(user);
-            List<PrescriptionImage> images = response.getImageList();
-
+            if (header == null) {
+                return defaultHeaderResponse;
+            }
+            DefaultResponse response = imageService.findImagesByAlarm(alarm);
+            List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
             List<ImageDto> imageDtoList = images.stream()
                     .map(m -> ImageDto.builder()
-                            .id(m.getId())
+                            .imageId(m.getId())
                             .image(m.getImage())
-                            .alarm(m.getAlarm())
+                            .alarm(m.getAlarm().getId())
                             .build())
                     .collect(Collectors.toList());
 
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
                     imageDtoList);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/image/new")
-    public DefaultApiResponse saveImage(
-            @RequestBody @Valid CreateImageRequest request) {
+    @Auth
+    @GetMapping("/image/user")
+    public DefaultResponse getImageByUser(
+            @RequestHeader("Authorization") final String header) {
         try {
+            if (header == null) {
+                return defaultHeaderResponse;
+            }
+            User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
+            DefaultResponse response = imageService.findImagesByUser(findUser);
+            List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
+            List<ImageDto> imageDtoList = images.stream()
+                    .map(m -> ImageDto.builder()
+                            .imageId(m.getId())
+                            .image(m.getImage())
+                            .alarm(m.getAlarm().getId())
+                            .build())
+                    .collect(Collectors.toList());
 
-            CreateImageRequest imageRequest = CreateImageRequest.builder()
-                    .image(request.getImage())
-                    .alarm(request.getAlarm())
-                    .build();
-
-            DefaultImageResponse response = imageService.save(imageRequest);
-
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
-                    imageRequest);
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
+                    imageDtoList);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-
+    @Auth
     @DeleteMapping("/image/{image_id}")
-    public DefaultApiResponse deleteImageResponse(
+    public DefaultResponse deleteImage(
+            @RequestHeader("Authorization") final String header,
             @PathVariable("image_id") Long id) {
         try {
-            DefaultImageResponse response = imageService.findOneImage(id);
-            PrescriptionImage image = response.getImage();
+            if (header == null) {
+                return defaultHeaderResponse;
+            }
+            DefaultResponse response = imageService.findOneImage(id);
+            PrescriptionImage image = (PrescriptionImage) response.getData();
             imageService.delete(image);
 
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
                     id);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
+    @PutMapping("/image/edit")
+    public DefaultResponse updateImage(
+            @RequestHeader("Authorization") final String header,
+            Alarm alarm,
+            UpdateImageRequest request) {
+        try {
+            if (header == null) {
+                return defaultHeaderResponse;
+            }
+
+            if (request.getImages() == null) {
+                DefaultResponse.response(StatusCode.METHOD_NOT_ALLOWED,
+                        ResponseMessage.PRESCRIPTION_UPDATE_FAIL);
+            }
+
+            List<PrescriptionImage> images =
+                    (List<PrescriptionImage>) imageService.findImagesByAlarm(alarm).getData();
+
+            // 해당 알람 이미지 삭제
+            for (PrescriptionImage image : images) {
+                imageService.delete(image);
+            }
+
+            // 요청 들어온 알람 등록
+            for (PrescriptionImage image : request.getImages()) {
+                imageService.save(image);
+            }
+
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.PRESCRIPTION_UPDATE_SUCCESS);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }

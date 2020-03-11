@@ -1,14 +1,14 @@
 package homedoctor.medicine.api.controller;
 
-import homedoctor.medicine.api.dto.DefaultApiResponse;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.alarm.request.CreateAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.request.UpdateAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.*;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultAlarmResponse;
 import homedoctor.medicine.service.AlarmService;
+import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.UserService;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
@@ -30,19 +30,70 @@ public class AlarmApiController {
 
     private final UserService userService;
 
-    // 예외 처리
-    @GetMapping("/alarm/{alarm_id}")
+    private final JwtService jwtService;
+
     @Auth
-    public DefaultApiResponse findOneAlarm(
+    @PostMapping("/alarm/new")
+    public DefaultResponse saveAlarm(
+            @RequestHeader("Authorization") final String header,
+            @RequestBody @Valid final CreateAlarmRequest request) {
+        try {
+            if (header == null) {
+                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
+            Long userId = jwtService.decode(header);
+            User findUser = (User) userService.findOneById(userId).getData();
+
+            if (request.validProperties()) {
+                Alarm alarm = Alarm.builder()
+                        .user(findUser)
+                        .title(request.getTitle())
+                        .label(request.getLabel())
+                        .startDate(request.getStartDate())
+                        .endDate(request.getEndDate())
+                        .times(request.getTimes())
+                        .repeats(request.getRepeats())
+                        .alarmStatus(request.getAlarmStatus())
+                        .build();
+                DefaultResponse response = alarmService.save(alarm);
+                return DefaultResponse.response(response.getStatus(),
+                        response.getMessage());
+            }
+            return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                    ResponseMessage.ALARM_CREATE_FAIL);
+
+        } catch (HttpMessageNotReadableException ex) {
+            log.error(ex.getMessage());
+            return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                    ResponseMessage.BAD_REQUEST);
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
+    @GetMapping("/alarm/{alarm_id}")
+    public DefaultResponse getOneAlarm(
+            @RequestHeader("Authorization") final String header,
             @PathVariable("alarm_id") Long id) {
         try {
-            DefaultAlarmResponse response = alarmService.findAlarm(id);
-            Alarm alarm = response.getAlarm();
+            if (header == null) {
+                DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
+            DefaultResponse response = alarmService.findAlarm(id);
+
+            Alarm alarm = (Alarm) response.getData();
 
             AlarmDto alarmDto = AlarmDto.builder()
-                    .id(alarm.getId())
+                    .user(alarm.getUser().getId())
+                    .alarmId(alarm.getId())
                     .title(alarm.getTitle())
-                    .label(alarm.getLabel())
+                    .label(alarm.getLabel().getId())
                     .startDate(alarm.getStartDate())
                     .endDate(alarm.getEndDate())
                     .alarmStatus(alarm.getAlarmStatus())
@@ -50,29 +101,37 @@ public class AlarmApiController {
                     .times(alarm.getTimes())
                     .build();
 
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
                     alarmDto);
         } catch (Exception e) {
             log.error(e.getMessage());
 
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/alarm")
-    public DefaultApiResponse getAllAlarmByUser(User user) {
+    @Auth
+    @GetMapping("/alarm/all")
+    public DefaultResponse getAlarmByUser(
+            @RequestHeader("Authorization") final String header) {
         try {
-            DefaultAlarmResponse response =
-                    alarmService.findAlarmsByUser(user);
+            if (header == null) {
+                DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
 
-            List<Alarm> findAllAlarm = response.getAlarmList();
+            Long userId = jwtService.decode(header);
+            DefaultResponse userResponse = userService.findOneById(userId);
+            DefaultResponse response = alarmService.findAlarmsByUser((User) userResponse.getData());
+            List<Alarm> findAllAlarm = (List<Alarm>) response.getData();
             List<AlarmDto> alarmDtoList = findAllAlarm.stream()
                     .map(m -> AlarmDto.builder()
-                            .id(m.getId())
+                            .user(m.getUser().getId())
+                            .alarmId(m.getId())
                             .title(m.getTitle())
-                            .label(m.getLabel())
+                            .label(m.getLabel().getId())
                             .startDate(m.getStartDate())
                             .endDate(m.getEndDate())
                             .alarmStatus(m.getAlarmStatus())
@@ -82,30 +141,35 @@ public class AlarmApiController {
                     .collect(Collectors.toList());
             // 노출되는 알람 입력 정보중 필요한 필드만 가져오기.(엔티티 노출하지 않기!!)
 
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
-                    AlarmAllResult.builder()
-                                .data(alarmDtoList)
-                                .counts(alarmDtoList.size())
-                                .build());
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
+                    alarmDtoList);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @Auth
     @GetMapping("/alarm/enable")
-    public DefaultApiResponse getEnableAlarm(User user) {
+    public DefaultResponse getEnableAlarm(
+            @RequestHeader("Authorization") final String header) {
         try {
-            DefaultAlarmResponse defaultAlarmResponse = alarmService.findEnableAlarm(user);
-            List<Alarm> findEnableAlarmList = defaultAlarmResponse.getAlarmList();
+            if (header == null) {
+                DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
+            User user = (User) userService.findOneById(jwtService.decode(header)).getData();
+            DefaultResponse response = alarmService.findEnableAlarm(user);
 
+            List<Alarm> findEnableAlarmList = (List<Alarm>) response.getData();
             List<AlarmDto> alarmDtoList = findEnableAlarmList.stream()
                     .map(m -> AlarmDto.builder()
-                            .id(m.getId())
+                            .user(m.getUser().getId())
+                            .alarmId(m.getId())
                             .title(m.getTitle())
-                            .label(m.getLabel())
+                            .label(m.getLabel().getId())
                             .startDate(m.getStartDate())
                             .endDate(m.getEndDate())
                             .alarmStatus(m.getAlarmStatus())
@@ -114,89 +178,75 @@ public class AlarmApiController {
                             .build())
                     .collect(Collectors.toList());
 
-            return DefaultApiResponse.response(StatusCode.OK,
-                    ResponseMessage.ALARM_SEARCH_SUCCESS,
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
                     alarmDtoList);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/alarm/new")
-    public DefaultApiResponse saveAlarm(
-            User user,
-            @RequestBody @Valid final CreateAlarmRequest request) {
-        try {
-            CreateAlarmRequest createAlarmReq = CreateAlarmRequest.builder()
-                    .user(user)
-                    .title(request.getTitle())
-                    .label(request.getLabel())
-                    .startDate(request.getStartDate())
-                    .endDate(request.getEndDate())
-                    .times(request.getTimes())
-                    .repeats(request.getRepeats())
-                    .alarmStatus(request.getAlarmStatus())
-                    .build();
-
-            DefaultAlarmResponse response = alarmService.save(createAlarmReq);
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
-                    createAlarmReq);
-
-        } catch (HttpMessageNotReadableException ex) {
-            log.error(ex.getMessage());
-            return DefaultApiResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.BAD_REQUEST);
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
-                    ResponseMessage.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/alarm/{alarm_id}/edit")
-    public DefaultApiResponse updateAlarm(
+    @Auth
+    @PutMapping("/alarm/{alarm_id}/edit")
+    public DefaultResponse getUpdateAlarm(
+            @RequestHeader("Authorization") final String header,
             @PathVariable("alarm_id") Long alarmId,
             @RequestBody @Valid UpdateAlarmRequest request) {
         try {
-            UpdateAlarmRequest updateAlarmRequest = UpdateAlarmRequest.builder()
-                    .title(request.getTitle())
-                    .label(request.getLabel())
-                    .startDate(request.getStartDate())
-                    .endDate(request.getEndDate())
-                    .alarmStatus(request.getAlarmStatus())
-                    .times(request.getTimes())
-                    .repeats(request.getRepeats())
-                    .build();
+            if (header == null) {
+                DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
 
-            DefaultAlarmResponse response = alarmService.update(alarmId, updateAlarmRequest);
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
-                    updateAlarmRequest);
+            if (request.validProperties()) {
+                Alarm alarm = Alarm.builder()
+                        .title(request.getTitle())
+                        .label(request.getLabel())
+                        .startDate(request.getStartDate())
+                        .endDate(request.getEndDate())
+                        .alarmStatus(request.getAlarmStatus())
+                        .times(request.getTimes())
+                        .repeats(request.getRepeats())
+                        .build();
+
+                DefaultResponse response = alarmService.update(alarmId, alarm);
+                return DefaultResponse.response(response.getStatus(),
+                        response.getMessage());
+            }
+
+            return DefaultResponse.builder()
+                    .status(StatusCode.BAD_REQUEST)
+                    .message(ResponseMessage.NOT_CONTENT)
+                    .build();
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-
+    @Auth
     @DeleteMapping("/alarm/{alarm_id}")
-    public DefaultApiResponse deleteAlarmResponse(
+    public DefaultResponse deleteAlarm(
+            @RequestHeader("Authorization") final String header,
             @PathVariable("alarm_id") Long id) {
         try {
-            DefaultAlarmResponse response = alarmService.findAlarm(id);
-            Alarm findAlarm = response.getAlarm();
-            alarmService.delete(findAlarm);
+            if (header == null) {
+                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
 
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage());
+            DefaultResponse response = alarmService.findAlarm(id);
+            Alarm findAlarm = (Alarm) response.getData();
+            DefaultResponse deleteResponse = alarmService.delete(findAlarm);
+
+            return DefaultResponse.response(deleteResponse.getStatus(),
+                    deleteResponse.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }

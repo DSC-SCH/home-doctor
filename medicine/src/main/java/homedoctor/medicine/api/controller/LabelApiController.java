@@ -1,12 +1,13 @@
 package homedoctor.medicine.api.controller;
 
-import homedoctor.medicine.api.dto.DefaultApiResponse;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.label.LabelDto;
 import homedoctor.medicine.api.dto.label.reqeust.CreateLabelRequest;
 import homedoctor.medicine.api.dto.label.reqeust.UpdateLabelRequest;
+import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.dto.DefaultLabelResponse;
+import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.LabelService;
 import homedoctor.medicine.service.UserService;
 import homedoctor.medicine.common.ResponseMessage;
@@ -29,109 +30,163 @@ public class LabelApiController {
 
     private final UserService userService;
 
+    private final JwtService jwtService;
 
-    @GetMapping("/label/{label_id}")
-    public DefaultApiResponse findOneLabel(
-            @PathVariable("label_id") Long id){
+    private final DefaultResponse defaultUnAuth =
+            DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                    ResponseMessage.UNAUTHORIZED);
 
+    @Auth
+    @PostMapping("/label/new")
+    public DefaultResponse saveLabel(
+            @RequestHeader("Authorization") final String header,
+            @RequestBody @Valid final CreateLabelRequest request) {
         try {
-            DefaultLabelResponse defaultLabelResponse = labelService.findOne(id);
+            if (header == null) {
+                return defaultUnAuth;
+            }
+            User findUser =
+                    (User) userService.findOneById(jwtService.decode(header)).getData();
 
-            Label label = defaultLabelResponse.getLabel();
+            if (request.validProperties()) {
+                Label label = Label.builder()
+                        .user(findUser)
+                        .title(request.getTitle())
+                        .color(request.getColor())
+                        .build();
+                DefaultResponse response = labelService.save(label);
 
-            LabelDto labelDto = LabelDto.builder()
-                    .id(label.getId())
-                    .user(label.getUser())
-                    .title(label.getTitle())
-                    .color(label.getColor())
-                    .build();
-            return DefaultApiResponse.response(defaultLabelResponse.getStatus(),
-                    defaultLabelResponse.getResponseMessage(),
-                    labelDto);
+                return DefaultResponse.response(response.getStatus(),
+                        response.getMessage(),
+                        label);
+            }
+            return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                    ResponseMessage.LABEL_CREATE_FAIL);
+
+        } catch (HttpMessageNotReadableException ex) {
+            log.error(ex.getMessage());
+            return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                    ResponseMessage.BAD_REQUEST);
+
         } catch (Exception e) {
             log.error(e.getMessage());
-
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/label")
-    public DefaultApiResponse getAllLabelByUser(User user) {
-        try {
-            DefaultLabelResponse defaultLabelResponse = labelService.fineLabelsByUser(user);
+    @Auth
+    @GetMapping("/label/{label_id}")
+    public DefaultResponse getOneLabel(
+            @RequestHeader("Authorization") final String header,
+            @PathVariable("label_id") Long id){
 
-            List<Label> labels = defaultLabelResponse.getLabelList();
+        try {
+            if (header == null) {
+                return defaultUnAuth;
+            }
+
+            DefaultResponse response = labelService.findOne(id);
+            Label label = (Label) response.getData();
+            LabelDto labelDto = LabelDto.builder()
+                    .labelId(label.getId())
+                    .user(label.getUser().getId())
+                    .title(label.getTitle())
+                    .color(label.getColor())
+                    .build();
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
+                    labelDto);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
+    @GetMapping("/label")
+    public DefaultResponse getLabelByUser(
+            @RequestHeader("Authorization") final String header) {
+        try {
+            if (header == null) {
+                return defaultUnAuth;
+            }
+            User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
+            DefaultResponse response = labelService.fineLabelsByUser(findUser);
+            List<Label> labels = (List<Label>) response.getData();
+
             List<LabelDto> alarmDtoList = labels.stream()
                     .map(m -> LabelDto.builder()
-                            .id(m.getId())
-                            .user(m.getUser())
+                            .labelId(m.getId())
+                            .user(m.getUser().getId())
                             .title(m.getTitle())
                             .color(m.getColor())
                             .build())
                     .collect(Collectors.toList());
 
 
-            return DefaultApiResponse.response(defaultLabelResponse.getStatus(),
-                    defaultLabelResponse.getResponseMessage(),
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
                     alarmDtoList);
 
         } catch (Exception e) {
             log.error(e.getMessage());
 
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("/label/new")
-    public DefaultApiResponse saveAlarm(
-            User user,
-            @RequestBody @Valid final CreateLabelRequest request) {
-        try {
-            CreateLabelRequest labelRequest = CreateLabelRequest.builder()
-                    .user(user)
-                    .title(request.getTitle())
-                    .color(request.getColor())
-                    .build();
-
-            DefaultLabelResponse defaultAlarmResponse = labelService.saveLabel(labelRequest);
-
-            return DefaultApiResponse.response(defaultAlarmResponse.getStatus(),
-                    defaultAlarmResponse.getResponseMessage(),
-                    labelRequest);
-
-        } catch (HttpMessageNotReadableException ex) {
-            log.error(ex.getMessage());
-            return DefaultApiResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.BAD_REQUEST);
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
-                    ResponseMessage.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    @PostMapping("/label/{label_id}/edit")
-    public DefaultApiResponse updateLabel(
+    @Auth
+    @PutMapping("/label/{label_id}/edit")
+    public DefaultResponse updateLabel(
+            @RequestHeader("Authorization") final String header,
             @PathVariable("label_id") Long labelId,
             @RequestBody @Valid UpdateLabelRequest request) {
         try {
-            UpdateLabelRequest updateLabelRequest = UpdateLabelRequest.builder()
-                    .id(labelId)
-                    .title(request.getTitle())
-                    .color(request.getColor())
-                    .build();
+            if (header == null) {
+                return defaultUnAuth;
+            }
 
-            DefaultLabelResponse response = labelService.update(labelId, updateLabelRequest);
-            return DefaultApiResponse.response(response.getStatus(),
-                    response.getResponseMessage(),
-                    updateLabelRequest);
+            if (request.validProperties()) {
+                Label label = Label.builder()
+                        .title(request.getTitle())
+                        .color(request.getColor())
+                        .build();
+
+                DefaultResponse response = labelService.update(labelId, label);
+                return DefaultResponse.response(response.getStatus(),
+                        response.getMessage());
+            }
+
+            return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                    ResponseMessage.LABEL_UPDATE_FAIL);
+
         } catch (Exception e) {
             log.error(e.getMessage());
-            return DefaultApiResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
+    @DeleteMapping("/label/{label_id}")
+    public DefaultResponse deleteLabel(
+            @RequestHeader("Authorization") final String header,
+            @PathVariable("label_id") Long labelId) {
+        try {
+            if (header == null) {
+                return defaultUnAuth;
+            }
+            DefaultResponse response = labelService.delete(labelId);
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
