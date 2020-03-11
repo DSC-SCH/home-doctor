@@ -30,7 +30,7 @@ public class ResponseMessage {
     public static final String LABEL_UPDATE_FAIL           = "라벨 수정 실패";
     public static final String LABEL_DELETE_SUCCESS        = "라벨 삭제 성공";
     public static final String LABEL_DELETE_FAIL           = "라벨 삭제 실패";
-    public static final String LABEL_SEARCH_SUCCESS        = "라벨 조회 성";
+    public static final String LABEL_SEARCH_SUCCESS        = "라벨 조회 성공";
     public static final String NOT_FOUND_LABEL             = "등록된 라벨이 없습니다.";
 
     // CONNECT
