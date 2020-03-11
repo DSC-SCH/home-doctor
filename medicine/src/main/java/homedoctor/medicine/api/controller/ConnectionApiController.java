@@ -2,11 +2,15 @@ package homedoctor.medicine.api.controller;
 
 
 import homedoctor.medicine.api.dto.DefaultResponse;
+import homedoctor.medicine.api.dto.alarm.AlarmDto;
+import homedoctor.medicine.api.dto.alarm.ReceiverAlarmRequest;
 import homedoctor.medicine.api.dto.connection.ConnectionUserDto;
 import homedoctor.medicine.api.dto.connection.CreateConnectionRequest;
 import homedoctor.medicine.common.auth.Auth;
+import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.ConnectionUser;
 import homedoctor.medicine.domain.User;
+import homedoctor.medicine.service.AlarmService;
 import homedoctor.medicine.service.ConnectionUserService;
 import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.UserService;
@@ -35,6 +39,8 @@ public class ConnectionApiController {
     private final UserService userService;
 
     private final JwtService jwtService;
+
+    private final AlarmService alarmService;
 
     @PostMapping("/connect/new")
     public DefaultResponse connectNew(
@@ -119,6 +125,42 @@ public class ConnectionApiController {
 
             return DefaultResponse.response(response.getStatus(),
                     response.getMessage(),
+                    managerDtoList);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
+    @GetMapping("/connect/receiver/alarm")
+    public DefaultResponse getReceiverAlarm(
+            @RequestHeader("Authorization") final String header,
+            ReceiverAlarmRequest receiverAlarmRequest) {
+        try {
+            if (header == null) {
+                return unAuthorizeResponse;
+            }
+
+            User receiverUser = (User) userService.findOneById(receiverAlarmRequest.getUser()).getData();
+            List<Alarm> findReceiverAlarm = (List<Alarm>) alarmService.findEnableAlarm(receiverUser).getData();
+            List<AlarmDto> managerDtoList = findReceiverAlarm.stream()
+                    .map(m -> AlarmDto.builder()
+                            .alarmId(m.getId())
+                            .title(m.getTitle())
+                            .user(m.getUser().getId())
+                            .label(m.getLabel().getId())
+                            .startDate(m.getStartDate())
+                            .endDate(m.getEndDate())
+                            .alarmStatus(m.getAlarmStatus())
+                            .repeats(m.getRepeats())
+                            .times(m.getTimes())
+                            .build())
+                    .collect(Collectors.toList());
+
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.ALARM_SEARCH_SUCCESS,
                     managerDtoList);
         } catch (Exception e) {
             log.error(e.getMessage());
