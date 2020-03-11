@@ -3,13 +3,13 @@ package homedoctor.medicine.common;
 public class ResponseMessage {
 
     // USER RESPONSE MESSAGE
-    public static final String USER_CREATE_SUCCESS        = "유저 등록 성공";
-    public static final String USER_CREATE_FAIL           = "유저 등록 실패";
-    public static final String USER_DELETE_SUCCESS        = "유저 삭제 성공";
-    public static final String USER_DELETE_FAIL           = "유저 삭제 실패";
-    public static final String USER_SEARCH_SUCCESS        = "유저 조회 성공";
-    public static final String USER_SEARCH_FAIL           = "유저 조회 실패";
-    public static final String NOT_FOUND_USER             = "등록된 유저가 없습니다.";
+    public static final String USER_CREATE_SUCCESS        = "회원 등록 성공";
+    public static final String USER_CREATE_FAIL           = "회원 등록 실패";
+    public static final String USER_DELETE_SUCCESS        = "회원 삭제 성공";
+    public static final String USER_DELETE_FAIL           = "회원 삭제 실패";
+    public static final String USER_SEARCH_SUCCESS        = "회원 조회 성공";
+    public static final String USER_SEARCH_FAIL           = "회원 조회 실패";
+    public static final String NOT_FOUND_USER             = "등록된 회원이 없습니다.";
     public static final String DUPLICATED_USER            = "이미 등록된 회원입니다.";
 
     // ALARM RESPONSE MESSAGE
@@ -36,6 +36,8 @@ public class ResponseMessage {
     // CONNECT
     public static final String CONNECTION_CREATE_SUCCESS   = "연동 성공";
     public static final String CONNECTION_CREATE_FAIL      = "연동 실패";
+    public static final String CONNECTION_SEARCH_SUCCESS   = "연동 조회 성공";
+    public static final String CONNECTION_SEARCH_FAIL      = "연동 조회 실패";
     public static final String CONNECTION_DELETE_SUCCESS   = "연동 해제 성공";
     public static final String CONNECTION_DELETE_FAIL      = "연동 해제 실패";
     public static final String NOT_FOUND_CONNECTION        = "연동된 유저가 없습니다.";
@@ -62,11 +64,15 @@ public class ResponseMessage {
     public static final String MEDICINE_SEARCH_SUCCESS     = "약품 조회 성공";
     public static final String NOT_FOUND_MEDICINE          = "입력된 정보가 포함된 약품이 없습니다.";
 
+    // LOGIN
+    public static final String LOGIN_SUCCESS               = "로그인 성공";
+    public static final String LOGIN_FAIL                  = "존재하지 않는 유저입니다.";
+
     // OTHER MESSAGE
     public static final String DB_ERROR                    = "디비 에러";
     public static final String INTERNAL_SERVER_ERROR       = "서버 내부 에러";
     public static final String NOT_CONTENT                 = "입력 정보가 부족합니다.";
     public static final String BAD_REQUEST                 = "잘못된 요청입니다.";
-    public static final String UNAUTHORIZED                = "토큰 인증 실패.";
-    public static final String AUTHORIZED                  = "토큰 인증 성공.";
+    public static final String UNAUTHORIZED                = "인증 실패.";
+    public static final String AUTHORIZED                  = "인증 성공.";
 }

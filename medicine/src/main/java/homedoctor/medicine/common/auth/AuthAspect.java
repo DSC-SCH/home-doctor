@@ -1,6 +1,6 @@
 package homedoctor.medicine.common.auth;
 
-import homedoctor.medicine.api.dto.DefaultApiResponse;
+import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.domain.User;
@@ -25,11 +25,11 @@ public class AuthAspect {
 
     private final static String AUTHORIZATION = "Authorization";
 
-    private final static DefaultApiResponse DEFAULT_RES =
-            DefaultApiResponse.builder()
+    private final static DefaultResponse DEFAULT_RES =
+            DefaultResponse.builder()
                     .status(StatusCode.UNAUTHORIZED)
-                    .responseMessage(ResponseMessage.UNAUTHORIZED).build();
-    private final static ResponseEntity<DefaultApiResponse> RES_RESPONSE_ENTITY = new ResponseEntity<>(DEFAULT_RES, HttpStatus.UNAUTHORIZED);
+                    .message(ResponseMessage.UNAUTHORIZED).build();
+    private final static ResponseEntity<DefaultResponse> RES_RESPONSE_ENTITY = new ResponseEntity<>(DEFAULT_RES, HttpStatus.UNAUTHORIZED);
 
     private final HttpServletRequest httpServletRequest;
 
