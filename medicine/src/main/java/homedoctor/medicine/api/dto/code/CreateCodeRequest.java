@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 public class CreateCodeRequest {
 
-    private User userId;
+    private Long userId;
 
     private String code;
 
