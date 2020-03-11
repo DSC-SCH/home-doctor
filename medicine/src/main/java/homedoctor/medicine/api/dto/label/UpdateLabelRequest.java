@@ -17,9 +17,9 @@ public class UpdateLabelRequest {
 
     public final boolean validProperties() {
         if (title != null && color != null) {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

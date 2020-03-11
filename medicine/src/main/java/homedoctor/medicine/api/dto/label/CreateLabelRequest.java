@@ -12,7 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CreateLabelRequest {
 
-    private User user;
+    private Long user;
 
     private String title;
 
