@@ -27,17 +27,11 @@ public class Medicine {
     @Column(name = "save_method")
     private String saveMethod;
 
+    @Column(name = "valid_date")
     private String validDate;
 
     private String dosage;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", name = "bad_effect")
     private String badEffect;
-
-    @Column(columnDefinition = "TEXT")
-    private String precautions;
-
-    @Column(columnDefinition = "TEXT")
-    private String combinationBan;
-
 }

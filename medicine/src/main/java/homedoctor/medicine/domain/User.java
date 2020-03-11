@@ -52,6 +52,10 @@ public class User extends DateTimeEntity {
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<ConnectionUser> managerUserList = new ArrayList<>();
 
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     @Builder
     public User(String username, String birthday, String email, String snsId, SnsType snsType, GenderType genderType, String phoneNum, String token, List<Alarm> alarmList) {
         this.username = username;

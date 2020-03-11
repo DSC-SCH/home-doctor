@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,13 +30,13 @@ public class Alarm extends DateTimeEntity {
     private String title;
 
     @OneToOne(cascade = ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "alarm_label", nullable = false)
+    @JoinColumn(name = "alarm_label")
     private Label label;
 
-    @Column(name = "alarm_start_date", length = 10, nullable = false)
+    @Column(name = "alarm_start_date", nullable = false)
     private Date startDate;
 
-    @Column(name = "alarm_end_date", length = 10, nullable = false)
+    @Column(name = "alarm_end_date", nullable = false)
     private Date endDate;
 
     @Column(name = "alarm_times", length = 128, nullable = false)
@@ -45,7 +46,7 @@ public class Alarm extends DateTimeEntity {
     private String repeats;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "alarm_enabled", nullable = false)
+    @Column(name = "alarm_status", nullable = false)
     private AlarmStatus alarmStatus;
 
     @OneToMany(mappedBy = "alarm", cascade = ALL)

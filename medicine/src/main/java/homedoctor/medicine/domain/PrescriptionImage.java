@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.sql.Blob;
 
 @Entity
@@ -21,11 +22,11 @@ public class PrescriptionImage extends DateTimeEntity {
     @JoinColumn(name = "alarm_id", nullable = false)
     private Alarm alarm;
 
-    @Column(name = "image", nullable = false)
-    private Blob image;
+    @Column(name = "image", nullable = false, columnDefinition = "TEXT")
+    private String image;
 
     @Builder
-    public PrescriptionImage(Alarm alarm, Blob image) {
+    public PrescriptionImage(Alarm alarm, String image) {
         this.alarm = alarm;
         this.image = image;
     }

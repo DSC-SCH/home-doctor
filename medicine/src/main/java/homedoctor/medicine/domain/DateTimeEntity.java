@@ -5,12 +5,13 @@ import lombok.Setter;
 
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @MappedSuperclass
 @Getter @Setter
 public abstract class DateTimeEntity {
 
-    private LocalDateTime createdDate;
+    private Date createdDate = new Date();
 
-    private LocalDateTime lastModifiedDate;
+    private Date lastModifiedDate = new Date();
 }
