@@ -33,11 +33,11 @@ public class UserServiceTest {
                 .build();
 
         // when
-        Long userID = userService.join(user);
-
-        // then
-        User findUser = userService.findOne(userID);
-        assertEquals(user, findUser);
+//        Long userID = userService.save(user);
+//
+//        // then
+//        User findUser = userService.findOneById(user.getId());
+//        assertEquals(user, findUser);
     }
 
 

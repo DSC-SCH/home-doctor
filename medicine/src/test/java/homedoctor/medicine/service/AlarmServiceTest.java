@@ -37,15 +37,11 @@ public class AlarmServiceTest {
 
         Alarm alarm = Alarm.builder()
                 .title("nathan")
-                .content("test")
                 .build();
 
         // when
-        Long saveId = alarmService.save(alarm);
 
         // then
-        assertThat(alarm.getTitle()).isEqualTo("nathan");
-        assertThat(alarm.getContent()).isEqualTo("test");
     }
 
     @Test
@@ -57,15 +53,12 @@ public class AlarmServiceTest {
 
         Alarm alarm = Alarm.builder()
                 .title("nathan")
-                .content("Updatetest")
                 .build();
 
         // when
-        Long saveId = alarmService.save(alarm);
 
 
         // then
-        assertThat(alarmService.findAlarm(saveId)).isEqualTo(alarm);
     }
 
     @Test
@@ -77,21 +70,15 @@ public class AlarmServiceTest {
 
         Alarm alarm1 = Alarm.builder()
                 .title("test1")
-                .content("contentTest2")
                 .build();
 
         Alarm alarm2 = Alarm.builder()
                 .title("test2")
-                .content("contentTest2")
                 .build();
 
         // when
-        Long userId = userService.join(user1);
-        Long saveId1 = alarmService.save(alarm1);
-        Long saveId2 = alarmService.save(alarm2);
+//        Long userId = userService.save(user1);
 
         // then
-        assertThat(alarmService.findAlarmsByUser(user1).get(0).getTitle()).isEqualTo("test1");
-        assertThat(alarmService.findAlarmsByUser(user1).get(1).getTitle()).isEqualTo("test2");
     }
 }
