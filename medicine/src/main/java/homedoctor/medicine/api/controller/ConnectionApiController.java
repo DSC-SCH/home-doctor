@@ -87,9 +87,16 @@ public class ConnectionApiController {
             DefaultResponse response = connectionUserService.findALlManagerByUser(findUser);
             List<User> findManagerList = (List<User>) response.getData();
 
+            if (findManagerList == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_CONNECTION, empty);
+            }
+
             List<ConnectionUserDto> managerDtoList = findManagerList.stream()
                     .map(m -> ConnectionUserDto.builder()
                             .connectionId(m.getId())
+                            .username(m.getUsername())
                             .user(m.getId())
                             .build())
                     .collect(Collectors.toList());
@@ -116,8 +123,16 @@ public class ConnectionApiController {
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
             DefaultResponse response = connectionUserService.findAllReceiverByUser(findUser);
             List<User> findReceiverList = (List<User>) response.getData();
+
+            if (findReceiverList == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_CONNECTION, empty);
+            }
+
             List<ConnectionUserDto> managerDtoList = findReceiverList.stream()
                     .map(m -> ConnectionUserDto.builder()
+                            .username(m.getUsername())
                             .connectionId(m.getId())
                             .user(m.getId())
                             .build())
@@ -145,6 +160,13 @@ public class ConnectionApiController {
 
             User receiverUser = (User) userService.findOneById(receiverAlarmRequest.getUser()).getData();
             List<Alarm> findReceiverAlarm = (List<Alarm>) alarmService.findEnableAlarm(receiverUser).getData();
+
+            if (findReceiverAlarm == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_ALARM, empty);
+            }
+
             List<AlarmDto> managerDtoList = findReceiverAlarm.stream()
                     .map(m -> AlarmDto.builder()
                             .alarmId(m.getId())
@@ -153,6 +175,8 @@ public class ConnectionApiController {
                             .label(m.getLabel().getId())
                             .startDate(m.getStartDate())
                             .endDate(m.getEndDate())
+                            .labelTitle(m.getLabel().getTitle())
+                            .color(m.getLabel().getColor())
                             .alarmStatus(m.getAlarmStatus())
                             .repeats(m.getRepeats())
                             .times(m.getTimes())

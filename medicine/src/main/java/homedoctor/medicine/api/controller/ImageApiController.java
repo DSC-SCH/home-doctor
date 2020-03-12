@@ -85,6 +85,12 @@ public class ImageApiController {
             }
             DefaultResponse response = imageService.findOneImage(id);
             PrescriptionImage image = (PrescriptionImage) response.getData();
+
+            if (image == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION);
+            }
+
             ImageDto imageDto = ImageDto.builder()
                     .imageId(image.getId())
                     .alarm(image.getAlarm().getId())
@@ -118,6 +124,15 @@ public class ImageApiController {
             Alarm alarm = (Alarm) alarmService.findAlarm(id).getData();
             DefaultResponse response = imageService.findImagesByAlarm(alarm);
             List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
+
+
+            if (images == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION,
+                        empty);
+            }
+
             List<ImageDto> imageDtoList = images.stream()
                     .map(m -> ImageDto.builder()
                             .imageId(m.getId())
@@ -148,6 +163,14 @@ public class ImageApiController {
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
             DefaultResponse response = imageService.findImagesByUser(findUser);
             List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
+
+            if (images == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION,
+                        empty);
+            }
+
             List<ImageDto> imageDtoList = images.stream()
                     .map(m -> ImageDto.builder()
                             .imageId(m.getId())
@@ -177,6 +200,13 @@ public class ImageApiController {
             }
             DefaultResponse response = imageService.findOneImage(id);
             PrescriptionImage image = (PrescriptionImage) response.getData();
+
+            if (image == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION);
+            }
+
             imageService.delete(image);
 
             return DefaultResponse.response(StatusCode.OK,

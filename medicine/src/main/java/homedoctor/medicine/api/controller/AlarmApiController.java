@@ -69,6 +69,7 @@ public class AlarmApiController {
 
         } catch (HttpMessageNotReadableException ex) {
             log.error(ex.getMessage());
+            ex.printStackTrace();
             return DefaultResponse.response(StatusCode.BAD_REQUEST,
                     ResponseMessage.BAD_REQUEST);
 
@@ -90,8 +91,13 @@ public class AlarmApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
             DefaultResponse response = alarmService.findAlarm(id);
-
             Alarm alarm = (Alarm) response.getData();
+
+            // 빈리스트 일때
+            if (alarm == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_ALARM);
+            }
 
             AlarmDto alarmDto = AlarmDto.builder()
                     .user(alarm.getUser().getId())
@@ -103,6 +109,8 @@ public class AlarmApiController {
                     .alarmStatus(alarm.getAlarmStatus())
                     .repeats(alarm.getRepeats())
                     .times(alarm.getTimes())
+                    .createdDate(AlarmDto.cutDateTimeTimeValue(alarm.getCreatedDate()))
+                    .lastModifiedDate(AlarmDto.cutDateTimeTimeValue(alarm.getLastModifiedDate()))
                     .build();
 
             return DefaultResponse.response(response.getStatus(),
@@ -130,6 +138,15 @@ public class AlarmApiController {
             DefaultResponse userResponse = userService.findOneById(userId);
             DefaultResponse response = alarmService.findAlarmsByUser((User) userResponse.getData());
             List<Alarm> findAllAlarm = (List<Alarm>) response.getData();
+
+            // 빈리스트 일때
+            if (findAllAlarm == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_ALARM,
+                        empty);
+            }
+
             List<AlarmDto> alarmDtoList = findAllAlarm.stream()
                     .map(m -> AlarmDto.builder()
                             .user(m.getUser().getId())
@@ -139,8 +156,12 @@ public class AlarmApiController {
                             .startDate(m.getStartDate())
                             .endDate(m.getEndDate())
                             .alarmStatus(m.getAlarmStatus())
+                            .labelTitle(m.getLabel().getTitle())
+                            .color(m.getLabel().getColor())
                             .repeats(m.getRepeats())
                             .times(m.getTimes())
+                            .createdDate(AlarmDto.cutDateTimeTimeValue(m.getCreatedDate()))
+                            .lastModifiedDate(AlarmDto.cutDateTimeTimeValue(m.getLastModifiedDate()))
                             .build())
                     .collect(Collectors.toList());
             // 노출되는 알람 입력 정보중 필요한 필드만 가져오기.(엔티티 노출하지 않기!!)
@@ -167,7 +188,17 @@ public class AlarmApiController {
             User user = (User) userService.findOneById(jwtService.decode(header)).getData();
             DefaultResponse response = alarmService.findEnableAlarm(user);
 
+
             List<Alarm> findEnableAlarmList = (List<Alarm>) response.getData();
+
+            // 빈리스트 일때
+            if (findEnableAlarmList == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_ALARM,
+                        empty);
+            }
+
             List<AlarmDto> alarmDtoList = findEnableAlarmList.stream()
                     .map(m -> AlarmDto.builder()
                             .user(m.getUser().getId())
@@ -177,8 +208,12 @@ public class AlarmApiController {
                             .startDate(m.getStartDate())
                             .endDate(m.getEndDate())
                             .alarmStatus(m.getAlarmStatus())
+                            .labelTitle(m.getLabel().getTitle())
+                            .color(m.getLabel().getColor())
                             .repeats(m.getRepeats())
                             .times(m.getTimes())
+                            .createdDate(AlarmDto.cutDateTimeTimeValue(m.getCreatedDate()))
+                            .lastModifiedDate(AlarmDto.cutDateTimeTimeValue(m.getLastModifiedDate()))
                             .build())
                     .collect(Collectors.toList());
 
@@ -187,13 +222,14 @@ public class AlarmApiController {
                     alarmDtoList);
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Auth
-    @PutMapping("/alarm/{alarm_id}/edit")
+    @PutMapping("/alarm/{alarm_id}")
     public DefaultResponse getUpdateAlarm(
             @RequestHeader("Authorization") final String header,
             @PathVariable("alarm_id") Long alarmId,
@@ -203,7 +239,7 @@ public class AlarmApiController {
                 DefaultResponse.response(StatusCode.UNAUTHORIZED,
                         ResponseMessage.UNAUTHORIZED);
             }
-
+            // find Alarm Label
             Label findLabel = (Label) labelService.findOne(request.getLabel()).getData();
 
             if (request.validProperties()) {
@@ -234,6 +270,30 @@ public class AlarmApiController {
     }
 
     @Auth
+    @PutMapping("/alarm/change/{alarm_id}")
+    public DefaultResponse changeAlarmStatus(
+            @RequestHeader("Authorization") final String header,
+            @RequestBody @Valid ChangeStatusRequest changeStatus,
+            @PathVariable("alarm_id") Long alarmId) {
+        try {
+            if (header == null) {
+                DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
+
+
+            DefaultResponse response = alarmService.changeEnableToCancel(alarmId, changeStatus.getAlarmStatus());
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
     @DeleteMapping("/alarm/{alarm_id}")
     public DefaultResponse deleteAlarm(
             @RequestHeader("Authorization") final String header,
@@ -246,6 +306,13 @@ public class AlarmApiController {
 
             DefaultResponse response = alarmService.findAlarm(id);
             Alarm findAlarm = (Alarm) response.getData();
+            // 빈리스트 일때
+            if (findAlarm == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_ALARM,
+                        empty);
+            }
             DefaultResponse deleteResponse = alarmService.delete(findAlarm);
 
             return DefaultResponse.response(deleteResponse.getStatus(),

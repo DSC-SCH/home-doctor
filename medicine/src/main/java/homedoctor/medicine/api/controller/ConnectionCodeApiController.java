@@ -75,6 +75,11 @@ public class ConnectionCodeApiController {
 
             DefaultResponse response = codeService.findCode(id);
             ConnectionCode code = (ConnectionCode) response.getData();
+
+            if (code == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_CODE);
+            }
             CodeDto codeDto = CodeDto.builder()
                     .id(id)
                     .user(code.getUser().getId())

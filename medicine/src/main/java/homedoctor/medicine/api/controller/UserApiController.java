@@ -36,8 +36,15 @@ public class UserApiController {
     @GetMapping("/terms")
     public DefaultResponse getTerms() {
         try {
-            List<Terms> terms = (List<Terms>) termService.findTerms().getData();
 
+            List<Terms> terms = (List<Terms>) termService.findTerms().getData();
+            String[] empty = new String[0];
+
+            if (terms == null) {
+
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_TERMS, empty);
+            }
             List<TermsDto> termsDto = terms.stream()
                     .map(m -> TermsDto.builder()
                     .title(m.getTitle())
@@ -49,6 +56,9 @@ public class UserApiController {
                     ResponseMessage.FOUND_TERMS,
                     termsDto);
         } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
@@ -56,14 +66,18 @@ public class UserApiController {
 
     @PostMapping("login")
     public DefaultResponse login(@RequestBody final LoginRequest loginRequest) {
-
         try {
+            User findUser = (User) userService.findOneSnsId(loginRequest.getSnsId(), loginRequest.getSnsType()).getData();
+
+            if (findUser == null) {
+                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.NOT_EXIST_USER);
+            }
             DefaultResponse response = authService.login(loginRequest);
 
             return response;
         } catch (Exception e) {
             log.error(e.getMessage());
-
         }
 
         return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
@@ -80,14 +94,21 @@ public class UserApiController {
                         .username(request.getUsername())
                         .birthday(request.getBirthday())
                         .email(request.getEmail())
+                        .snsId(request.getSnsId())
                         .snsType(request.getSnsType())
                         .genderType(request.getGenderType())
                         .phoneNum(request.getPhoneNum())
                         .build();
                 DefaultResponse saveResponse = userService.save(user);
 
+                UserCreateDto userCreateDto = UserCreateDto.builder()
+                        .token(user.getToken())
+                        .userId(user.getId())
+                        .build();
+
                 return DefaultResponse.response(saveResponse.getStatus(),
-                        saveResponse.getMessage());
+                        saveResponse.getMessage(),
+                        userCreateDto);
             }
 
             return DefaultResponse.response(StatusCode.BAD_REQUEST,
@@ -111,6 +132,12 @@ public class UserApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
+
+            if (findUser == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_USER);
+            }
+
             UserDto userDto = UserDto.builder()
                     .id(findUser.getId())
                     .username(findUser.getUsername())
@@ -137,6 +164,14 @@ public class UserApiController {
         try {
             DefaultResponse response = userService.findAllUsers();
             List<User> findAllUser = (List<User>) response.getData();
+
+            if (findAllUser == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_USER,
+                        empty);
+            }
+
             List<UserDto> collect = findAllUser.stream()
                     .map(m -> UserDto.builder()
                             .id(m.getId())
@@ -180,6 +215,12 @@ public class UserApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
+
+            if (findUser == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_EXIST_USER);
+            }
             userService.delete(findUser.getId());
 
             return DefaultResponse.response(StatusCode.OK,

@@ -28,6 +28,13 @@ public class MedicineApiController {
         try {
             List<Medicine> medicineList = (List<Medicine>) medicineService.findByName(name).getData();
 
+            if (medicineList == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_MEDICINE,
+                        empty);
+            }
+
             List<MedicineDto> medicineDtoList = medicineList.stream()
                     .map(m -> MedicineDto.builder()
                             .medicineId(m.getId())
@@ -52,6 +59,13 @@ public class MedicineApiController {
         try {
             List<Medicine> medicineList = (List<Medicine>) medicineService.findByKeyword(keyword).getData();
 
+
+            if (medicineList == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_MEDICINE,
+                        empty);
+            }
             List<MedicineDto> medicineDtoList = medicineList.stream()
                     .map(m -> MedicineDto.builder()
                             .medicineId(m.getId())
@@ -76,6 +90,11 @@ public class MedicineApiController {
         try {
             Medicine medicine = (Medicine) medicineService.findOneMedicine(id).getData();
 
+            if (medicine == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_MEDICINE);
+            }
             MedicineDto medicineDto = MedicineDto.builder()
                     .name(medicine.getName())
                     .effect(medicine.getEffect())
