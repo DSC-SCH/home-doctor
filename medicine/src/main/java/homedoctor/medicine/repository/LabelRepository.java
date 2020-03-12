@@ -23,7 +23,8 @@ public class LabelRepository {
     }
 
     public List<Label> findAllByUser(User user) {
-        return em.createQuery("select l from Label l where l.user = :user", Label.class)
+        String query = "select l from Label l join fetch l.user where l.user = :user";
+        return em.createQuery(query, Label.class)
                 .setParameter("user", user)
                 .getResultList();
     }
