@@ -36,7 +36,6 @@ public class ConnectionUserRepository {
         List<User> userList = em.createQuery(query, User.class)
                 .setParameter("user", user)
                 .getResultList();
-
         return userList;
     }
 
