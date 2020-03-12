@@ -1,6 +1,7 @@
 package homedoctor.medicine.repository;
 
 import homedoctor.medicine.domain.Alarm;
+import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,17 +20,37 @@ public class AlarmRepository {
     }
 
     public Alarm findOne(Long id) {
-        return em.find(Alarm.class, id);
+        String query = "select a from Alarm a join fetch a.label where a.id = :id";
+        return em.createQuery(query, Alarm.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
     public List<Alarm> findAllByUser(User user) {
-        return em.createQuery("select a from Alarm a where a.user = :user", Alarm.class)
+        return em.createQuery("select a from Alarm a join fetch a.label where a.user = :user", Alarm.class)
                 .setParameter("user", user)
                 .getResultList();
     }
 
-    public List<Alarm> findAllByEnable(User user) {
+    public List<Alarm> findAllByLabel(Long user, Long label) {
+
         String query = "select a from Alarm a " +
+                "where a.user.id = :user and a.label.id = :label";
+        return em.createQuery(query, Alarm.class)
+                .setParameter("user", user)
+                .setParameter("label", label)
+                .getResultList();
+    }
+
+    public void updateLabel(Long userId, Long alarmId) {
+        em.createQuery("update Alarm a set a.label=1L where a.user.id = :userId and a.id = :alarm")
+                .setParameter("userId", userId)
+                .setParameter("alarm", alarmId)
+                .executeUpdate();
+    }
+
+    public List<Alarm> findAllByEnable(User user) {
+        String query = "select a from Alarm a join fetch a.label " +
                 "where a.user = :user and " +
                 "a.alarmStatus = homedoctor.medicine.domain.AlarmStatus.ENABLE";
 
