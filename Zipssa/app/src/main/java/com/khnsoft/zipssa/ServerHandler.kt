@@ -15,11 +15,15 @@ class ServerHandler {
             "alarm_end_date" to "endDate",
             "alarm_times" to "times",
             "alarm_repeats" to "repeats",
-            "alarm_enabled" to "alarmStatus"
+            "alarm_enabled" to "alarmStatus",
+            "label_title" to "labelTitle",
+            "label_color" to "color",
+            "created_date" to "createdDate",
+            "last_modified_date" to "lastModifiedDate"
         )
 
         val labelToServer = mapOf(
-            "label_id" to "labelID",
+            "label_id" to "labelId",
             "label_user" to "user",
             "label_title" to "title",
             "label_color" to "color"
@@ -60,21 +64,21 @@ class ServerHandler {
             val method = api.method
             val json: JsonObject?
             json = if (method == HttpMethod.POST || method == HttpMethod.PUT) {
-                if (data == null) return HttpAttr.ERROR_MSG
+                if (data == null) return HttpHelper.getError()
                 when(api) {
-                    EndOfAPI.ADD_ALARM, EndOfAPI.EDIT_ALARM -> convertKeys(data, alarmToServer)
+                    EndOfAPI.ADD_ALARM, EndOfAPI.EDIT_ALARM, EndOfAPI.CHANGE_ALARM -> convertKeys(data, alarmToServer)
                     EndOfAPI.ADD_LABEL, EndOfAPI.EDIT_LABEL -> convertKeys(data, labelToServer)
                     else -> data
                 }
             } else if (method == HttpMethod.GET || method == HttpMethod.DELETE) {
                 null
             } else {
-                return HttpAttr.ERROR_MSG
+                return HttpHelper.getError()
             }
 
             val remote: String = if (api.isIdNeeded) {
                 if (id == null)
-                    return HttpAttr.ERROR_MSG
+                    return HttpHelper.getError()
                 else
                     "${api.remote}/${id}"
             } else {
@@ -84,7 +88,7 @@ class ServerHandler {
             // /*
             if (UserData.accountType == AccountType.OFFLINE) {
                 if (context == null)
-                    return HttpAttr.ERROR_MSG
+                    return HttpHelper.getError()
                 return DatabaseHandler.execOfflineAPI(context, api, data, id)
             }
             // */

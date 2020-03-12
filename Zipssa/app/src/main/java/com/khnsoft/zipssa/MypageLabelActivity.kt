@@ -1,6 +1,5 @@
 package com.khnsoft.zipssa
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -13,7 +12,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.mypage_label_activity.*
 
 class MypageLabelActivity : AppCompatActivity() {
@@ -60,7 +58,7 @@ class MypageLabelActivity : AppCompatActivity() {
 
 		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 			// TODO("Match data to layout")
-			val jItem = lLabels[position].asJsonObject
+			val jItem = ServerHandler.convertKeys(lLabels[position].asJsonObject, ServerHandler.labelToLocal)
 
 			val drawable = holder.color.background as GradientDrawable
 			drawable.setColor(Color.parseColor(jItem["label_color"].asString))
@@ -78,7 +76,7 @@ class MypageLabelActivity : AppCompatActivity() {
 					alertConfirmText = "삭제"
 					confirmListener = View.OnClickListener {
 						val result = ServerHandler.send(this@MypageLabelActivity,EndOfAPI.DELETE_LABEL, id=jItem["label_id"].asInt)
-						if (!HttpAttr.isOK(result)) {
+						if (!HttpHelper.isOK(result)) {
 							return@OnClickListener
 						}
 

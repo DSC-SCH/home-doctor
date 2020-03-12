@@ -23,6 +23,7 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 	}
 
 	fun requestMe() {
+		Log.i("@@@", "REQUESTME")
 		UserManagement.getInstance().me(object: MeV2ResponseCallback() {
 			override fun onSuccess(result: MeV2Response?) {
 				val kakaoAccount = result?.kakaoAccount
@@ -32,13 +33,15 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 					val email = kakaoAccount.email
 					val gender = kakaoAccount.gender
 
+					Log.i("@@@", result.id.toString())
+
 					val json = JsonObject()
 					json.addProperty("snsType", AccountType.KAKAO.type)
 					json.addProperty("snsId", result.id.toString())
 					val loginResult = ServerHandler.send(null, EndOfAPI.USER_LOGIN, json)
 
 					when (loginResult["status"].asInt) {
-						HttpAttr.OK_CODE -> {
+						HttpHelper.OK_CODE -> {
 							val userData = loginResult["data"].asJsonObject
 							UserData.accountType = AccountType.KAKAO
 							UserData.token = userData["token"].asString
@@ -53,7 +56,7 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 
 							context.startLoading()
 						}
-						HttpAttr.NO_USER_CODE -> {
+						HttpHelper.NO_USER_CODE -> {
 							val intent = Intent(context, JoinActivity::class.java)
 							intent.putExtra("sns_type", AccountType.KAKAO.type)
 							intent.putExtra("sns_id", result.id.toString())
@@ -73,6 +76,11 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 						}
 					}
 				}
+			}
+
+			override fun onFailure(errorResult: ErrorResult?) {
+				super.onFailure(errorResult)
+				Log.i("@@@", errorResult.toString())
 			}
 
 			override fun onSessionClosed(errorResult: ErrorResult?) {

@@ -1,6 +1,5 @@
 package com.khnsoft.zipssa
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.list_fragment.*
 import kotlinx.android.synthetic.main.sync_drawer.*
 import java.text.SimpleDateFormat
@@ -208,8 +206,19 @@ class MainListFragment : Fragment() {
 
 				itemView.setOnClickListener {
 					val intent = Intent(context, MainItemPopup::class.java)
-					intent.putExtra("jItem", jItem.toString())
+					intent.putExtra(ExtraAttr.EXTRA_ALARM_ID.extra, jItem["alarm_id"].asInt)
 					context?.startActivity(intent)
+				}
+
+				// TODO("Else place to switch")
+				switch.setOnCheckedChangeListener { buttonView, isChecked ->
+					val json = JsonObject()
+					json.addProperty("alarm_enabled", if (isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
+
+					val result = ServerHandler.send(context, EndOfAPI.CHANGE_ALARM, json, jItem["alarm_id"].asInt)
+
+					if (!HttpHelper.isOK(result))
+						switch.isChecked = false
 				}
 
 				// TODO("Checkbox or '0/0' after alarm function and medilog tb")

@@ -23,6 +23,8 @@ class MypageHistoryActivity : AppCompatActivity() {
 		const val PAGE_PHOTO = 1
 	}
 
+	var curPage = PAGE_ALL
+
 	val sdf_date_show = SimpleDateFormat("yy.MM.dd", Locale.KOREA)
 	val sdf_date_created = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
 	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -43,11 +45,16 @@ class MypageHistoryActivity : AppCompatActivity() {
 			}
 		})
 
-		changePage(PAGE_ALL)
+		changePage(curPage)
 	}
 
 	fun changePage(page: Int) {
-		when (page) {
+		curPage = page
+		refresh()
+	}
+
+	fun refresh() {
+		when (curPage) {
 			PAGE_ALL -> {
 				val lHistory = ServerHandler.send(this@MypageHistoryActivity, EndOfAPI.GET_ALL_ALARMS)["data"].asJsonArray
 
@@ -66,6 +73,12 @@ class MypageHistoryActivity : AppCompatActivity() {
 				history_container.adapter = adapter
 			}
 		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+
+		refresh()
 	}
 
 	inner class PhotoRecyclerAdapter(val lPhoto: JsonArray) :
@@ -123,7 +136,7 @@ class MypageHistoryActivity : AppCompatActivity() {
 			holder.created_date.text = sdf_date_created.format(sdf_date_save.parse(jItem["created_date"].asString))
 			holder.container.setOnClickListener {
 				val intent = Intent(this@MypageHistoryActivity, MainItemPopup::class.java)
-				intent.putExtra("jItem", jItem.toString())
+				intent.putExtra(ExtraAttr.EXTRA_ALARM_ID.extra, jItem["alarm_id"].asInt)
 				startActivity(intent)
 			}
 		}

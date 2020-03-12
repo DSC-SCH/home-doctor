@@ -11,7 +11,6 @@ import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.list_item_popup.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,8 +32,8 @@ class MainItemPopup : AppCompatActivity() {
         setContentView(R.layout.list_item_popup)
         setupFloatingPosition()
 
-        val sItem = intent.getStringExtra("jItem")
-        val jItem = JsonParser.parseString(sItem).asJsonObject
+        val _id = intent.getIntExtra(ExtraAttr.EXTRA_ALARM_ID.extra, -1)
+        val jItem = ServerHandler.send(this@MainItemPopup, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
 
         val drawable = alarm_label.background as GradientDrawable
         drawable.setColor(Color.parseColor("${jItem["label_color"].asString}"))
@@ -57,6 +56,16 @@ class MainItemPopup : AppCompatActivity() {
             timeView = findViewById(R.id.time_item)
             timeView.id = 0
             timeView.text = sdf_time_show.format(sdf_time_save.parse(item.asString))
+        }
+
+        alarm_switch.setOnCheckedChangeListener { buttonView, isChecked ->
+            val json = JsonObject()
+            json.addProperty("alarm_enabled", if (isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
+
+            val result = ServerHandler.send(this@MainItemPopup, EndOfAPI.CHANGE_ALARM, json, jItem["alarm_id"].asInt)
+
+            if (!HttpHelper.isOK(result))
+                alarm_switch.isChecked = false
         }
 
         // TODO("Abort since current date")
@@ -110,7 +119,7 @@ class MainItemPopup : AppCompatActivity() {
 
         edit_btn.setOnClickListener {
             val intent = Intent(this@MainItemPopup, EditAlarmActivity::class.java)
-            intent.putExtra("jItem", sItem)
+            intent.putExtra(ExtraAttr.EXTRA_ALARM_ID.extra, _id)
             startActivity(intent)
             finish()
         }

@@ -42,7 +42,7 @@ class JoinActivity : AppCompatActivity() {
 		}
 
 		// TODO("Get contracts from API")
-		val lContract = JsonArray()
+		val lContract = ServerHandler.send(this@JoinActivity, EndOfAPI.GET_CONTRACTS)["data"].asJsonArray
 
 		val adapter = ContractRecyclerAdapter(lContract)
 		val lm = LinearLayoutManager(this@JoinActivity)
@@ -114,17 +114,17 @@ class JoinActivity : AppCompatActivity() {
 
 			if (isOK) {
 				val json = JsonObject()
-				json.addProperty("user_name", name_input.text.toString())
+				json.addProperty("username", name_input.text.toString())
 				json.addProperty("birthday", sdf_date_save.format(curCal.time))
 				json.addProperty("email", email_input.text.toString())
 				json.addProperty("snsType", _sns_type)
 				json.addProperty("snsId", _sns_id)
-				json.addProperty("genderType", if (gender_f.isChecked) Gender.MEN.gender else Gender.WOMEN.gender)
+				json.addProperty("genderType", if (gender_m.isChecked) Gender.MEN.gender else Gender.WOMEN.gender)
 				json.addProperty("phoneNum", validPh)
 
 				val result = ServerHandler.send(this@JoinActivity, EndOfAPI.USER_REGISTER, json)
 
-				if (HttpAttr.isOK(result)) {
+				if (HttpHelper.isOK(result)) {
 					val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {
 						// TODO("Change text")
 						alertTitle = "가입 성공"
@@ -140,8 +140,12 @@ class JoinActivity : AppCompatActivity() {
 					editor.putString(LoginActivity.SP_LOGIN, _sns_type)
 					editor.apply()
 
-					val intent2 = Intent(this@JoinActivity, MainActivity::class.java)
-					startActivity(intent)
+					val userData = result["data"].asJsonObject
+					UserData.id = userData["userId"].asInt
+					UserData.token = userData["token"].asString
+
+					val intent2 = Intent(this@JoinActivity, LoadingActivity::class.java)
+					startActivity(intent2)
 					finish()
 				}
 			}

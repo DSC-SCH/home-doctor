@@ -1,9 +1,12 @@
 package com.khnsoft.zipssa
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
+import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.DrawableContainer
@@ -11,6 +14,7 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,11 +27,12 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.edit_alarm_activity.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 class EditAlarmActivity : AppCompatActivity() {
-	val sdf_time_show = SimpleDateFormat("a hh:mm", Locale.KOREA)
+	val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
 	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
 	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -49,18 +54,38 @@ class EditAlarmActivity : AppCompatActivity() {
 	var timesInitialized = false
 	var labelSelected = -1
 
+	val images = mutableListOf<Bitmap>()
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.edit_alarm_activity)
 
-		val _intent = intent
-		val _jItem = JsonParser.parseString(_intent.getStringExtra("jItem")).asJsonObject
-
+		val _id = intent.getIntExtra(ExtraAttr.EXTRA_ALARM_ID.extra, -1)
+		val _jItem = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
 
 		// Setting back button
 		back_btn.setOnClickListener {
 			onBackPressed()
 		}
+
+		// Setting image
+		image_from_camera.setOnClickListener {
+			val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+			startActivityForResult(intent, PhotoAttr.CAMERA.rc)
+		}
+
+		image_from_gallery.setOnClickListener {
+			val intent = Intent(Intent.ACTION_PICK)
+			intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
+			startActivityForResult(intent, PhotoAttr.GALLERY.rc)
+		}
+
+		val lImages = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_IMAGES, id=_id)["data"].asJsonArray
+		for (image in lImages) {
+			val jItem = image.asJsonObject
+			images.add(ImageHelper.base64ToBitmap(jItem["image"].asString))
+		}
+		refreshImages()
 
 		// Setting title
 		edit_title.setText(_jItem["alarm_title"].asString)
@@ -109,6 +134,7 @@ class EditAlarmActivity : AppCompatActivity() {
 				val adapter: EditTimeRecyclerAdapter
 				if (!timesInitialized) {
 					adapter = EditTimeRecyclerAdapter(_jTimes)
+					timesInitialized = !timesInitialized
 				} else {
 					adapter = EditTimeRecyclerAdapter(DEFAULT_TIMES[position].asJsonArray)
 				}
@@ -212,7 +238,7 @@ class EditAlarmActivity : AppCompatActivity() {
 				alertConfirmText = "삭제"
 				confirmListener = View.OnClickListener {
 					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.DELETE_ALARM, id=_jItem["alarm_id"].asInt)
-					if (!HttpAttr.isOK(result)) {
+					if (!HttpHelper.isOK(result)) {
 						return@OnClickListener
 					}
 
@@ -284,7 +310,20 @@ class EditAlarmActivity : AppCompatActivity() {
 					json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
 					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_ALARM, json, _jItem["alarm_id"].asInt)
-					if (!HttpAttr.isOK(result)) return@OnClickListener
+
+					if (!HttpHelper.isOK(result)) return@OnClickListener
+
+					val json2 = JsonObject()
+					val lImages = JsonArray()
+
+					for (image in images) {
+						lImages.add(ImageHelper.bitmapToBase64(image))
+					}
+
+					json2.add("image", lImages)
+					val result2 = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_IMAGES, json2, _jItem["alarm_id"].asInt)
+
+					if (!HttpHelper.isOK(result2)) return@OnClickListener
 
 					val data = MyAlertPopup.Data(AlertType.CONFIRM)
 					data.alertTitle = alertTitle
@@ -309,12 +348,51 @@ class EditAlarmActivity : AppCompatActivity() {
 		setupLabels()
 	}
 
+	fun refreshImages() {
+		val adapter = PhotoRecyclerAdapter()
+		val lm = LinearLayoutManager(this@EditAlarmActivity, LinearLayoutManager.HORIZONTAL, false)
+		image_container.layoutManager = lm
+		image_container.adapter = adapter
+	}
+
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
 		if (requestCode == MyAlertPopup.RC) {
 			if (data != null && data.getIntExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
 				finish()
+		} else {
+			if (requestCode == PhotoAttr.CAMERA.rc) {
+				if (resultCode == Activity.RESULT_OK) {
+					val img = (data?.extras?.get("data") ?: return) as Bitmap
+					images.add(img)
+					refreshImages()
+				}
+			} else if (requestCode == PhotoAttr.GALLERY.rc) {
+				if (data == null) return
+				val photoUri = data.data
+				var cursor: Cursor? = null
+				val tempFile: File?
+
+				try {
+					val proj = arrayOf(MediaStore.Images.Media.DATA)
+
+					cursor = contentResolver.query(photoUri ?: return, proj, null, null, null)
+
+					val column_index = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA) ?: return
+
+					cursor.moveToFirst()
+					tempFile = File(cursor.getString(column_index))
+				} finally {
+					cursor?.close()
+				}
+
+				val options = BitmapFactory.Options()
+				val img = BitmapFactory.decodeFile(tempFile?.absolutePath ?: return, options)
+				images.add(img)
+
+				refreshImages()
+			}
 		}
 	}
 
@@ -402,7 +480,6 @@ class EditAlarmActivity : AppCompatActivity() {
 
 	inner class EditTimeRecyclerAdapter(val lTimes: JsonArray) :
 		RecyclerView.Adapter<EditTimeRecyclerAdapter.ViewHolder>() {
-		val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 			val time = itemView.findViewById<TextView>(R.id.time_item)
@@ -427,6 +504,33 @@ class EditAlarmActivity : AppCompatActivity() {
 					cal[Calendar.MINUTE] = minute
 					holder.time.text = sdf_time_show.format(cal.time)
 				}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
+			}
+		}
+	}
+
+	inner class PhotoRecyclerAdapter() :
+		RecyclerView.Adapter<PhotoRecyclerAdapter.ViewHolder>() {
+
+		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+			val image = itemView.findViewById<ImageView>(R.id.image_item)
+			val remove = itemView.findViewById<ImageView>(R.id.image_remove)
+		}
+
+		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+			val view = LayoutInflater.from(this@EditAlarmActivity).inflate(R.layout.alarm_page_photo_item, parent, false)
+			return ViewHolder(view)
+		}
+
+		override fun getItemCount(): Int {
+			return images.size
+		}
+
+		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+			val bitmap = images[position]
+			holder.image.setImageBitmap(bitmap)
+			holder.remove.setOnClickListener {
+				images.removeAt(position)
+				refreshImages()
 			}
 		}
 	}

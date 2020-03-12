@@ -104,16 +104,6 @@
 			android:text="구글 로그인" />
 	</LinearLayout>
 
-	<com.kakao.usermgmt.LoginButton
-		android:id="@+id/login_kakao_origin_btn"
-		android:layout_width="0dp"
-		android:layout_height="0dp" />
-
-	<com.google.android.gms.common.SignInButton
-		android:id="@+id/login_google_origin_btn"
-		android:layout_width="0dp"
-		android:layout_height="0dp" />
-
 	<Space
 		android:layout_width="0dp"
 		android:layout_height="0dp"

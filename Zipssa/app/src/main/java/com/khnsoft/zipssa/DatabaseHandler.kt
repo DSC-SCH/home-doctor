@@ -5,8 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DatabaseHandler(context: Context?) {
     lateinit var mDB: SQLiteDatabase
@@ -19,6 +20,7 @@ class DatabaseHandler(context: Context?) {
     companion object {
         const val DB_NAME = "Zipssa.db"
         const val DB_VERSION = 1
+        val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
         fun open(context: Context?): DatabaseHandler {
             return DatabaseHandler(context)
@@ -76,6 +78,7 @@ class DatabaseHandler(context: Context?) {
 
         fun execOfflineAPI(context: Context, api: EndOfAPI, data: JsonObject? = null, id: Int? = null): JsonObject {
             val mHandler = open(context)
+            val curDate = sdf_date_save.format(Calendar.getInstance().time)
 
             try {
                 when (api) {
@@ -86,13 +89,13 @@ class DatabaseHandler(context: Context?) {
                             VALUES (
                             ${jItem["user_id"].asInt},
                             '${jItem["user_name"].asString}',
-                            '${jItem["created_date"].asString}',
-                            '${jItem["last_modified_date"].asString}'
+                            '${curDate}',
+                            '${curDate}'
                             )
                         """.trimIndent()
 
                         mHandler.execNonResult(sql)
-                        return HttpAttr.OK_MSG
+                        return HttpHelper.getOK()
                     }
                     EndOfAPI.GET_ENABLED_ALARMS -> {
                         val sql = """
@@ -104,9 +107,7 @@ class DatabaseHandler(context: Context?) {
 						""".trimMargin()
 
                         val lAlarms = mHandler.execResult(sql)
-                        val ret = JsonObject()
-                        ret.add("data", lAlarms)
-                        return ret
+                        return HttpHelper.getOK(lAlarms)
                     }
                     EndOfAPI.ADD_LABEL -> {
                         initLabels(mHandler)
@@ -119,13 +120,13 @@ class DatabaseHandler(context: Context?) {
                             ${jItem["label_user"].asInt},
                             '${jItem["label_title"].asString}',
                             '${jItem["label_color"].asString}',
-                            '${jItem["created_date"].asString}',
-                            '${jItem["last_modified_date"].asString}'
+                            '${curDate}',
+                            '${curDate}'
                             )
                         """.trimIndent()
 
                         mHandler.execNonResult(sql)
-                        return HttpAttr.OK_MSG
+                        return HttpHelper.getOK()
                     }
                     EndOfAPI.GET_LABELS -> {
                         initLabels(mHandler)
@@ -136,9 +137,7 @@ class DatabaseHandler(context: Context?) {
                         """.trimMargin()
 
                         val lLabels = mHandler.execResult(sql)
-                        val ret = JsonObject()
-                        ret.add("data", lLabels)
-                        return ret
+                        return HttpHelper.getOK(lLabels)
                     }
                     EndOfAPI.EDIT_LABEL -> {
                         val jItem = data!!
@@ -147,12 +146,12 @@ class DatabaseHandler(context: Context?) {
                             UPDATE LABEL_TB SET 
                             label_title='${jItem["label_title"].asString}',
                             label_color='${jItem["label_color"].asString}',
-                            last_modified_date='${jItem["last_modified_date"].asString}' 
+                            last_modified_date='${curDate}' 
                             WHERE label_id=${id}
                         """.trimIndent()
 
                         mHandler.execNonResult(sql)
-                        return HttpAttr.OK_MSG
+                        return HttpHelper.getOK()
                     }
                     EndOfAPI.DELETE_LABEL -> {
                         val sql = """
@@ -160,7 +159,22 @@ class DatabaseHandler(context: Context?) {
                         """.trimIndent()
 
                         mHandler.execNonResult(sql)
-                        return HttpAttr.OK_MSG
+                        return HttpHelper.getOK()
+                    }
+                    EndOfAPI.GET_ALARM -> {
+                        val sql = """
+                            SELECT alarm_id, alarm_title, alarm_user, alarm_label, alarm_start_date, alarm_end_date, alarm_times,
+                            alarm_repeats, alarm_enabled, ALARM_TB.created_date, ALARM_TB.last_modified_date, label_title, label_color 
+                            FROM ALARM_TB 
+                            LEFT OUTER JOIN LABEL_TB ON ALARM_TB.alarm_label=LABEL_TB.label_id 
+                            WHERE alarm_id=${id}
+                        """.trimIndent()
+
+                        val lAlarms = mHandler.execResult(sql)
+                        if (lAlarms.size() > 0) {
+                            return HttpHelper.getOK(lAlarms[0].asJsonObject)
+                        }
+                        return HttpHelper.getError()
                     }
                     EndOfAPI.GET_ALL_ALARMS -> {
                         val sql = """
@@ -172,13 +186,11 @@ class DatabaseHandler(context: Context?) {
                         """.trimIndent()
 
                         val lAlarms = mHandler.execResult(sql)
-                        val ret = JsonObject()
-                        ret.add("data", lAlarms)
-                        return ret
+                        return HttpHelper.getOK(lAlarms)
                     }
                     EndOfAPI.ADD_ALARM -> {
                         val jItem = data!!
-                        val sql = """
+                        var sql = """
                             INSERT INTO ALARM_TB (alarm_title, alarm_user, alarm_label, alarm_start_date, alarm_end_date,  
                             alarm_times, alarm_repeats, alarm_enabled, created_date, last_modified_date) 
                             VALUES (
@@ -190,13 +202,24 @@ class DatabaseHandler(context: Context?) {
                             '${jItem["alarm_times"].asString}',
                             '${jItem["alarm_repeats"].asString}',
                             '${jItem["alarm_enabled"].asString}',
-                            '${jItem["created_date"].asString}',
-                            '${jItem["last_modified_date"].asString}'
+                            '${curDate}',
+                            '${curDate}'
                             )
                         """.trimIndent()
 
                         mHandler.execNonResult(sql)
-                        return HttpAttr.OK_MSG
+
+                        sql = """
+                            SELECT alarm_id FROM ALARM_TB ORDER BY alarm_id DESC limit 1
+                        """.trimIndent()
+
+                        val result = mHandler.execResult(sql)
+                        if (result.size() > 0) {
+                            val alarmId = result[0].asJsonObject["alarm_id"].asInt
+                            return HttpHelper.getOK(alarmId)
+                        }
+
+                        return HttpHelper.getError()
                     }
                     EndOfAPI.EDIT_ALARM -> {
                         val jItem = data!!
@@ -209,12 +232,24 @@ class DatabaseHandler(context: Context?) {
                             alarm_times='${jItem["alarm_times"].asString}',
                             alarm_repeats='${jItem["alarm_repeats"].asString}',
                             alarm_enabled='${jItem["alarm_enabled"].asString}',
-                            last_modified_date='${jItem["last_modified_date"].asString}'
+                            last_modified_date='${curDate}'
                             WHERE alarm_id=${id}
                         """.trimIndent()
 
                         mHandler.execNonResult(sql)
-                        return HttpAttr.OK_MSG
+                        return HttpHelper.getOK()
+                    }
+                    EndOfAPI.CHANGE_ALARM -> {
+                        val jItem = data!!
+
+                        val sql = """
+                            UPDATE ALARM_TB SET 
+                            alarm_enabled='${jItem["alarm_enabled"].asString}' 
+                            WHERE alarm_id=${id}
+                        """.trimIndent()
+
+                        mHandler.execNonResult(sql)
+                        return HttpHelper.getOK()
                     }
                     EndOfAPI.DELETE_ALARM -> {
                         val sql = """
@@ -222,15 +257,70 @@ class DatabaseHandler(context: Context?) {
                         """.trimIndent()
 
                         mHandler.execNonResult(sql)
-                        return HttpAttr.OK_MSG
+                        return HttpHelper.getOK()
+                    }
+                    EndOfAPI.ADD_IMAGE -> {
+                        val jItem = data!!
+                        val images = jItem["image"].asJsonArray
+
+                        for (image in images) {
+                            val sql = """
+                                INSERT INTO IMAGE_TB (alarm_id, image, created_date, last_modified_date) 
+                                VALUES (
+                                ${id},
+                                '${image.asString}',
+                                '${curDate}',
+                                '${curDate}'
+                                )
+                            """.trimIndent()
+
+                            mHandler.execNonResult(sql)
+                        }
+
+                        return HttpHelper.getOK()
+                    }
+                    EndOfAPI.EDIT_IMAGES -> {
+                        val jItem = data!!
+                        val images = jItem["image"].asJsonArray
+
+                        var sql = """
+                            DELETE FROM IMAGE_TB WHERE alarm_id=${id}
+                        """.trimIndent()
+
+                        mHandler.execNonResult(sql)
+
+                        for (image in images) {
+                            sql = """
+                                INSERT INTO IMAGE_TB (alarm_id, image, created_date, last_modified_date) 
+                                VALUES (
+                                ${id},
+                                '${image.asString}',
+                                '${curDate}',
+                                '${curDate}'
+                                )
+                            """.trimIndent()
+
+                            mHandler.execNonResult(sql)
+                        }
+
+                        return HttpHelper.getOK()
+                    }
+                    EndOfAPI.GET_IMAGES -> {
+                        val sql = """
+                            SELECT image_id, alarm_id, image FROM IMAGE_TB WHERE alarm_id=${id}
+                        """.trimIndent()
+
+                        val lImages = mHandler.execResult(sql)
+
+                        return HttpHelper.getOK(lImages)
                     }
                     else -> {
-                        return HttpAttr.ERROR_MSG
+                        return HttpHelper.getError()
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                return HttpAttr.ERROR_MSG
+                return HttpHelper.getError()
             } finally {
                 mHandler.close()
             }

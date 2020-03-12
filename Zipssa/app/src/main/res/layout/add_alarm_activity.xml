@@ -177,7 +177,6 @@
 						android:id="@+id/add_title"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:hint="\@@감기약 먹자@@"
 						android:fontFamily="@font/daylight_210"
 						android:textSize="@dimen/alarm_page_content_text"
 						android:textColor="@color/text_color" />

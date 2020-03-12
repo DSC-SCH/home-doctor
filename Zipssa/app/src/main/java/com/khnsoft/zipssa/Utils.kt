@@ -1,10 +1,5 @@
 package com.khnsoft.zipssa
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import java.lang.Exception
-
 enum class HttpMethod(val method: String) {
     POST("POST"),
     GET("GET"),
@@ -17,6 +12,13 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     USER_REGISTER("/user", HttpMethod.POST, false),
     USER_LOGIN("/login", HttpMethod.POST, false),
     USER_GET("/user", HttpMethod.GET, false),
+    GET_CONTRACTS("/terms", HttpMethod.GET, false),
+    SYNC_GENERATE("/", HttpMethod.POST, false),
+    SYNC_CONNECT("/", HttpMethod.POST, false),
+    SYNC_GET_MANAGERS("/connect/manager", HttpMethod.GET, false),
+    SYNC_GET_CREWS("/connect/receiver", HttpMethod.GET, false),
+    SYNC_DELETE("/connect", HttpMethod.DELETE, true),
+    SYNC_GET_ALARMS("/connect/receiver/alarm", HttpMethod.DELETE, true),
 
     // Both of OFFLINE and ONLINE
     GET_ENABLED_ALARMS("/alarm/enable", HttpMethod.GET, false),
@@ -28,58 +30,16 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     DELETE_ALARM("/alarm", HttpMethod.DELETE, true),
     EDIT_ALARM("/alarm", HttpMethod.PUT, true),
     GET_ALL_ALARMS("/alarm/all", HttpMethod.GET, false),
+    CHANGE_ALARM("/alarm/change", HttpMethod.PUT, true),
+    GET_ALARM("/alarm", HttpMethod.GET, true),
+    ADD_IMAGE("/image/new", HttpMethod.POST, true),
+    GET_IMAGES("/image/alarm", HttpMethod.GET, true),
+    EDIT_IMAGES("/image/edit", HttpMethod.POST, true),
 
     USER_DELETE("/user", HttpMethod.DELETE, false),
-    GET_ALARM("/alarm", HttpMethod.GET, true),
-    ADD_IMAGE("/image/new", HttpMethod.POST, false),
-    GET_IMAGES("/image", HttpMethod.POST, false),
     GET_ALL_IMAGE("/image/user", HttpMethod.POST, false),
     DELETE_IMAGE("/image", HttpMethod.DELETE, true),
-    SYNC_GENERATE("/", HttpMethod.POST, false),
-    SYNC_CONNECT("/", HttpMethod.POST, false),
-    SYNC_GET_MANAGERS("/connect/manager", HttpMethod.GET, false),
-    SYNC_GET_CREWS("/connect/receiver", HttpMethod.GET, false),
-    SYNC_DELETE("/connect", HttpMethod.DELETE, true),
-}
-
-class HttpAttr {
-    companion object {
-        const val SERVER_URL = "http://"
-        const val ERROR_CODE = -1
-        const val OK_CODE = 200
-        const val NO_USER_CODE = 401
-        val ERROR_MSG = JsonParser.parseString("""{"status": ${ERROR_CODE}}""").asJsonObject
-        val OK_MSG = JsonParser.parseString("""{"status": ${OK_CODE}}""").asJsonObject
-
-        fun isOK(json: JsonObject) : Boolean{
-            return try {
-                json["status"].asInt == OK_CODE
-            } catch (e: Exception) {
-                e.printStackTrace()
-                false
-            }
-        }
-    }
-}
-
-class AlarmParser {
-    companion object {
-        fun parseTimes(string: String) : JsonArray {
-            val ret = string.split("/").joinToString { it -> "\"${it}\"" }
-            return JsonParser.parseString("[${if (ret.equals("\"\"")) "" else ret}]").asJsonArray
-        }
-
-        fun parseRepeats(string: String) : JsonArray {
-            return JsonParser.parseString("[${string.split("/").joinToString()}]").asJsonArray
-        }
-
-        fun parseStatus(string: String) : AlarmStatus {
-            for (value in AlarmStatus.values()) {
-                if (value.status.equals(string)) return value
-            }
-            return AlarmStatus.valueOf(string)
-        }
-    }
+    GET_SYNC_ALARMS("/connect/receiver/alarm", HttpMethod.DELETE, true),
 }
 
 enum class AccountType(val type: String) {
@@ -100,9 +60,8 @@ enum class AlertType() {
     CONFIRM
 }
 
-enum class StatusCode(val status: Int) {
-    SUCCESS(0),
-    FAILED(1)
+enum class ExtraAttr(val extra: String) {
+    EXTRA_ALARM_ID("alarm_id"),
 }
 
 enum class Gender(val gender: String) {
@@ -110,40 +69,29 @@ enum class Gender(val gender: String) {
     WOMEN("WOMEN")
 }
 
-class Checker() {
-    companion object {
-        fun checkEmail(email: String) : Boolean {
-            val etIdx = email.indexOf('@')
-            val dotIdx = email.indexOf('.')
-
-            return when {
-                // No '@'
-                etIdx == -1 -> false
-                // No '.'
-                dotIdx == -1 -> false
-                // No letters before '@'
-                etIdx == 0 -> false
-                // No letters between '@' and '.'
-                dotIdx == etIdx + 1 -> false
-                // No letters after '.'
-                email.length == dotIdx + 1 -> false
-                else -> true
-            }
-        }
-
-        fun checkPhone(phone: String) : String? {
-            val elseStr = phone.replace("[0-9|-]".toRegex(), "")
-            if (elseStr.isNotEmpty()) return null
-
-            val onlyNum = phone.replace("[^0-9]".toRegex(), "")
-            if (onlyNum.length < 8) return null
-
-            return onlyNum
-        }
-    }
-}
-
 enum class PhotoAttr(val rc: Int) {
     CAMERA(301),
     GALLERY(300)
+}
+
+enum class StatusCode(val status: Int) {
+    SUCCESS(0),
+    FAILED(1)
+}
+
+class UserData {
+    companion object {
+        val DEFAULT_ACCOUNT = AccountType.NO_LOGIN
+        const val DEFAULT_ID = -1
+
+        var accountType: AccountType = DEFAULT_ACCOUNT
+        var token: String? = null
+        var id: Int = DEFAULT_ID
+    }
+}
+
+class SharedPreferencesSrc {
+    companion object {
+        const val SP_NAME = "account"
+    }
 }

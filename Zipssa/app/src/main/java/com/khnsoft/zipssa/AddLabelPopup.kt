@@ -66,9 +66,9 @@ class AddLabelPopup : AppCompatActivity() {
 			json.addProperty("created_date", sdf_date_save.format(curCal.time))
 			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
-			ServerHandler.send(this@AddLabelPopup, EndOfAPI.ADD_LABEL, json)
+			val result = ServerHandler.send(this@AddLabelPopup, EndOfAPI.ADD_LABEL, json)
 
-			if (DatabaseHandler.update(this@AddLabelPopup)) {
+			if (HttpHelper.isOK(result)) {
 				finish()
 			}
 		}

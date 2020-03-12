@@ -3,7 +3,6 @@ package com.khnsoft.zipssa
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -13,10 +12,8 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.DrawableContainer
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,13 +28,11 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.add_alarm_activity.*
 import java.io.File
-import java.io.IOException
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddAlarmActivity : AppCompatActivity() {
-	val sdf_time_show = SimpleDateFormat("a hh:mm", Locale.KOREA)
+	val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
 	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
 	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -220,10 +215,20 @@ class AddAlarmActivity : AppCompatActivity() {
 
 			val result = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_ALARM, json)
 
-			if (HttpAttr.isOK(result)) {
-				// TODO("Send image if sent alarm successful")
+			if (HttpHelper.isOK(result)) {
+				val json2 = JsonObject()
+				val lImages = JsonArray()
 
-				finish()
+				for (image in images) {
+					lImages.add(ImageHelper.bitmapToBase64(image))
+				}
+
+				json2.add("image", lImages)
+
+				val result2 = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_IMAGE, json2, result["data"].asInt)
+
+				if (HttpHelper.isOK(result2))
+					finish()
 			}
 		}
 	}
@@ -356,7 +361,6 @@ class AddAlarmActivity : AppCompatActivity() {
 
 	inner class AddTimeRecyclerAdapter(val lTimes: JsonArray) :
 		RecyclerView.Adapter<AddTimeRecyclerAdapter.ViewHolder>() {
-		val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 			val time = itemView.findViewById<TextView>(R.id.time_item)

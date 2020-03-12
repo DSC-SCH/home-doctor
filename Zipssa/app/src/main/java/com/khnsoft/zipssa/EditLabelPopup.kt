@@ -82,11 +82,11 @@ class EditLabelPopup : AppCompatActivity() {
 					json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
 					val result = ServerHandler.send(this@EditLabelPopup, EndOfAPI.EDIT_LABEL, json, _jItem["label_id"].asInt)
-					if (!HttpAttr.isOK(result)) return@OnClickListener
+					if (!HttpHelper.isOK(result)) return@OnClickListener
 
 					val data = MyAlertPopup.Data(AlertType.CONFIRM)
 					data.alertTitle = alertTitle
-					data.alertContent = "해당 알림이 수정되었습니다."
+					data.alertContent = "해당 라벨이 수정되었습니다."
 					val dataId = DataPasser.insert(data)
 
 					val intent = Intent(this@EditLabelPopup, MyAlertPopup::class.java)

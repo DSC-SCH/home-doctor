@@ -1,6 +1,7 @@
 package com.khnsoft.zipssa
 
 import android.os.AsyncTask
+import android.util.Log
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -19,23 +20,28 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 	}
 
 	fun getResultFromAPI(remote: String?, method: HttpMethod, sMsg: String?) : String{
-		if (remote == null) return HttpAttr.ERROR_MSG.toString()
+		if (remote == null) return HttpHelper.getError().toString()
 
-		var ret = HttpAttr.ERROR_MSG.toString()
+		var ret = HttpHelper.getError().toString()
 		var httpCon: HttpURLConnection? = null
 
+		Log.i("HttpInfo", "API: ${remote}, METHOD: ${method.method}")
+
 		try {
-			val url = URL("${HttpAttr.SERVER_URL}${remote}")
+			val url = URL("${HttpHelper.SERVER_URL}${remote}")
 			httpCon = url.openConnection() as HttpURLConnection
 
 			httpCon.requestMethod = method.method
+			httpCon.connectTimeout = 3000
 			httpCon.setRequestProperty("Content-Type", "application/json")
 			httpCon.setRequestProperty("Authorization", UserData.token)
 			httpCon.doInput = true
 
 			if (method == HttpMethod.POST || method == HttpMethod.PUT) {
 				if (sMsg == null)
-					return HttpAttr.ERROR_MSG.toString()
+					return HttpHelper.getError().toString()
+
+				Log.i("HttpOutput", sMsg)
 
 				val outputStream = httpCon.outputStream
 				outputStream.write(sMsg.toByteArray())
@@ -61,6 +67,7 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 			httpCon?.disconnect()
 		}
 
+		Log.i("HttpInput", ret)
 		return ret
 	}
 

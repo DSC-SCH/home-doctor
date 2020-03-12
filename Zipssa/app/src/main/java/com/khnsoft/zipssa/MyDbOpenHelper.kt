@@ -14,8 +14,6 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 		createTableLabel(db)
 		createTableAlarm(db)
 		createTableImage(db)
-		createTableCare(db)
-		createTableCheck(db)
 	}
 
 	override fun onOpen(db: SQLiteDatabase?) {
@@ -97,54 +95,13 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 			CREATE TABLE IF NOT EXISTS IMAGE_TB (
 			image_id INTEGER PRIMARY KEY AUTOINCREMENT,
 			alarm_id INTEGER NOT NULL REFERENCES ALARM_TB(alarm_id) ON DELETE CASCADE,
-			image LONGBLOB NOT NULL,
+			image TEXT NOT NULL,
 			created_date CHAR(10) NOT NULL,
 			last_modified_date CHAR(10) NOT NULL
 			)
 		""".trimIndent()
 
 		Log.i("Initialize IMAGE_TB", sql)
-
-		try {
-			db.execSQL(sql)
-		} catch (e: Exception) {
-			e.printStackTrace()
-		}
-	}
-
-	fun createTableCare(db: SQLiteDatabase) {
-		val sql = """
-			CREATE TABLE IF NOT EXISTS CARE_TB (
-			connection_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			user_id INTEGER NOT NULL REFERENCES USER_TB(user_id) ON DELETE CASCADE,
-			care_user INTEGER NOT NULL REFERENCES USER_TB(user_id) ON DELETE CASCADE,
-			created_date CHAR(10) NOT NULL,
-			last_modified_date CHAR(10) NOT NULL	
-			)
-		""".trimIndent()
-
-		Log.i("Initialize CARE_TB", sql)
-
-		try {
-			db.execSQL(sql)
-		} catch (e: Exception) {
-			e.printStackTrace()
-		}
-	}
-
-	fun createTableCheck(db: SQLiteDatabase) {
-		val sql = """
-			CREATE TABLE IF NOT EXISTS CHECK_TB (
-			user_id INTEGER PRIMARY KEY REFERENCES USER_TB(user_id) ON DELETE CASCADE,
-			user INTEGER NOT NULL DEFAULT 0,
-			label INTEGER NOT NULL DEFAULT 0,
-			alarm INTEGER NOT NULL DEFAULT 0,
-			image INTEGER NOT NULL DEFAULT 0,
-			care INTEGER NOT NULL DEFAULT 0
-			)
-		""".trimIndent()
-
-		Log.i("Initialize CHECK_TB", sql)
 
 		try {
 			db.execSQL(sql)

@@ -31,6 +31,7 @@
 			android:textColor="#FFFFFF" />
 
 		<TextView
+			android:id="@+id/edit_btn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:background="@drawable/white_btn"
@@ -88,6 +89,7 @@
 
 
 	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/sync_container"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1" />
