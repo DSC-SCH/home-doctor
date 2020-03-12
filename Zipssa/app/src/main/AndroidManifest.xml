@@ -58,5 +58,8 @@
         <activity android:name=".MainListCalendarActivity" />
         <activity android:name=".MainListSyncActivity" />
         <activity android:name=".LoadingActivity" />
+		<activity android:name=".MypageLabelActivity" />
+        <activity android:name=".EditLabelPopup"
+            android:theme="@style/PopupTheme" />
     </application>
 </manifest>

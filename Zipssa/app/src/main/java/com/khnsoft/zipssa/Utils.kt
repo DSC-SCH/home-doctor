@@ -16,21 +16,21 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     // ONLINE only
     USER_REGISTER("/user", HttpMethod.POST, false),
     USER_LOGIN("/login", HttpMethod.POST, false),
+    USER_GET("/user", HttpMethod.GET, false),
 
     // Both of OFFLINE and ONLINE
     GET_ENABLED_ALARMS("/alarm/enable", HttpMethod.GET, false),
     ADD_ALARM("/alarm/new", HttpMethod.POST, false),
     ADD_LABEL("/label/new", HttpMethod.POST, false),
     GET_LABELS("/label", HttpMethod.GET, false),
-    DELETE_ALARM("/alarm", HttpMethod.DELETE, true),
-    EDIT_ALARM("/alarm", HttpMethod.PUT, true),
-
-    USER_GET("/user", HttpMethod.GET, true),
-    USER_DELETE("/user", HttpMethod.DELETE, false),
-    GET_ALL_ALARMS("/alarm/all", HttpMethod.GET, false),
-    GET_ALARM("/alarm", HttpMethod.GET, true),
     EDIT_LABEL("/label", HttpMethod.PUT, true),
     DELETE_LABEL("/label", HttpMethod.DELETE, true),
+    DELETE_ALARM("/alarm", HttpMethod.DELETE, true),
+    EDIT_ALARM("/alarm", HttpMethod.PUT, true),
+    GET_ALL_ALARMS("/alarm/all", HttpMethod.GET, false),
+
+    USER_DELETE("/user", HttpMethod.DELETE, false),
+    GET_ALARM("/alarm", HttpMethod.GET, true),
     ADD_IMAGE("/image/new", HttpMethod.POST, false),
     GET_IMAGES("/image", HttpMethod.POST, false),
     GET_ALL_IMAGE("/image/user", HttpMethod.POST, false),

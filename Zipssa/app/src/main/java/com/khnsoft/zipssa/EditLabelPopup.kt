@@ -1,5 +1,6 @@
 package com.khnsoft.zipssa
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.DrawableContainer
@@ -7,14 +8,20 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import com.google.gson.JsonObject
-import kotlinx.android.synthetic.main.add_label_popup.*
+import com.google.gson.JsonParser
+import kotlinx.android.synthetic.main.edit_label_popup.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 class EditLabelPopup : AppCompatActivity() {
+	companion object {
+		const val EXTRA_LABEL = "label"
+	}
+
 	val LABELS_COLORS = listOf<String>(
 		"#FF7070", "#FFD4C4", "#FFFFBE", "#CAFFA7", "#6FD472",
 		"#A9E6DA", "#74B9F2", "#B1E1FE", "#919CD4", "#E3DAF9",
@@ -23,7 +30,9 @@ class EditLabelPopup : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.add_label_popup)
+		setContentView(R.layout.edit_label_popup)
+
+		val _jItem = JsonParser.parseString(intent.getStringExtra(EXTRA_LABEL)).asJsonObject
 
 		// Setting labels
 		val radioGroup = MyRadioGroup()
@@ -44,9 +53,12 @@ class EditLabelPopup : AppCompatActivity() {
 			selected.setColor(Color.parseColor(LABELS_COLORS[i]))
 			unselected = children[1] as GradientDrawable
 			unselected.setColor(Color.parseColor(LABELS_COLORS[i]))
+
+			if (LABELS_COLORS[i] == _jItem["label_color"].asString)
+				radioBtn.callOnClick()
 		}
 
-		add_label_btn.setOnClickListener {
+		edit_label_btn.setOnClickListener {
 			if (label_title.text.isBlank()) {
 				Toast.makeText(this@EditLabelPopup, "증상을 입력해 주세요.", Toast.LENGTH_LONG).show()
 				return@setOnClickListener
@@ -58,19 +70,46 @@ class EditLabelPopup : AppCompatActivity() {
 				return@setOnClickListener
 			}
 
-			val curCal = Calendar.getInstance()
-			val json = JsonObject()
-			json.addProperty("label_user", UserData.id)
-			json.addProperty("label_title", label_title.text.toString())
-			json.addProperty("label_color", LABELS_COLORS[radioGroup.getCheckedIndex()])
-			json.addProperty("created_date", sdf_date_save.format(curCal.time))
-			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
+			val data = MyAlertPopup.Data(AlertType.ALERT).apply {
+				alertTitle = label_title.text.toString()
+				alertContent = "해당 라벨 정보를 수정하시겠습니까?"
+				alertConfirmText = "수정"
+				confirmListener = View.OnClickListener {
+					val curCal = Calendar.getInstance()
+					val json = JsonObject()
+					json.addProperty("label_title", label_title.text.toString())
+					json.addProperty("label_color", LABELS_COLORS[radioGroup.getCheckedIndex()])
+					json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
-			ServerHandler.send(this@EditLabelPopup, EndOfAPI.ADD_LABEL, json)
+					val result = ServerHandler.send(this@EditLabelPopup, EndOfAPI.EDIT_LABEL, json, _jItem["label_id"].asInt)
+					if (!HttpAttr.isOK(result)) return@OnClickListener
 
-			if (DatabaseHandler.update(this@EditLabelPopup)) {
-				finish()
+					val data = MyAlertPopup.Data(AlertType.CONFIRM)
+					data.alertTitle = alertTitle
+					data.alertContent = "해당 알림이 수정되었습니다."
+					val dataId = DataPasser.insert(data)
+
+					val intent = Intent(this@EditLabelPopup, MyAlertPopup::class.java)
+					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+					startActivity(intent)
+				}
 			}
+
+			val dataId = DataPasser.insert(data)
+			val intent = Intent(this@EditLabelPopup, MyAlertPopup::class.java)
+			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+			startActivityForResult(intent, MyAlertPopup.RC)
+		}
+
+		label_title.setText(_jItem["label_title"].asString)
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+
+		if (requestCode == MyAlertPopup.RC) {
+			if (data != null && data.getIntExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
+				finish()
 		}
 	}
 }

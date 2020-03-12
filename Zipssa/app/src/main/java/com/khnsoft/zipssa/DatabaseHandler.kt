@@ -105,7 +105,7 @@ class DatabaseHandler(context: Context?) {
 
                         val lAlarms = mHandler.execResult(sql)
                         val ret = JsonObject()
-                        ret.add("array", lAlarms)
+                        ret.add("data", lAlarms)
                         return ret
                     }
                     EndOfAPI.ADD_LABEL -> {
@@ -137,7 +137,43 @@ class DatabaseHandler(context: Context?) {
 
                         val lLabels = mHandler.execResult(sql)
                         val ret = JsonObject()
-                        ret.add("array", lLabels)
+                        ret.add("data", lLabels)
+                        return ret
+                    }
+                    EndOfAPI.EDIT_LABEL -> {
+                        val jItem = data!!
+
+                        val sql = """
+                            UPDATE LABEL_TB SET 
+                            label_title='${jItem["label_title"].asString}',
+                            label_color='${jItem["label_color"].asString}',
+                            last_modified_date='${jItem["last_modified_date"].asString}' 
+                            WHERE label_id=${id}
+                        """.trimIndent()
+
+                        mHandler.execNonResult(sql)
+                        return HttpAttr.OK_MSG
+                    }
+                    EndOfAPI.DELETE_LABEL -> {
+                        val sql = """
+                            DELETE FROM LABEL_TB WHERE label_id=${id}
+                        """.trimIndent()
+
+                        mHandler.execNonResult(sql)
+                        return HttpAttr.OK_MSG
+                    }
+                    EndOfAPI.GET_ALL_ALARMS -> {
+                        val sql = """
+                            SELECT alarm_id, alarm_title, alarm_user, alarm_label, alarm_start_date, alarm_end_date, alarm_times,
+                            alarm_repeats, alarm_enabled, ALARM_TB.created_date, ALARM_TB.last_modified_date, label_title, label_color 
+                            FROM ALARM_TB 
+                            LEFT OUTER JOIN LABEL_TB ON ALARM_TB.alarm_label=LABEL_TB.label_id 
+                            WHERE alarm_user=${UserData.id}
+                        """.trimIndent()
+
+                        val lAlarms = mHandler.execResult(sql)
+                        val ret = JsonObject()
+                        ret.add("data", lAlarms)
                         return ret
                     }
                     EndOfAPI.ADD_ALARM -> {

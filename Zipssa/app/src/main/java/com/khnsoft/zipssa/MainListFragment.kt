@@ -96,9 +96,11 @@ class MainListFragment : Fragment() {
 		val curDate = main_date.text.toString()
 		curCal.time = sdf_main_date.parse(curDate)
 
-		val lTemp = ServerHandler.send(context, EndOfAPI.GET_ENABLED_ALARMS)["array"].asJsonArray
+		val lTemp = ServerHandler.send(context, EndOfAPI.GET_ENABLED_ALARMS)["data"].asJsonArray
 
 		val lAllAlarms = JsonArray()
+
+		Log.i("@@@", lTemp.toString())
 
 		for (item in lTemp) {
 			val jItem = ServerHandler.convertKeys(item.asJsonObject, ServerHandler.alarmToLocal)
@@ -194,7 +196,7 @@ class MainListFragment : Fragment() {
 				}
 
 				title.text = jItem["alarm_title"].asString
-				title.setBackgroundColor(Color.parseColor("${jItem["label_color"].asString}"))
+				title.setBackgroundColor(Color.parseColor(jItem["label_color"].asString))
 
 				count.text = "${lTimes.size()}회 복용"
 				time_container.layoutManager = lm

@@ -59,6 +59,7 @@
 				android:layout_weight="1" />
 
 			<TextView
+				android:id="@+id/user_name"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/nanum_square_ac"
@@ -92,6 +93,7 @@
 				android:layout_weight="1" />
 
 			<TextView
+				android:id="@+id/user_email"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/nanum_square_ac"
@@ -125,6 +127,7 @@
 				android:layout_weight="1" />
 
 			<TextView
+				android:id="@+id/user_phone"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/nanum_square_ac"
@@ -158,6 +161,7 @@
 				android:layout_weight="1" />
 
 			<TextView
+				android:id="@+id/user_gender"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/nanum_square_ac"
@@ -191,6 +195,7 @@
 				android:layout_weight="1" />
 
 			<TextView
+				android:id="@+id/user_birthday"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:fontFamily="@font/nanum_square_ac"

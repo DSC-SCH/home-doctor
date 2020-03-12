@@ -19,6 +19,7 @@ class MypageActivity : AppCompatActivity() {
 		notice_btn.setOnClickListener(btnClickListener)
 		sync_btn.setOnClickListener(btnClickListener)
 		history_btn.setOnClickListener(btnClickListener)
+		label_btn.setOnClickListener(btnClickListener)
 		setting_btn.setOnClickListener(btnClickListener)
 		leave_btn.setOnClickListener(btnClickListener)
 		service_btn.setOnClickListener(btnClickListener)
@@ -30,6 +31,7 @@ class MypageActivity : AppCompatActivity() {
 			R.id.notice_btn -> MypageNoticeActivity::class.java
 			R.id.sync_btn -> MypageSyncActivity::class.java
 			R.id.history_btn -> MypageHistoryActivity::class.java
+			R.id.label_btn -> MypageLabelActivity::class.java
 			R.id.setting_btn -> MypageSettingActivity::class.java
 			R.id.leave_btn -> MypageLeavingActivity::class.java
 			R.id.service_btn -> MypageServiceActivity::class.java

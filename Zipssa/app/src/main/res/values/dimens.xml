@@ -354,6 +354,7 @@
 
 	<dimen name="history_all_title_text">15sp</dimen>
 	<dimen name="history_all_content_text">15sp</dimen>
+	<dimen name="history_all_date_text">13sp</dimen>
 
 	<dimen name="history_photo_padding">5dp</dimen>
 	<dimen name="history_photo_image_sizeH">120dp</dimen>

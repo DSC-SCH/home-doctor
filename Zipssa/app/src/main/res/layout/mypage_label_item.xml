@@ -15,12 +15,14 @@
 		android:gravity="center" >
 
 		<View
+			android:id="@+id/label_color"
 			android:layout_width="@dimen/label_color_size"
 			android:layout_height="@dimen/label_color_size"
 			android:background="@drawable/label_color"
 			android:layout_marginHorizontal="@dimen/label_content_marginH"/>
 
 		<TextView
+			android:id="@+id/label_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/nanum_square_ac"
@@ -34,6 +36,7 @@
 			android:layout_weight="1" />
 
 		<TextView
+			android:id="@+id/label_edit"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:background="@drawable/label_edit_btn"
@@ -45,9 +48,10 @@
 			android:text="수정"/>
 
 		<TextView
+			android:id="@+id/label_delete"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:background="@drawable/label_remove_btn"
+			android:background="@drawable/label_delete_btn"
 			android:layout_marginHorizontal="@dimen/label_content_marginH"
 			android:paddingVertical="@dimen/label_btn_paddingV"
 			android:paddingHorizontal="@dimen/label_btn_paddingH"

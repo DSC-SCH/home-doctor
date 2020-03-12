@@ -38,8 +38,8 @@ import java.util.*
 
 class AddAlarmActivity : AppCompatActivity() {
 	val sdf_time_show = SimpleDateFormat("a hh:mm", Locale.KOREA)
-	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
 	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
+	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
 	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 	val DEFAULT_TIMES = JsonParser.parseString(
@@ -281,7 +281,7 @@ class AddAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		val lLabels = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)["array"].asJsonArray
+		val lLabels = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
 		val labelSize = lLabels.size()
 		var count = 0
 		var labelLine: AlarmLabelLine

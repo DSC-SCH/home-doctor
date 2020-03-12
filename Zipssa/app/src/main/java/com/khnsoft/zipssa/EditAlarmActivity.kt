@@ -211,7 +211,7 @@ class EditAlarmActivity : AppCompatActivity() {
 				alertContent = "해당 알림 정보를 삭제하시겠습니까?"
 				alertConfirmText = "삭제"
 				confirmListener = View.OnClickListener {
-					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.DELETE_ALARM, null, _jItem["alarm_id"].asInt)
+					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.DELETE_ALARM, id=_jItem["alarm_id"].asInt)
 					if (!HttpAttr.isOK(result)) {
 						return@OnClickListener
 					}
@@ -326,7 +326,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		val lLabels = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)["array"].asJsonArray
+		val lLabels = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
 
 		val labelSize = lLabels.size()
 		var count = 0
