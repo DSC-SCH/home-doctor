@@ -25,7 +25,7 @@ public class TermService {
             List<Terms> terms = termRepository.findTerms();
 
             if (terms == null) {
-                return DefaultResponse.response(StatusCode.METHOD_NOT_ALLOWED,
+                return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_FOUND_TERMS);
             }
             return DefaultResponse.response(StatusCode.OK,

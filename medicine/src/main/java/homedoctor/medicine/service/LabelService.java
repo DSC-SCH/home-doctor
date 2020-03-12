@@ -149,7 +149,7 @@ public class LabelService {
 
             return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .message(ResponseMessage.ALARM_UPDATE_SUCCESS)
+                    .message(ResponseMessage.LABEL_UPDATE_SUCCESS)
                     .build();
 
         } catch (Exception e) {
@@ -169,7 +169,7 @@ public class LabelService {
 
         try {
             Label findLabel = labelRepository.findOne(labelId);
-
+            System.out.println();
             if (findLabel != null) {
                 labelRepository.delete(findLabel);
                 return DefaultResponse.builder()
@@ -177,7 +177,6 @@ public class LabelService {
                         .message(ResponseMessage.LABEL_DELETE_SUCCESS)
                         .build();
             }
-
             return DefaultResponse.builder()
                     .status(StatusCode.METHOD_NOT_ALLOWED)
                     .message(ResponseMessage.LABEL_DELETE_FAIL)

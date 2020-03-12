@@ -22,7 +22,7 @@ public class AuthService {
 
 
     public DefaultResponse login(final LoginRequest loginRequest){
-        final User user = userRepository.findOneById(loginRequest.getUserId());
+        final User user = userRepository.findOneBySnsId(loginRequest.getSnsId(), loginRequest.getSnsType());
 
         if(user !=null){
             final String tokenDto = jwtService.create(user.getId());
