@@ -11,6 +11,7 @@ public class ResponseMessage {
     public static final String USER_SEARCH_FAIL           = "회원 조회 실패";
     public static final String NOT_FOUND_USER             = "등록된 회원이 없습니다.";
     public static final String DUPLICATED_USER            = "이미 등록된 회원입니다.";
+    public static final String NOT_EXIST_USER             = "존재하지 않는 유저입니다.";
 
     // ALARM RESPONSE MESSAGE
     public static final String ALARM_CREATE_SUCCESS        = "알람 등록 성공";
@@ -21,6 +22,8 @@ public class ResponseMessage {
     public static final String ALARM_DELETE_FAIL           = "알람 삭제 실패";
     public static final String ALARM_SEARCH_SUCCESS        = "알람 조회 성공";
     public static final String ALARM_SEARCH_FAIL           = "알람 조회 실패";
+    public static final String ALARM_CHANGE_LABEL_FAIL     = "알람 라벨 변경 실패";
+    public static final String ALARM_CHANGE_LABEL_SUCCESS  = "알람 라벨 변경 실패";
     public static final String NOT_FOUND_ALARM             = "등록된 알람이 없습니다.";
 
     // LABEL
