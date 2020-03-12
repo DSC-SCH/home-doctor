@@ -30,8 +30,10 @@ public class ConnectionUserRepository {
     }
 
     public List<User> findAllByCareUser(User user) {
-        List<User> userList = em.createQuery("select c.careUser from ConnectionUser c " +
-                "where c.user = :user", User.class)
+        String query = "select c.careUser from ConnectionUser c join c.careUser u " +
+                "where c.user = :user";
+
+        List<User> userList = em.createQuery(query, User.class)
                 .setParameter("user", user)
                 .getResultList();
 
@@ -39,8 +41,9 @@ public class ConnectionUserRepository {
     }
 
     public List<User> findAllByManagerUser(User user) {
-        List<User> managerUserList = em.createQuery(
-                "select c.user from ConnectionUser c where c.careUser = :user", User.class)
+        String query = "select c.user from ConnectionUser c join c.user u where c.careUser = :user";
+
+        List<User> managerUserList = em.createQuery(query, User.class)
                 .setParameter("user", user)
                 .getResultList();
 
