@@ -10,6 +10,8 @@ import lombok.Data;
 @Builder
 public class ConnectionUserDto {
 
+    private String username;
+
     private Long connectionId;
 
     private Long user;
