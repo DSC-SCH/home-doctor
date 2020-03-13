@@ -38,13 +38,13 @@ public class UserApiController {
         try {
 
             List<Terms> terms = (List<Terms>) termService.findTerms().getData();
-            String[] empty = new String[0];
 
-            if (terms == null) {
-
+            if (terms == null || terms.isEmpty()) {
+                String[] empty = new String[0];
                 return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_FOUND_TERMS, empty);
             }
+
             List<TermsDto> termsDto = terms.stream()
                     .map(m -> TermsDto.builder()
                     .title(m.getTitle())
@@ -58,6 +58,7 @@ public class UserApiController {
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
+            System.err.println(e.getMessage());
 
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);

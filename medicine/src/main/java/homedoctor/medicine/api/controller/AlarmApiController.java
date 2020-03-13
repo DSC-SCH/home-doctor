@@ -61,8 +61,12 @@ public class AlarmApiController {
                         .alarmStatus(request.getAlarmStatus())
                         .build();
                 DefaultResponse response = alarmService.save(alarm);
+                CreateAlarmResponse createAlarmResponse = CreateAlarmResponse.builder()
+                        .id(alarm.getId())
+                        .build();
                 return DefaultResponse.response(response.getStatus(),
-                        response.getMessage());
+                        response.getMessage(),
+                        createAlarmResponse);
             }
             return DefaultResponse.response(StatusCode.BAD_REQUEST,
                     ResponseMessage.ALARM_CREATE_FAIL);
@@ -103,14 +107,16 @@ public class AlarmApiController {
                     .user(alarm.getUser().getId())
                     .alarmId(alarm.getId())
                     .title(alarm.getTitle())
+                    .labelTitle(alarm.getLabel().getTitle())
+                    .color(alarm.getLabel().getColor())
                     .label(alarm.getLabel().getId())
                     .startDate(alarm.getStartDate())
                     .endDate(alarm.getEndDate())
                     .alarmStatus(alarm.getAlarmStatus())
                     .repeats(alarm.getRepeats())
                     .times(alarm.getTimes())
-                    .createdDate(AlarmDto.cutDateTimeTimeValue(alarm.getCreatedDate()))
-                    .lastModifiedDate(AlarmDto.cutDateTimeTimeValue(alarm.getLastModifiedDate()))
+                    .createdDate(alarm.getCreatedDate())
+                    .lastModifiedDate(alarm.getLastModifiedDate())
                     .build();
 
             return DefaultResponse.response(response.getStatus(),
@@ -160,8 +166,8 @@ public class AlarmApiController {
                             .color(m.getLabel().getColor())
                             .repeats(m.getRepeats())
                             .times(m.getTimes())
-                            .createdDate(AlarmDto.cutDateTimeTimeValue(m.getCreatedDate()))
-                            .lastModifiedDate(AlarmDto.cutDateTimeTimeValue(m.getLastModifiedDate()))
+                            .createdDate(m.getCreatedDate())
+                            .lastModifiedDate(m.getLastModifiedDate())
                             .build())
                     .collect(Collectors.toList());
             // 노출되는 알람 입력 정보중 필요한 필드만 가져오기.(엔티티 노출하지 않기!!)
@@ -212,8 +218,8 @@ public class AlarmApiController {
                             .color(m.getLabel().getColor())
                             .repeats(m.getRepeats())
                             .times(m.getTimes())
-                            .createdDate(AlarmDto.cutDateTimeTimeValue(m.getCreatedDate()))
-                            .lastModifiedDate(AlarmDto.cutDateTimeTimeValue(m.getLastModifiedDate()))
+                            .createdDate(m.getCreatedDate())
+                            .lastModifiedDate(m.getLastModifiedDate())
                             .build())
                     .collect(Collectors.toList());
 
@@ -230,7 +236,7 @@ public class AlarmApiController {
 
     @Auth
     @PutMapping("/alarm/{alarm_id}")
-    public DefaultResponse getUpdateAlarm(
+    public DefaultResponse updateAlarm(
             @RequestHeader("Authorization") final String header,
             @PathVariable("alarm_id") Long alarmId,
             @RequestBody @Valid UpdateAlarmRequest request) {
