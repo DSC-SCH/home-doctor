@@ -69,7 +69,6 @@ for i in range(len(medical_df)):
 
     data.append(group_data)
 
-import json
 import numpy as np
 
 class NpEncoder(json.JSONEncoder):
@@ -83,7 +82,6 @@ class NpEncoder(json.JSONEncoder):
         else:
             return super(NpEncoder, self).default(obj)
 
-# Your codes ....
 m_json = json.dumps(data, ensure_ascii=False, indent=4, cls=NpEncoder)
 
 with open('sample.json', 'w') as outfile:
