@@ -34,7 +34,10 @@ public class UserRepository {
     }
 
     public User findOneById(Long id) {
-        return em.find(User.class, id);
+        User user = em.find(User.class, id);
+        System.out.println("===user====");
+        System.out.println(user.toString());
+        return user;
     }
 
     public User findOneBySnsId(String snsId, SnsType snsType) {

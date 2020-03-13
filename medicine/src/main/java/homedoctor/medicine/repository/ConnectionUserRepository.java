@@ -22,6 +22,26 @@ public class ConnectionUserRepository {
         return em.find(ConnectionUser.class, id);
     }
 
+    public ConnectionUser findConnectionByUser(Long userId) {
+        Long tableCounts = em.createQuery("select count(c) from ConnectionUser c", Long.class)
+                .getSingleResult();
+
+        if (tableCounts == 0) {
+            return null;
+        }
+
+        List<ConnectionUser> connectionUser = em.createQuery("select c from ConnectionUser c join c.user u where u.id = :id",
+                ConnectionUser.class)
+                .setParameter("id", userId)
+                .getResultList();
+
+        if (connectionUser == null || connectionUser.isEmpty()) {
+            return null;
+        }
+
+        return connectionUser.get(0);
+    }
+
     public void delete(ConnectionUser connectionUser) {
         em.createQuery(
                 "delete from ConnectionUser c where c = :connectionUser")
