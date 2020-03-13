@@ -1,21 +1,20 @@
 package homedoctor.medicine.service;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
-import homedoctor.medicine.domain.Alarm;
-import homedoctor.medicine.domain.AlarmStatus;
-import homedoctor.medicine.domain.Label;
-import homedoctor.medicine.domain.User;
+import homedoctor.medicine.domain.*;
 import homedoctor.medicine.repository.AlarmRepository;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.repository.LabelRepository;
+import homedoctor.medicine.repository.PrescriptionImageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import sun.rmi.runtime.Log;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -24,9 +23,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class AlarmService {
 
+    @Autowired
     private final AlarmRepository alarmRepository;
 
+    @Autowired
     private final LabelRepository labelRepository;
+
+    @Autowired
+    private final PrescriptionImageRepository prescriptionImageRepository;
 
     @Transactional
     public DefaultResponse save(Alarm alarm) {
@@ -230,6 +234,7 @@ public class AlarmService {
                         .build();
             }
 
+            Date currentDate = new Date();
 
             findAlarm.setTitle(alarm.getTitle());
             findAlarm.setLabel(alarm.getLabel());
@@ -238,6 +243,8 @@ public class AlarmService {
             findAlarm.setAlarmStatus(alarm.getAlarmStatus());
             findAlarm.setRepeats(alarm.getRepeats());
             findAlarm.setTimes(alarm.getTimes());
+            findAlarm.setLastModifiedDate(currentDate);
+
             alarmRepository.save(findAlarm);
 
             return DefaultResponse.builder()
@@ -267,6 +274,21 @@ public class AlarmService {
                         .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
+
+            List<PrescriptionImage> prescriptionImageList = prescriptionImageRepository.findAllByAlarm(alarm.getId());
+
+            if (prescriptionImageList == null) {
+                return DefaultResponse.response(StatusCode.METHOD_NOT_ALLOWED,
+                        ResponseMessage.PRESCRIPTION_SEARCH_FAIL);
+            }
+
+            if (!prescriptionImageList.isEmpty()) {
+                for (PrescriptionImage prescriptionImage : prescriptionImageList) {
+                    prescriptionImageRepository.delete(prescriptionImage.getId());
+                }
+            }
+
+
             alarmRepository.delete(findAlarm);
             return DefaultResponse.builder()
                     .status(StatusCode.OK)

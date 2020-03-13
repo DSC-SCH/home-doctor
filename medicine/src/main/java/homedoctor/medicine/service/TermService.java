@@ -7,6 +7,7 @@ import homedoctor.medicine.domain.Terms;
 import homedoctor.medicine.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TermService {
 
+    @Autowired
     private final TermRepository termRepository;
 
     public DefaultResponse findTerms() {
         try {
             List<Terms> terms = termRepository.findTerms();
-
-            if (terms == null) {
-                return DefaultResponse.response(StatusCode.OK,
-                        ResponseMessage.NOT_FOUND_TERMS);
-            }
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.FOUND_TERMS,
                     terms);

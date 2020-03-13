@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -67,6 +69,7 @@ public class LabelService {
                     .title("알레르기")
                     .color("#D6D6FF")
                     .build();
+
             labelRepository.save(labelOnce);
             labelRepository.save(labelTwice);
             labelRepository.save(labelThird);
@@ -142,9 +145,12 @@ public class LabelService {
                         .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
+            Date currentDate = new Date();
 
             findLabel.setTitle(label.getTitle());
             findLabel.setColor(label.getColor());
+            findLabel.setLastModifiedDate(currentDate);
+
             labelRepository.save(findLabel);
 
             return DefaultResponse.builder()
