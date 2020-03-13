@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
-@Getter @Setter
+@Getter
 @RequiredArgsConstructor
 public class ConnectionCode extends DateTimeEntity {
 
@@ -24,7 +25,7 @@ public class ConnectionCode extends DateTimeEntity {
     private String code;
 
     @Column(nullable = false)
-    private Integer life;
+    private Date life;
 
     // == 연관관계 메서드 == //
     public void setUser(User user) {
@@ -32,7 +33,7 @@ public class ConnectionCode extends DateTimeEntity {
     }
 
     @Builder
-    public ConnectionCode(User user, String code, int life) {
+    public ConnectionCode(User user, String code, Date life) {
         this.user = user;
         this.code = code;
         this.life = life;

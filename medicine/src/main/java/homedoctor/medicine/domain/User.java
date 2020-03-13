@@ -27,6 +27,7 @@ public class User extends DateTimeEntity {
     @Column(nullable = false)
     private String email;
 
+    @Column(length = 4095)
     private String snsId;
 
     @Enumerated(EnumType.STRING)

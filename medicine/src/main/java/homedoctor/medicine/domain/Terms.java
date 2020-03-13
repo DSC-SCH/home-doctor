@@ -1,5 +1,6 @@
 package homedoctor.medicine.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -11,7 +12,6 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Setter
 @RequiredArgsConstructor
 public class Terms {
 
@@ -22,4 +22,10 @@ public class Terms {
 
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    @Builder
+    public Terms(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
