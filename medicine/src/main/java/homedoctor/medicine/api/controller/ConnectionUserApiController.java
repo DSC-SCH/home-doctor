@@ -8,12 +8,10 @@ import homedoctor.medicine.api.dto.connection.ConnectionUserDto;
 import homedoctor.medicine.api.dto.connection.CreateConnectionRequest;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;
+import homedoctor.medicine.domain.ConnectionCode;
 import homedoctor.medicine.domain.ConnectionUser;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.service.AlarmService;
-import homedoctor.medicine.service.ConnectionUserService;
-import homedoctor.medicine.service.JwtService;
-import homedoctor.medicine.service.UserService;
+import homedoctor.medicine.service.*;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import lombok.RequiredArgsConstructor;
@@ -42,26 +40,23 @@ public class ConnectionApiController {
 
     private final AlarmService alarmService;
 
+    private final ConnectionCodeService connectionCodeService;
+
     @PostMapping("/connect/new")
     public DefaultResponse connectNew(
-            User manager,
-            User receiver,
             @RequestBody @Valid final CreateConnectionRequest request) {
         try {
-            if (request.validProperties()) {
-                ConnectionUser connection = ConnectionUser.builder()
-                        .user(manager)
-                        .careUser(receiver)
-                        .build();
+            ConnectionCode code = (ConnectionCode) connectionCodeService.findCode(request.getCode()).getData();
 
-                DefaultResponse response = connectionUserService.save(connection);
-                return DefaultResponse.response(response.getStatus(),
-                        response.getMessage(),
-                        connection);
+            // 코드 유효성 검사
+            if (code == null) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_EQUAL_CODE);
             }
 
-            return DefaultResponse.response(StatusCode.CONFLICT,
-                    ResponseMessage.CONNECTION_CREATE_FAIL);
+            DefaultResponse response = connectionUserService.save(request.getManager(), code.getUser().getId());
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
 
         } catch (HttpMessageNotReadableException ex) {
             log.error(ex.getMessage());
