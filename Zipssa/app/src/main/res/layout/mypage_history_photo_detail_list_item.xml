@@ -9,5 +9,6 @@
 	<ImageView
 		android:id="@+id/image_item"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:layout_height="match_parent"
+		android:padding="@dimen/history_photo_detail_list_image_padding"/>
 </LinearLayout>

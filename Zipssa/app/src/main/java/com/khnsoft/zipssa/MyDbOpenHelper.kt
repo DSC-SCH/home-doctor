@@ -14,6 +14,7 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 		createTableLabel(db)
 		createTableAlarm(db)
 		createTableImage(db)
+		createTableTaken(db)
 	}
 
 	override fun onOpen(db: SQLiteDatabase?) {
@@ -26,15 +27,15 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 
 	fun createTableUser(db: SQLiteDatabase) {
 		val sql = """
-			|CREATE TABLE IF NOT EXISTS USER_TB (
-			|user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-			|user_name VARCHAR(20) NOT NULL,
-			|created_date CHAR(10) NOT NULL,
-			|last_modified_date CHAR(10) NOT NULL
-			|)
-		""".trimMargin()
+			CREATE TABLE IF NOT EXISTS USER_TB (
+			user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+			user_name VARCHAR(20) NOT NULL,
+			created_date CHAR(10) NOT NULL,
+			last_modified_date CHAR(10) NOT NULL
+			)
+		""".trimIndent()
 
-		Log.i("Initialize USER_TB", sql)
+		MyLogger.i("Initialize USER_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -55,7 +56,7 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 			)
 		""".trimIndent()
 
-		Log.i("Initialize LABEL_TB", sql)
+		MyLogger.i("Initialize LABEL_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -81,7 +82,7 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 			)
 		""".trimIndent()
 
-		Log.i("Initialize ALARM_TB", sql)
+		MyLogger.i("Initialize ALARM_TB", sql)
 
 		try {
 			db.execSQL(sql)
@@ -101,7 +102,26 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 			)
 		""".trimIndent()
 
-		Log.i("Initialize IMAGE_TB", sql)
+		MyLogger.i("Initialize IMAGE_TB", sql)
+
+		try {
+			db.execSQL(sql)
+		} catch (e: Exception) {
+			e.printStackTrace()
+		}
+	}
+
+	fun createTableTaken(db: SQLiteDatabase) {
+		val sql = """
+			CREATE TABLE IF NOT EXISTS TAKEN_TB (
+			taken_alarm_id INTEGER REFERENCES ALARM_TB(alarm_id) ON DELETE CASCADE,
+			taken_date CHAR(10),
+			taken_count INTEGER,
+			PRIMARY KEY (taken_alarm_id, taken_date)
+			)
+		""".trimIndent()
+
+		MyLogger.i("Initialize TAKEN_TB", sql)
 
 		try {
 			db.execSQL(sql)

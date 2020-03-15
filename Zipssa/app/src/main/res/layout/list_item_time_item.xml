@@ -9,7 +9,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center"
-		android:fontFamily="@font/daylight_210"
+		android:fontFamily="@font/nanum_square_ac"
 		android:textSize="@dimen/main_item_time_text"
 		android:textColor="@color/text_color"
 		android:text="am 9:00" />

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/main_remain_container"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:paddingVertical="@dimen/main_remain_paddingV"
+	android:paddingHorizontal="@dimen/main_remain_paddingH"
+	android:clipToPadding="false" >
+
+	<LinearLayout
+		android:id="@+id/main_remain_box"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/main_remain_time"
+		android:orientation="vertical"
+		android:paddingVertical="@dimen/main_remain_box_paddingV"
+		android:gravity="center"
+		android:elevation="@dimen/shadow_size">
+
+		<TextView
+			android:id="@+id/main_remain_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/main_remain_title_text"
+			android:textColor="@color/text_color"
+			android:text="Title"
+			android:paddingHorizontal="@dimen/main_item_title_paddingH"
+			android:paddingVertical="@dimen/main_item_title_paddingV"/>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/split_line"
+			android:background="@color/split_line"
+			android:layout_marginHorizontal="@dimen/main_item_split_marginH"/>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center|bottom"
+			android:paddingVertical="@dimen/main_remain_content_paddingV">
+
+			<ImageView
+				android:layout_width="@dimen/main_remain_icon_size"
+				android:layout_height="@dimen/main_remain_icon_size"
+				android:src="@drawable/alarm_img_remain"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/lotte_dream_bold"
+				android:textSize="@dimen/main_remain_subtime_text"
+				android:textColor="@color/text_color"
+				android:text=" 다음 알림까지 "/>
+
+			<TextView
+				android:id="@+id/main_remain_time"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/lotte_dream_bold"
+				android:textSize="@dimen/main_remain_time_text"
+				android:textColor="@color/main_theme"
+				android:text="0 시간 0 분"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/lotte_dream_bold"
+				android:textSize="@dimen/main_remain_subtime_text"
+				android:textColor="@color/text_color"
+				android:text=" 남았어요! "/>
+
+			<ImageView
+				android:layout_width="@dimen/main_remain_icon_size"
+				android:layout_height="@dimen/main_remain_icon_size"
+				android:src="@drawable/alarm_img_remain"/>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>

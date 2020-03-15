@@ -15,7 +15,6 @@ import android.graphics.drawable.StateListDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,21 +31,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class EditAlarmActivity : AppCompatActivity() {
-	val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
-	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
-	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
-	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 	val DEFAULT_TIMES = JsonParser.parseString(
-		"""[
-		|[],
-		|["오전 9:00"],
-		|["오전 9:00", "오후 7:00"],
-		|["오전 9:00", "오후 1:00", "오후 7:00"],
-		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00"],
-		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00"],
-		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00"]
-	]""".trimMargin()
+		"""
+		[
+			[],
+			["오전 9:00"],
+			["오전 9:00", "오후 7:00"],
+			["오전 9:00", "오후 1:00", "오후 7:00"],
+			["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00"],
+			["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00"],
+			["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00"]
+		]
+		""".trimIndent()
 	).asJsonArray
 
 	lateinit var radioGroup: MyRadioGroup
@@ -60,8 +57,10 @@ class EditAlarmActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.edit_alarm_activity)
 
-		val _id = intent.getIntExtra(ExtraAttr.EXTRA_ALARM_ID.extra, -1)
-		val _jItem = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
+		val _id = intent.getIntExtra(ExtraAttr.ALARM_ID, -1)
+		val _jTemp = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
+		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)
+		val _jItem = ServerHandler.convertKeys(_jTemp, ServerHandler.alarmToLocal)
 
 		// Setting back button
 		back_btn.setOnClickListener {
@@ -69,23 +68,27 @@ class EditAlarmActivity : AppCompatActivity() {
 		}
 
 		// Setting image
-		image_from_camera.setOnClickListener {
-			val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-			startActivityForResult(intent, PhotoAttr.CAMERA.rc)
-		}
+		if (UserData.careUser == null) {
+			image_from_camera.setOnClickListener {
+				val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+				startActivityForResult(intent, PhotoAttr.CAMERA.rc)
+			}
 
-		image_from_gallery.setOnClickListener {
-			val intent = Intent(Intent.ACTION_PICK)
-			intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
-			startActivityForResult(intent, PhotoAttr.GALLERY.rc)
-		}
+			image_from_gallery.setOnClickListener {
+				val intent = Intent(Intent.ACTION_PICK)
+				intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
+				startActivityForResult(intent, PhotoAttr.GALLERY.rc)
+			}
 
-		val lImages = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_IMAGES, id=_id)["data"].asJsonArray
-		for (image in lImages) {
-			val jItem = image.asJsonObject
-			images.add(ImageHelper.base64ToBitmap(jItem["image"].asString))
+			val lImages = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_IMAGES, id = _id)["data"].asJsonArray
+			for (image in lImages) {
+				val jItem = ServerHandler.convertKeys(image.asJsonObject, ServerHandler.imageToLocal)
+				images.add(ImageHelper.base64ToBitmap(jItem["image"].asString))
+			}
+			refreshImages()
+		} else {
+			image_section.visibility = View.GONE
 		}
-		refreshImages()
 
 		// Setting title
 		edit_title.setText(_jItem["alarm_title"].asString)
@@ -101,7 +104,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		val _jTimesRaw = AlarmParser.parseTimes(_jItem["alarm_times"].asString)
 		val _jTimes = JsonArray()
 		for (item in _jTimesRaw) {
-			_jTimes.add(sdf_time_show.format(sdf_time_save.parse(item.asString)))
+			_jTimes.add(SDF.timeInKorean.format(SDF.time.parse(item.asString)))
 		}
 		alarm_times.setSelection(when(_jTimes.size()) {
 			1 -> 1
@@ -146,18 +149,18 @@ class EditAlarmActivity : AppCompatActivity() {
 
 		// Setting start and end date
 		val startCal = Calendar.getInstance()
-		startCal.time = sdf_date_save.parse(_jItem["alarm_start_date"].asString)
+		startCal.time = SDF.dateBar.parse(_jItem["alarm_start_date"].asString)
 		val endCal = Calendar.getInstance()
-		endCal.time = sdf_date_save.parse(_jItem["alarm_end_date"].asString)
-		edit_start_date.text = sdf_date_show.format(startCal.time)
-		edit_end_date.text = sdf_date_show.format(endCal.time)
+		endCal.time = SDF.dateBar.parse(_jItem["alarm_end_date"].asString)
+		edit_start_date.text = SDF.dateInKorean.format(startCal.time)
+		edit_end_date.text = SDF.dateInKorean.format(endCal.time)
 
 		edit_start_date.setOnClickListener {
 			DatePickerDialog(this@EditAlarmActivity, { view, year, month, dayOfMonth ->
 				startCal[Calendar.YEAR] = year
 				startCal[Calendar.MONTH] = month
 				startCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				edit_start_date.text = sdf_date_show.format(startCal.time)
+				edit_start_date.text = SDF.dateInKorean.format(startCal.time)
 			}, startCal[Calendar.YEAR], startCal[Calendar.MONTH], startCal[Calendar.DAY_OF_MONTH]).show()
 		}
 
@@ -166,7 +169,7 @@ class EditAlarmActivity : AppCompatActivity() {
 				endCal[Calendar.YEAR] = year
 				endCal[Calendar.MONTH] = month
 				endCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				edit_end_date.text = sdf_date_show.format(endCal.time)
+				edit_end_date.text = SDF.dateInKorean.format(endCal.time)
 			}, endCal[Calendar.YEAR], endCal[Calendar.MONTH], endCal[Calendar.DAY_OF_MONTH]).show()
 		}
 
@@ -237,7 +240,8 @@ class EditAlarmActivity : AppCompatActivity() {
 				alertContent = "해당 알림 정보를 삭제하시겠습니까?"
 				alertConfirmText = "삭제"
 				confirmListener = View.OnClickListener {
-					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.DELETE_ALARM, id=_jItem["alarm_id"].asInt)
+					val result = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.DELETE_ALARM, id=_id)
+					else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_DELETE_ALARM, id=UserData.careUser, id2=_id)
 					if (!HttpHelper.isOK(result)) {
 						return@OnClickListener
 					}
@@ -248,14 +252,14 @@ class EditAlarmActivity : AppCompatActivity() {
 					val dataId = DataPasser.insert(data)
 
 					val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
-					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+					intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 					startActivity(intent)
 				}
 			}
 
 			val dataId = DataPasser.insert(data)
 			val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
-			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+			intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 			startActivityForResult(intent, MyAlertPopup.RC)
 		}
 
@@ -272,7 +276,7 @@ class EditAlarmActivity : AppCompatActivity() {
 			for (i in 0..count - 1) {
 				val holder =
 					edit_time_container.getChildViewHolder(edit_time_container[i]) as EditTimeRecyclerAdapter.ViewHolder
-				lTimes.add(sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString())))
+				lTimes.add(SDF.time.format(SDF.timeInKorean.parse(holder.time.text.toString())))
 			}
 			lTimes.sort()
 			lTimes.toString()
@@ -302,28 +306,30 @@ class EditAlarmActivity : AppCompatActivity() {
 					val json = JsonObject()
 					json.addProperty("alarm_title", edit_title.text.toString())
 					json.addProperty("alarm_label", radioGroup.radios[radioGroup.getCheckedIndex()].tag as Int)
-					json.addProperty("alarm_start_date", sdf_date_save.format(startCal.time))
-					json.addProperty("alarm_end_date", sdf_date_save.format(endCal.time))
+					json.addProperty("alarm_start_date", SDF.dateBar.format(startCal.time))
+					json.addProperty("alarm_end_date", SDF.dateBar.format(endCal.time))
 					json.addProperty("alarm_times", lTimes.joinToString("/"))
 					json.addProperty("alarm_repeats", lRepeats.joinToString("/"))
 					json.addProperty("alarm_enabled", if (edit_times_switch.isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
-					json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
-					val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_ALARM, json, _jItem["alarm_id"].asInt)
+					val result = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_ALARM, json, _id)
+					else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_EDIT_ALARM, json, UserData.careUser, _id)
 
 					if (!HttpHelper.isOK(result)) return@OnClickListener
 
-					val json2 = JsonObject()
-					val lImages = JsonArray()
+					if (UserData.careUser == null) {
+						val json2 = JsonObject()
+						val lImages = JsonArray()
 
-					for (image in images) {
-						lImages.add(ImageHelper.bitmapToBase64(image))
+						for (image in images) {
+							lImages.add(ImageHelper.bitmapToBase64(image))
+						}
+
+						json2.add("image", lImages)
+						val result2 = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_IMAGES, json2, _id)
+
+						if (!HttpHelper.isOK(result2)) return@OnClickListener
 					}
-
-					json2.add("image", lImages)
-					val result2 = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_IMAGES, json2, _jItem["alarm_id"].asInt)
-
-					if (!HttpHelper.isOK(result2)) return@OnClickListener
 
 					val data = MyAlertPopup.Data(AlertType.CONFIRM)
 					data.alertTitle = alertTitle
@@ -331,14 +337,14 @@ class EditAlarmActivity : AppCompatActivity() {
 					val dataId = DataPasser.insert(data)
 
 					val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
-					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+					intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 					startActivity(intent)
 				}
 			}
 
 			val dataId = DataPasser.insert(data)
 			val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
-			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+			intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 			startActivityForResult(intent, MyAlertPopup.RC)
 		}
 	}
@@ -359,7 +365,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		super.onActivityResult(requestCode, resultCode, data)
 
 		if (requestCode == MyAlertPopup.RC) {
-			if (data != null && data.getIntExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
+			if (data != null && data.getIntExtra(ExtraAttr.POPUP_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
 				finish()
 		} else {
 			if (requestCode == PhotoAttr.CAMERA.rc) {
@@ -398,12 +404,13 @@ class EditAlarmActivity : AppCompatActivity() {
 
 	fun setupLabels() {
 		val sql = """
-			|SELECT _ID, LABEL_TITLE, LABEL_COLOR FROM LABEL_TB
-		""".trimMargin()
+			SELECT _ID, LABEL_TITLE, LABEL_COLOR FROM LABEL_TB
+		""".trimIndent()
 
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
+		// TODO("Server: Get sync user labels")
 		val lLabels = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
 
 		val labelSize = lLabels.size()
@@ -498,11 +505,11 @@ class EditAlarmActivity : AppCompatActivity() {
 			holder.time.text = lTimes[position].asString
 			holder.time.setOnClickListener {
 				val cal = Calendar.getInstance()
-				cal.time = sdf_time_show.parse(holder.time.text.toString())
+				cal.time = SDF.timeInKorean.parse(holder.time.text.toString())
 				TimePickerDialog(this@EditAlarmActivity, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
 					cal[Calendar.HOUR_OF_DAY] = hourOfDay
 					cal[Calendar.MINUTE] = minute
-					holder.time.text = sdf_time_show.format(cal.time)
+					holder.time.text = SDF.timeInKorean.format(cal.time)
 				}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
 			}
 		}

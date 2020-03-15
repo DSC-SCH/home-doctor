@@ -19,7 +19,7 @@ class AddLabelPopup : AppCompatActivity() {
 		"#FF7070", "#FFD4C4", "#FFFFBE", "#CAFFA7", "#6FD472",
 		"#A9E6DA", "#74B9F2", "#B1E1FE", "#919CD4", "#E3DAF9",
 		"#DFBBE9", "#F194DE", "#FFE2F7", "#D4D4D4", "#B29090")
-	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -63,8 +63,6 @@ class AddLabelPopup : AppCompatActivity() {
 			json.addProperty("label_user", UserData.id)
 			json.addProperty("label_title", label_title.text.toString())
 			json.addProperty("label_color", LABELS_COLORS[radioGroup.getCheckedIndex()])
-			json.addProperty("created_date", sdf_date_save.format(curCal.time))
-			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
 			val result = ServerHandler.send(this@AddLabelPopup, EndOfAPI.ADD_LABEL, json)
 

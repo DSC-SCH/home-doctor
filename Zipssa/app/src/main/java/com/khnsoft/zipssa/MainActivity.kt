@@ -7,19 +7,24 @@ import android.view.Gravity
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.list_fragment.*
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.search_fragment.*
 
 class MainActivity : AppCompatActivity() {
 	val FRAG_HOME = 0
 	val FRAG_SEARCH = 2
 
 	var buttons= List<LinearLayout>(0) { LinearLayout(this@MainActivity) }
-	var cur_frag = -1;
+	var cur_frag = FRAG_HOME
 
-	lateinit var mMainListFragment: MainListFragment
+	companion object {
+		var curActivity : MainActivity? = null
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.main_activity)
+
+		curActivity = this@MainActivity
 
 		buttons = listOf(bar_home, bar_add, bar_search, bar_mypage)
 
@@ -41,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 			startActivity(intent)
 		}
 
-		callPage(FRAG_HOME)
+		callPage(cur_frag)
 	}
 
 	fun callPage(no: Int) {
@@ -53,8 +58,7 @@ class MainActivity : AppCompatActivity() {
 
 		when (no) {
 			FRAG_HOME -> {
-				mMainListFragment = MainListFragment.getInstance()
-				transaction.replace(R.id.main_container, mMainListFragment)
+				transaction.replace(R.id.main_container, MainListFragment.getInstance())
 				transaction.commit()
 			}
 
@@ -70,10 +74,14 @@ class MainActivity : AppCompatActivity() {
 
 	override fun onBackPressed() {
 		if (cur_frag == FRAG_HOME) {
-			if (::mMainListFragment.isInitialized && mMainListFragment.sync_drawer.isDrawerOpen(Gravity.RIGHT))
-				mMainListFragment.sync_drawer.closeDrawer(Gravity.RIGHT)
+			val frag = MainListFragment.getInstance()
+			if (frag.sync_drawer.isDrawerOpen(Gravity.RIGHT))
+				frag.sync_drawer.closeDrawer(Gravity.RIGHT)
 			else
 				super.onBackPressed()
+		} else if (MainSearchFragment.getInstance().curPage == MainSearchFragment.FRAG_RESULT) {
+			MainSearchFragment.getInstance().callPage(MainSearchFragment.FRAG_RECENT)
+			MainSearchFragment.getInstance().search_text.setText("")
 		} else {
 			callPage(FRAG_HOME)
 		}

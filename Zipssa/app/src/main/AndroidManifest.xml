@@ -56,7 +56,6 @@
 		</activity>
 		<activity android:name=".ContractActivity" />
 		<activity android:name=".MainListCalendarActivity" />
-		<activity android:name=".MainListSyncActivity" />
 		<activity android:name=".LoadingActivity" />
 		<activity android:name=".MypageLabelActivity" />
 		<activity

@@ -3,6 +3,7 @@ package com.khnsoft.zipssa
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.medicine_detail_activity.*
 
 class MedicineDetailActivity : AppCompatActivity() {
@@ -15,6 +16,10 @@ class MedicineDetailActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.medicine_detail_activity)
+
+		val jItem = JsonParser.parseString(intent.getStringExtra(ExtraAttr.MEDICINE)).asJsonObject
+
+		// TODO("Server: Set medicine data")
 
 		effect_btn.setOnClickListener {
 			if (isEffectExpanded) {
@@ -75,8 +80,5 @@ class MedicineDetailActivity : AppCompatActivity() {
 
 			isWarningExpanded = !isWarningExpanded
 		}
-
-		// TODO("Animation (optional)")
-		// TODO("Medicine detail")
 	}
 }

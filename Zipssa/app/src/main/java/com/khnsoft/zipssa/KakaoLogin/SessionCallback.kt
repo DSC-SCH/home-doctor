@@ -2,7 +2,6 @@ package com.khnsoft.zipssa.KakaoLogin
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.google.gson.JsonObject
 import com.kakao.auth.ISessionCallback
 import com.kakao.network.ErrorResult
@@ -23,7 +22,6 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 	}
 
 	fun requestMe() {
-		Log.i("@@@", "REQUESTME")
 		UserManagement.getInstance().me(object: MeV2ResponseCallback() {
 			override fun onSuccess(result: MeV2Response?) {
 				val kakaoAccount = result?.kakaoAccount
@@ -32,8 +30,6 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 					val nickname = kakaoAccount.profile.nickname
 					val email = kakaoAccount.email
 					val gender = kakaoAccount.gender
-
-					Log.i("@@@", result.id.toString())
 
 					val json = JsonObject()
 					json.addProperty("snsType", AccountType.KAKAO.type)
@@ -47,7 +43,7 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 							UserData.token = userData["token"].asString
 							UserData.id = userData["userId"].asInt
 
-							val sp = context.getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+							val sp = SPHandler.getSp(context)
 							if (sp.getInt(LoginActivity.SP_USER_ID, UserData.DEFAULT_ID) != UserData.id) {
 								val editor = sp.edit()
 								editor.putInt(LoginActivity.SP_USER_ID, UserData.id)
@@ -68,7 +64,6 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 								else -> null
 							})
 							context.startActivity(intent)
-							context.finish()
 						}
 						else -> {
 							UserData.accountType = AccountType.NO_NETWORK
@@ -80,11 +75,11 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 
 			override fun onFailure(errorResult: ErrorResult?) {
 				super.onFailure(errorResult)
-				Log.i("@@@", errorResult.toString())
+				MyLogger.e("Kakao Login", errorResult.toString())
 			}
 
 			override fun onSessionClosed(errorResult: ErrorResult?) {
-				Log.e("SessionCallback", "onSessionClosed: ${errorResult?.errorMessage ?: "null"}")
+				MyLogger.e("Kakao Login", "onSessionClosed: ${errorResult?.errorMessage ?: "null"}")
 			}
 		})
 	}

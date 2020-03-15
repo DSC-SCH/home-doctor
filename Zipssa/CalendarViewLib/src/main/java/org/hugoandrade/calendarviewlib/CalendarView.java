@@ -902,7 +902,6 @@ public class CalendarView extends FrameLayout {
         private Calendar mDatetime;
         private String mNote;
         private int mPrimaryColor;
-        private int mSecondaryColor;
 
         public CalendarObject(String id, Calendar datetime, String note, int primaryColor) {
             mID = id;

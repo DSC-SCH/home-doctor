@@ -15,7 +15,7 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:fontFamily="@font/daylight_210"
+			android:fontFamily="@font/lotte_dream_bold"
 			android:textColor="@color/text_color"
 			android:textSize="@dimen/add_label_text"
 			android:text="증상 이름 : "/>
@@ -24,7 +24,7 @@
 			android:id="@+id/label_title"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:fontFamily="@font/daylight_210"
+			android:fontFamily="@font/nanum_square_ac"
 			android:textColor="@color/text_color"
 			android:textSize="@dimen/add_label_text" />
 	</LinearLayout>
@@ -184,7 +184,7 @@
 			android:paddingHorizontal="@dimen/add_label_button_paddingH"
 			android:paddingVertical="@dimen/add_label_button_paddingV"
 			android:layout_gravity="center"
-			android:fontFamily="@font/daylight_210"
+			android:fontFamily="@font/lotte_dream_bold"
 			android:textColor="@color/text_color"
 			android:textSize="@dimen/add_label_text"
 			android:text="수정" />

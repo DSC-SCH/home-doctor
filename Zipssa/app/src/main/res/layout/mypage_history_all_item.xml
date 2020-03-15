@@ -92,7 +92,7 @@
 					android:fontFamily="@font/nanum_square_ac"
 					android:textSize="@dimen/history_all_content_text"
 					android:textColor="@color/text_color"
-					android:text="주 " />
+					android:text="하루 " />
 
 				<TextView
 					android:id="@+id/alarm_count"
@@ -126,13 +126,13 @@
 			android:fontFamily="@font/nanum_square_ac"
 			android:textSize="@dimen/history_all_date_text"
 			android:textColor="@color/text_color_gray"
-			android:text="00.00.00" />
+			android:text="0000.00.00" />
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:fontFamily="@font/nanum_square_ac"
-			android:textSize="@dimen/history_all_content_text"
+			android:textSize="@dimen/history_all_date_text"
 			android:textColor="@color/text_color_gray"
 			android:text="입력" />
 	</LinearLayout>

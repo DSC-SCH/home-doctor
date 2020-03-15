@@ -47,17 +47,19 @@
 				android:orientation="vertical">
 
 				<LinearLayout
-					android:layout_width="wrap_content"
+					android:id="@+id/main_name_bar"
+					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
 					android:layout_gravity="top|center"
-					android:layout_marginVertical="@dimen/main_title_marginV">
+					android:gravity="center|bottom"
+					android:paddingVertical="@dimen/main_title_marginV">
 
 					<TextView
 						android:id="@+id/main_name"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:fontFamily="@font/bmjua"
+						android:fontFamily="@font/lotte_dream_bold"
 						android:text="약타미"
 						android:textColor="@color/text_color"
 						android:textSize="@dimen/main_title_text" />
@@ -65,7 +67,7 @@
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:fontFamily="@font/bmjua"
+						android:fontFamily="@font/lotte_dream_bold"
 						android:text=" 님의 리스트"
 						android:textColor="@color/text_color"
 						android:textSize="@dimen/main_subtitle_text" />
@@ -96,10 +98,10 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_marginHorizontal="@dimen/main_date_marginV"
-						android:fontFamily="@font/bmjua"
+						android:fontFamily="@font/lotte_dream_bold"
 						android:text="0000 / 00 / 00"
 						android:textColor="@color/text_color"
-						android:textSize="@dimen/main_date_text" />
+						android:textSize="@dimen/main_title_date_text" />
 
 					<ImageView
 						android:id="@+id/main_date_next"

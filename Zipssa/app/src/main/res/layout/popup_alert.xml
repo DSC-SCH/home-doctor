@@ -11,7 +11,7 @@
 		android:id="@+id/popup_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:fontFamily="@font/bmjua"
+		android:fontFamily="@font/lotte_dream_bold"
 		android:textSize="@dimen/popup_content_text"
 		android:textColor="@color/text_color"
 		android:text="Title"/>
@@ -20,7 +20,8 @@
 		android:id="@+id/popup_content"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:fontFamily="@font/daylight_210"
+		android:gravity="center"
+		android:fontFamily="@font/nanum_square_ac"
 		android:padding="@dimen/popup_content_padding"
 		android:textSize="@dimen/popup_content_text"
 		android:textColor="@color/text_color"
@@ -44,7 +45,7 @@
 			android:layout_weight="1"
 			android:padding="@dimen/popup_button_padding"
 			android:gravity="center"
-			android:fontFamily="@font/daylight_210"
+			android:fontFamily="@font/nanum_square_ac"
 			android:textSize="@dimen/popup_button_text"
 			android:textColor="@color/text_color"
 			android:text="취소"/>
@@ -61,7 +62,7 @@
 			android:layout_weight="1"
 			android:padding="@dimen/popup_button_padding"
 			android:gravity="center"
-			android:fontFamily="@font/daylight_210"
+			android:fontFamily="@font/nanum_square_ac"
 			android:textSize="@dimen/popup_button_text"
 			android:textColor="@color/text_color"/>
 	</LinearLayout>

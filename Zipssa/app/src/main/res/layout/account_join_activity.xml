@@ -25,37 +25,38 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			android:text="회원가입"
-			android:fontFamily="@font/bmjua"
+			android:fontFamily="@font/lotte_dream_bold"
 			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
 	</FrameLayout>
 
 	<ScrollView
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:background="@color/background_theme">
+		android:layout_height="match_parent">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
+			android:layout_marginTop="@dimen/mypage_marginV"
+			android:background="@color/background_theme"
 			android:padding="@dimen/join_padding">
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
 				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
+				android:gravity="center"
+				android:orientation="horizontal">
 
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/nanum_square_ac"
+					android:padding="@dimen/join_input_padding"
+					android:text="이름 *"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="이름 *"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<Space
 					android:layout_width="0dp"
@@ -66,8 +67,8 @@
 					android:id="@+id/join_name_check_warning"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/lotte_dream_bold"
+					android:padding="@dimen/join_input_padding"
 					android:textColor="@color/warning_color"
 					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
@@ -77,26 +78,26 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:background="@drawable/account_stroke_box"
-				android:padding="@dimen/join_input_padding"
 				android:fontFamily="@font/nanum_square_ac"
+				android:padding="@dimen/join_input_padding"
 				android:textColor="@color/text_color"
 				android:textSize="@dimen/join_item_text" />
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
 				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
+				android:gravity="center"
+				android:orientation="horizontal">
 
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/nanum_square_ac"
+					android:padding="@dimen/join_input_padding"
+					android:text="성별 *"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="성별 *"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<Space
 					android:layout_width="0dp"
@@ -107,8 +108,8 @@
 					android:id="@+id/join_gender_check_warning"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/lotte_dream_bold"
+					android:padding="@dimen/join_input_padding"
 					android:textColor="@color/warning_color"
 					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
@@ -117,52 +118,52 @@
 				android:id="@+id/gender_group"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal" >
+				android:orientation="horizontal">
 
 				<RadioButton
 					android:id="@+id/gender_m"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/nanum_square_ac"
+					android:text="남"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="남"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<Space
 					android:layout_width="0dp"
 					android:layout_height="0dp"
-					android:layout_weight="1"/>
+					android:layout_weight="1" />
 
 				<RadioButton
 					android:id="@+id/gender_f"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:fontFamily="@font/nanum_square_ac"
+					android:text="여"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="여"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<Space
 					android:layout_width="0dp"
 					android:layout_height="0dp"
-					android:layout_weight="3"/>
+					android:layout_weight="3" />
 			</RadioGroup>
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
 				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
+				android:gravity="center"
+				android:orientation="horizontal">
 
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/nanum_square_ac"
+					android:padding="@dimen/join_input_padding"
+					android:text="생년월일 *"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="생년월일 *"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<Space
 					android:layout_width="0dp"
@@ -173,8 +174,8 @@
 					android:id="@+id/join_birthday_check_warning"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/lotte_dream_bold"
+					android:padding="@dimen/join_input_padding"
 					android:textColor="@color/warning_color"
 					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
@@ -182,8 +183,8 @@
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:gravity="center" >
+				android:gravity="center"
+				android:orientation="horizontal">
 
 				<TextView
 					android:id="@+id/birthday_input"
@@ -191,42 +192,42 @@
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
 					android:background="@drawable/account_stroke_box"
-					android:padding="@dimen/join_input_padding"
-					android:gravity="center"
 					android:fontFamily="@font/nanum_square_ac"
+					android:gravity="center"
+					android:padding="@dimen/join_input_padding"
+					android:text="생년월일을 선택해주세요"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="생년월일을 선택해주세요"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<TextView
 					android:id="@+id/birthday_select"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:background="@drawable/account_check_box"
 					android:layout_marginLeft="@dimen/join_check_marginL"
-					android:paddingVertical="@dimen/join_input_padding"
-					android:paddingHorizontal="@dimen/join_check_paddingH"
+					android:background="@drawable/account_check_box"
 					android:fontFamily="@font/nanum_square_ac"
+					android:paddingHorizontal="@dimen/join_check_paddingH"
+					android:paddingVertical="@dimen/join_input_padding"
+					android:text="날짜 선택"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="날짜 선택"/>
+					android:textSize="@dimen/join_item_text" />
 			</LinearLayout>
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
 				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
+				android:gravity="center"
+				android:orientation="horizontal">
 
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/nanum_square_ac"
+					android:padding="@dimen/join_input_padding"
+					android:text="이메일 *"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="이메일 *"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<Space
 					android:layout_width="0dp"
@@ -237,8 +238,8 @@
 					android:id="@+id/join_email_check_warning"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/lotte_dream_bold"
+					android:padding="@dimen/join_input_padding"
 					android:textColor="@color/warning_color"
 					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
@@ -248,27 +249,27 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:background="@drawable/account_stroke_box"
-				android:padding="@dimen/join_input_padding"
 				android:fontFamily="@font/nanum_square_ac"
+				android:hint="example@email.com"
+				android:padding="@dimen/join_input_padding"
 				android:textColor="@color/text_color"
-				android:textSize="@dimen/join_item_text"
-				android:hint="example@email.com"/>
+				android:textSize="@dimen/join_item_text" />
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:orientation="horizontal"
 				android:layout_marginTop="@dimen/join_item_marginT"
-				android:gravity="center">
+				android:gravity="center"
+				android:orientation="horizontal">
 
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/nanum_square_ac"
+					android:padding="@dimen/join_input_padding"
+					android:text="전화번호 *"
 					android:textColor="@color/text_color"
-					android:textSize="@dimen/join_item_text"
-					android:text="전화번호 *"/>
+					android:textSize="@dimen/join_item_text" />
 
 				<Space
 					android:layout_width="0dp"
@@ -279,8 +280,8 @@
 					android:id="@+id/join_ph_warning"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:padding="@dimen/join_input_padding"
 					android:fontFamily="@font/lotte_dream_bold"
+					android:padding="@dimen/join_input_padding"
 					android:textColor="@color/warning_color"
 					android:textSize="@dimen/join_check_text" />
 			</LinearLayout>
@@ -290,10 +291,10 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:background="@drawable/account_stroke_box"
-				android:padding="@dimen/join_input_padding"
-				android:inputType="numberSigned"
 				android:digits="0123456789-"
 				android:fontFamily="@font/nanum_square_ac"
+				android:inputType="numberSigned"
+				android:padding="@dimen/join_input_padding"
 				android:textColor="@color/text_color"
 				android:textSize="@dimen/join_item_text" />
 
@@ -301,16 +302,16 @@
 				android:id="@+id/contract_container"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:overScrollMode="never"
-				android:layout_marginTop="@dimen/join_contract_marginT"/>
+				android:layout_marginTop="@dimen/join_contract_marginT"
+				android:overScrollMode="never" />
 
 			<TextView
 				android:id="@+id/join_contract_warning"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/join_contract_warning_marginT"
-				android:padding="@dimen/join_input_padding"
 				android:fontFamily="@font/lotte_dream_bold"
+				android:padding="@dimen/join_input_padding"
 				android:textColor="@color/warning_color"
 				android:textSize="@dimen/join_check_text" />
 
@@ -318,15 +319,15 @@
 				android:id="@+id/join_confirm_btn"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:gravity="center"
-				android:background="@drawable/account_stroke_box"
-				android:paddingVertical="@dimen/join_btn_paddingV"
-				android:layout_marginTop="@dimen/join_btn_marginT"
 				android:layout_marginHorizontal="@dimen/join_btn_marginH"
+				android:layout_marginTop="@dimen/join_btn_marginT"
+				android:background="@drawable/account_stroke_box"
 				android:fontFamily="@font/lotte_dream_bold"
+				android:gravity="center"
+				android:paddingVertical="@dimen/join_btn_paddingV"
+				android:text="회원가입"
 				android:textColor="@color/text_color"
-				android:textSize="@dimen/join_btn_text"
-				android:text="회원가입"/>
+				android:textSize="@dimen/join_btn_text" />
 		</LinearLayout>
 	</ScrollView>
 </LinearLayout>

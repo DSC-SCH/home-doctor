@@ -18,14 +18,7 @@ class PermissionActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.permission_activity)
 
-		/*
-		// TODO("Remove above lines")
-		val intent = Intent(this@PermissionActivity, LoginActivity::class.java)
-		startActivity(intent)
-		finish()
-		// */
-
-		val sp = getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+		val sp = SPHandler.getSp(this@PermissionActivity)
 		val isPermissionChecked = sp.getBoolean(SP_PERMISSION, false)
 
 		if (isPermissionChecked)

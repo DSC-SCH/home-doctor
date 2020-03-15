@@ -13,7 +13,7 @@
 		android:gravity="center"
 		android:paddingVertical="@dimen/label_paddingV"
 		android:layout_margin="@dimen/label_marginH"
-		android:fontFamily="@font/daylight_210"
+		android:fontFamily="@font/nanum_square_ac"
 		android:textSize="@dimen/label_text"
 		android:textColor="@color/text_color"
 		android:text="+" />

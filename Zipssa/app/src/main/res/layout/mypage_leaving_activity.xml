@@ -26,7 +26,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			android:text="서비스 탈퇴"
-			android:fontFamily="@font/bmjua"
+			android:fontFamily="@font/lotte_dream_bold"
 			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
 	</FrameLayout>
@@ -143,6 +143,16 @@
 						android:textColor="@color/text_color"
 						android:hint="기타 사유"/>
 				</LinearLayout>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:layout_marginTop="@dimen/leaving_warning_marginT"
+					android:fontFamily="@font/lotte_dream_bold"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="※ 최대 2개까지 선택 가능합니다 ※"/>
 			</LinearLayout>
 
 			<LinearLayout

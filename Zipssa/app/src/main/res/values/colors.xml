@@ -10,16 +10,18 @@
     <color name="text_color">#707070</color>
     <color name="text_color_gray">#B5B5B5</color>
     <color name="split_line">#E1E1E1</color>
+    <color name="box_theme">#F7F7F7</color>
 
     <color name="main_bottom_bar">#FAFAFA</color>
     <color name="main_bottom_bar_text">@color/text_color</color>
     <color name="main_bottom_bar_split">#F7F7F7</color>
     <color name="main_bottom_bar_selected">#E1E1E1</color>
 
+    <color name="button_theme">#E1E1E1</color>
+
     <color name="main_list_text">#009AFA</color>
     <color name="main_list_remain_time">#74B9F2</color>
     <color name="main_list_item">#FFFFFF</color>
-    <color name="box_theme">#FFFFFF</color>
     <color name="white_pressed">#E6E6E6</color>
     <color name="bottom_bar_text">#FFFFFF</color>
 

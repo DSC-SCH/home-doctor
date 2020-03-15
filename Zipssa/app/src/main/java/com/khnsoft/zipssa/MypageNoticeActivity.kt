@@ -1,11 +1,13 @@
 package com.khnsoft.zipssa
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,8 +22,9 @@ class MypageNoticeActivity : AppCompatActivity() {
 
 		back_btn.setOnClickListener { onBackPressed() }
 
-		// TODO("Get notice from server")
-		val adapter = NoticeRecyclerAdapter(JsonArray())
+		val lNotice = ServerHandler.send(this@MypageNoticeActivity, EndOfAPI.GET_NOTICES)["data"].asJsonArray
+
+		val adapter = NoticeRecyclerAdapter(lNotice)
 		val lm = LinearLayoutManager(this@MypageNoticeActivity)
 		notice_container.layoutManager = lm
 		notice_container.adapter = adapter
@@ -33,6 +36,7 @@ class MypageNoticeActivity : AppCompatActivity() {
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 			val date = itemView.findViewById<TextView>(R.id.notice_date)
 			val title = itemView.findViewById<TextView>(R.id.notice_title)
+			val container = itemView.findViewById<LinearLayout>(R.id.notice_item_container)
 		}
 
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,8 +49,11 @@ class MypageNoticeActivity : AppCompatActivity() {
 		}
 
 		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-			// TODO("Match data to layout")
-			// TODO("Set onClickListener --> to notice_detail")
+			// TODO("Server: Match data to layout")
+			holder.container.setOnClickListener {
+				val intent = Intent(this@MypageNoticeActivity, MypageNoticeDetailActivity::class.java)
+				startActivity(intent)
+			}
 		}
 	}
 }

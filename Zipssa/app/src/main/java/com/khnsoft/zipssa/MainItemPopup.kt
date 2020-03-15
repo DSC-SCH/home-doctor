@@ -12,14 +12,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.list_item_popup.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class MainItemPopup : AppCompatActivity() {
-    val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
-    val sdf_date_show = SimpleDateFormat("M'월' d'일'", Locale.KOREA)
-    val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
-    val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
 
     lateinit var animOpen: Animation
     lateinit var animClose: Animation
@@ -32,8 +27,10 @@ class MainItemPopup : AppCompatActivity() {
         setContentView(R.layout.list_item_popup)
         setupFloatingPosition()
 
-        val _id = intent.getIntExtra(ExtraAttr.EXTRA_ALARM_ID.extra, -1)
-        val jItem = ServerHandler.send(this@MainItemPopup, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
+        val _id = intent.getIntExtra(ExtraAttr.ALARM_ID, -1)
+        val jTemp = if (UserData.careUser == null) ServerHandler.send(this@MainItemPopup, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
+        else ServerHandler.send(this@MainItemPopup, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)
+        val jItem = ServerHandler.convertKeys(jTemp, ServerHandler.alarmToLocal)
 
         val drawable = alarm_label.background as GradientDrawable
         drawable.setColor(Color.parseColor("${jItem["label_color"].asString}"))
@@ -41,9 +38,9 @@ class MainItemPopup : AppCompatActivity() {
         alarm_title.text = jItem["alarm_title"].asString
         alarm_switch.isChecked = AlarmParser.parseStatus(jItem["alarm_enabled"].asString) == AlarmStatus.ENABLED
         start_date.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["alarm_start_date"].asString))
+        start_date.text = SDF.monthDateInKorean.format(SDF.dateBar.parse(jItem["alarm_start_date"].asString))
         end_date.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        end_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["alarm_end_date"].asString))
+        end_date.text = SDF.monthDateInKorean.format(SDF.dateBar.parse(jItem["alarm_end_date"].asString))
 
         val jTimes = AlarmParser.parseTimes(jItem["alarm_times"].asString)
         alarm_count.text = "${jTimes.size()}"
@@ -55,20 +52,21 @@ class MainItemPopup : AppCompatActivity() {
             times_container.addView(timeBox)
             timeView = findViewById(R.id.time_item)
             timeView.id = 0
-            timeView.text = sdf_time_show.format(sdf_time_save.parse(item.asString))
+            timeView.text = SDF.timeInKorean.format(SDF.time.parse(item.asString))
         }
 
+        if (UserData.careUser != null)
+            alarm_switch.isEnabled = false
         alarm_switch.setOnCheckedChangeListener { buttonView, isChecked ->
             val json = JsonObject()
             json.addProperty("alarm_enabled", if (isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
 
-            val result = ServerHandler.send(this@MainItemPopup, EndOfAPI.CHANGE_ALARM, json, jItem["alarm_id"].asInt)
+            val result = ServerHandler.send(this@MainItemPopup, EndOfAPI.CHANGE_ALARM_STATE, json, _id)
 
             if (!HttpHelper.isOK(result))
                 alarm_switch.isChecked = false
         }
 
-        // TODO("Abort since current date")
         animOpen = AnimationUtils.loadAnimation(this@MainItemPopup, R.anim.floating_open)
         animClose = AnimationUtils.loadAnimation(this@MainItemPopup, R.anim.floating_close)
         layoutAnimOpen = AnimationUtils.loadAnimation(this@MainItemPopup, R.anim.floating_layout_open)
@@ -92,7 +90,7 @@ class MainItemPopup : AppCompatActivity() {
             }
             val dataId = DataPasser.insert(data)
 			val intent = Intent(this@MainItemPopup, MyAlertPopup::class.java)
-			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+			intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 			startActivity(intent)
         }
 
@@ -100,17 +98,21 @@ class MainItemPopup : AppCompatActivity() {
             val calYesterday = Calendar.getInstance()
             calYesterday.add(Calendar.DAY_OF_MONTH, -1)
             val json = JsonObject()
-            json.addProperty("alarm_end_date", sdf_date_save.format(calYesterday))
-            ServerHandler.send(this@MainItemPopup, EndOfAPI.EDIT_ALARM, json, jItem["ALARM_ID"].asInt)
+            json.addProperty("alarm_end_date", SDF.dateBar.format(calYesterday))
+            val result = if (UserData.careUser == null) ServerHandler.send(this@MainItemPopup, EndOfAPI.EDIT_ALARM, json, _id)
+            else ServerHandler.send(this@MainItemPopup, EndOfAPI.SYNC_EDIT_ALARM, json, UserData.careUser, _id)
 
-			val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {
-				alertTitle = jItem["alarm_title"].asString
-				alertContent = "이후 모든 알림이 중단되었습니다."
-			}
-			val dataId = DataPasser.insert(data)
-			val intent = Intent(this@MainItemPopup, MyAlertPopup::class.java)
-			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
-			startActivity(intent)
+            if (HttpHelper.isOK(result)) {
+                val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {
+                    alertTitle = jItem["alarm_title"].asString
+                    alertContent = "이후 모든 알림이 중단되었습니다."
+                }
+                val dataId = DataPasser.insert(data)
+                val intent = Intent(this@MainItemPopup, MyAlertPopup::class.java)
+                intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
+                startActivity(intent)
+                finish()
+            }
         }
 
         confirm_btn.setOnClickListener {
@@ -119,7 +121,7 @@ class MainItemPopup : AppCompatActivity() {
 
         edit_btn.setOnClickListener {
             val intent = Intent(this@MainItemPopup, EditAlarmActivity::class.java)
-            intent.putExtra(ExtraAttr.EXTRA_ALARM_ID.extra, _id)
+            intent.putExtra(ExtraAttr.ALARM_ID, _id)
             startActivity(intent)
             finish()
         }

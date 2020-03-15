@@ -26,7 +26,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			android:text="계정 연동"
-			android:fontFamily="@font/bmjua"
+			android:fontFamily="@font/lotte_dream_bold"
 			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
 

@@ -57,7 +57,6 @@ class MypageLabelActivity : AppCompatActivity() {
 		}
 
 		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-			// TODO("Match data to layout")
 			val jItem = ServerHandler.convertKeys(lLabels[position].asJsonObject, ServerHandler.labelToLocal)
 
 			val drawable = holder.color.background as GradientDrawable
@@ -65,7 +64,7 @@ class MypageLabelActivity : AppCompatActivity() {
 			holder.title.text = jItem["label_title"].asString
 			holder.edit.setOnClickListener {
 				val intent = Intent(this@MypageLabelActivity, EditLabelPopup::class.java)
-				intent.putExtra(EditLabelPopup.EXTRA_LABEL, jItem.toString())
+				intent.putExtra(ExtraAttr.LABEL, jItem.toString())
 				startActivity(intent)
 			}
 
@@ -86,14 +85,14 @@ class MypageLabelActivity : AppCompatActivity() {
 						val dataId = DataPasser.insert(data)
 
 						val intent = Intent(this@MypageLabelActivity, MyAlertPopup::class.java)
-						intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+						intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 						startActivity(intent)
 					}
 				}
 
 				val dataId = DataPasser.insert(data)
 				val intent = Intent(this@MypageLabelActivity, MyAlertPopup::class.java)
-				intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+				intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 				startActivityForResult(intent, MyAlertPopup.RC)
 			}
 		}
@@ -103,7 +102,7 @@ class MypageLabelActivity : AppCompatActivity() {
 		super.onActivityResult(requestCode, resultCode, data)
 
 		if (requestCode == MyAlertPopup.RC) {
-			if (data != null && data.getIntExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
+			if (data != null && data.getIntExtra(ExtraAttr.POPUP_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
 				refresh()
 		}
 	}

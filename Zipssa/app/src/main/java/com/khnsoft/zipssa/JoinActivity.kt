@@ -16,12 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.account_join_activity.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 class JoinActivity : AppCompatActivity() {
-	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
-	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -41,7 +38,6 @@ class JoinActivity : AppCompatActivity() {
 			else -> {}
 		}
 
-		// TODO("Get contracts from API")
 		val lContract = ServerHandler.send(this@JoinActivity, EndOfAPI.GET_CONTRACTS)["data"].asJsonArray
 
 		val adapter = ContractRecyclerAdapter(lContract)
@@ -57,7 +53,7 @@ class JoinActivity : AppCompatActivity() {
 				curCal[Calendar.YEAR] = year
 				curCal[Calendar.MONTH] = month
 				curCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				birthday_input.text = sdf_date_show.format(curCal.time)
+				birthday_input.text = SDF.dateInKorean.format(curCal.time)
 				birthdaySelected = true
 			}, curCal[Calendar.YEAR], curCal[Calendar.MONTH], curCal[Calendar.DAY_OF_MONTH]).show()
 		}
@@ -115,7 +111,7 @@ class JoinActivity : AppCompatActivity() {
 			if (isOK) {
 				val json = JsonObject()
 				json.addProperty("username", name_input.text.toString())
-				json.addProperty("birthday", sdf_date_save.format(curCal.time))
+				json.addProperty("birthday", SDF.dateBar.format(curCal.time))
 				json.addProperty("email", email_input.text.toString())
 				json.addProperty("snsType", _sns_type)
 				json.addProperty("snsId", _sns_id)
@@ -126,16 +122,15 @@ class JoinActivity : AppCompatActivity() {
 
 				if (HttpHelper.isOK(result)) {
 					val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {
-						// TODO("Change text")
 						alertTitle = "가입 성공"
-						alertContent = "가입 성공"
+						alertContent = "서비스에 가입되었습니다."
 					}
 					val dataId = DataPasser.insert(data)
 					val intent = Intent(this@JoinActivity, MyAlertPopup::class.java)
-					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+					intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 					startActivity(intent)
 
-					val sp = getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+					val sp = SPHandler.getSp(this@JoinActivity)
 					val editor = sp.edit()
 					editor.putString(LoginActivity.SP_LOGIN, _sns_type)
 					editor.apply()
@@ -146,6 +141,7 @@ class JoinActivity : AppCompatActivity() {
 
 					val intent2 = Intent(this@JoinActivity, LoadingActivity::class.java)
 					startActivity(intent2)
+					LoginActivity.curActivity?.finish()
 					finish()
 				}
 			}
@@ -187,9 +183,9 @@ class JoinActivity : AppCompatActivity() {
 			holder.content.text = jItem["content"].asString
 			holder.content.setOnClickListener {
 				val intent = Intent(this@JoinActivity, ContractActivity::class.java)
-				intent.putExtra(ContractActivity.EXTRA_NUM, position)
-				intent.putExtra(ContractActivity.EXTRA_CONTRACT, jItem.toString())
-				intent.putExtra(ContractActivity.EXTRA_CHECKED, holder.title.isChecked)
+				intent.putExtra(ExtraAttr.CONTRACT_NUM, position)
+				intent.putExtra(ExtraAttr.CONTRACT, jItem.toString())
+				intent.putExtra(ExtraAttr.CONTRACT_CHECKED, holder.title.isChecked)
 				startActivityForResult(intent, ContractActivity.RC_CONTRACT)
 			}
 		}
@@ -198,9 +194,9 @@ class JoinActivity : AppCompatActivity() {
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
-		if (requestCode == ContractActivity.RC_CONTRACT) {
-			val holder = contract_container.findViewHolderForAdapterPosition(data!!.getIntExtra(ContractActivity.EXTRA_NUM, -1)) as ContractRecyclerAdapter.ViewHolder
-			holder.title.isChecked = data.getBooleanExtra(ContractActivity.EXTRA_CHECKED, false)
+		if (requestCode == ContractActivity.RC_CONTRACT && data != null) {
+			val holder = contract_container.findViewHolderForAdapterPosition(data!!.getIntExtra(ExtraAttr.CONTRACT_NUM, -1)) as ContractRecyclerAdapter.ViewHolder
+			holder.title.isChecked = data.getBooleanExtra(ExtraAttr.CONTRACT_CHECKED, false)
 		}
 	}
 }

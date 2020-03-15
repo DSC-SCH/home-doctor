@@ -1,5 +1,6 @@
 package com.khnsoft.zipssa
 
+import android.util.Log
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -16,7 +17,6 @@ class HttpHelper {
 
         init {
             ERROR_MSG.addProperty("status", ERROR_CODE)
-            ERROR_MSG.addProperty("message", "내부 서버 실행 오류")
             OK_MSG.addProperty("status", OK_CODE)
             OK_MSG.addProperty("message", "내부 서버 실행 성공")
         }
@@ -30,8 +30,15 @@ class HttpHelper {
             }
         }
 
-        fun getError() : JsonObject {
-            return ERROR_MSG
+        fun getError(msg: String? = null) : JsonObject {
+            val ret = ERROR_MSG.deepCopy()
+            if (msg == null) {
+                ret.addProperty("message", "오류 발생")
+            } else {
+                ret.addProperty("message", msg)
+            }
+            MyLogger.e("Execute Error", ret.toString())
+            return ret
         }
 
         fun getOK(data : JsonElement? = null) : JsonObject {

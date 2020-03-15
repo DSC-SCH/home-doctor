@@ -15,7 +15,6 @@ import android.graphics.drawable.StateListDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,33 +27,28 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.add_alarm_activity.*
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 
 class AddAlarmActivity : AppCompatActivity() {
-	val sdf_time_show = SimpleDateFormat("a h:mm", Locale.KOREA)
-	val sdf_time_save = SimpleDateFormat("HH:mm", Locale.KOREA)
-	val sdf_date_show = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
-	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 	val DEFAULT_TIMES = JsonParser.parseString(
-		"""[
-		|[],
-		|["오전 9:00"],
-		|["오전 9:00", "오후 7:00"],
-		|["오전 9:00", "오후 1:00", "오후 7:00"],
-		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00"],
-		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00"],
-		|["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00"]
-	]""".trimMargin()
+		"""
+		[
+			[],
+			["오전 9:00"],
+			["오전 9:00", "오후 7:00"],
+			["오전 9:00", "오후 1:00", "오후 7:00"],
+			["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00"],
+			["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00"],
+			["오전 9:00", "오전 11:00", "오후 1:00", "오후 3:00", "오후 5:00", "오후 7:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00", "오후 9:00"]
+		]
+		""".trimIndent()
 	).asJsonArray
 
 	lateinit var radioGroup: MyRadioGroup
 	var labelSelected = -1
 
 	val images = mutableListOf<Bitmap>()
-
-	// TODO("Camera and photo")
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -66,20 +60,25 @@ class AddAlarmActivity : AppCompatActivity() {
 		}
 
 		// Setting image button
-		image_from_camera.setOnClickListener {
-			val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-			startActivityForResult(intent, PhotoAttr.CAMERA.rc)
-		}
+		if (UserData.careUser == null) {
+			image_from_camera.setOnClickListener {
+				val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+				startActivityForResult(intent, PhotoAttr.CAMERA.rc)
+			}
 
-		image_from_gallery.setOnClickListener {
-			val intent = Intent(Intent.ACTION_PICK)
-			intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
-			startActivityForResult(intent, PhotoAttr.GALLERY.rc)
+			image_from_gallery.setOnClickListener {
+				val intent = Intent(Intent.ACTION_PICK)
+				intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
+				startActivityForResult(intent, PhotoAttr.GALLERY.rc)
+			}
+		} else {
+			image_section.visibility = View.GONE
 		}
 
 		// Setting alarm time
 		val alarm_counts_array = resources.getStringArray(R.array.alarm_times)
-		val arrayAdapter = ArrayAdapter<String>(applicationContext, R.layout.alarm_count_spinner_item, alarm_counts_array)
+		val arrayAdapter =
+			ArrayAdapter<String>(applicationContext, R.layout.alarm_count_spinner_item, alarm_counts_array)
 		arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
 		alarm_times.adapter = arrayAdapter
 
@@ -111,16 +110,24 @@ class AddAlarmActivity : AppCompatActivity() {
 		// Setting start and end date
 		val startCal = Calendar.getInstance()
 		val endCal = Calendar.getInstance()
+		endCal.time = startCal.time
 		endCal.add(Calendar.DAY_OF_MONTH, 6)
-		add_start_date.text = sdf_date_show.format(startCal.time)
-		add_end_date.text = sdf_date_show.format(endCal.time)
+		add_start_date.text = SDF.dateInKorean.format(startCal.time)
+		add_end_date.text = SDF.dateInKorean.format(endCal.time)
 
 		add_start_date.setOnClickListener {
 			DatePickerDialog(this@AddAlarmActivity, { view, year, month, dayOfMonth ->
 				startCal[Calendar.YEAR] = year
 				startCal[Calendar.MONTH] = month
 				startCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				add_start_date.text = sdf_date_show.format(startCal.time)
+				add_start_date.text = SDF.dateInKorean.format(startCal.time)
+
+				if (startCal.timeInMillis > endCal.timeInMillis) {
+					endCal[Calendar.YEAR] = year
+					endCal[Calendar.MONTH] = month
+					endCal[Calendar.DAY_OF_MONTH] = dayOfMonth
+					add_end_date.text = SDF.dateInKorean.format(endCal.time)
+				}
 			}, startCal[Calendar.YEAR], startCal[Calendar.MONTH], startCal[Calendar.DAY_OF_MONTH]).show()
 		}
 
@@ -129,7 +136,14 @@ class AddAlarmActivity : AppCompatActivity() {
 				endCal[Calendar.YEAR] = year
 				endCal[Calendar.MONTH] = month
 				endCal[Calendar.DAY_OF_MONTH] = dayOfMonth
-				add_end_date.text = sdf_date_show.format(endCal.time)
+				add_end_date.text = SDF.dateInKorean.format(endCal.time)
+
+				if (startCal.timeInMillis > endCal.timeInMillis) {
+					startCal[Calendar.YEAR] = year
+					startCal[Calendar.MONTH] = month
+					startCal[Calendar.DAY_OF_MONTH] = dayOfMonth
+					add_start_date.text = SDF.dateInKorean.format(startCal.time)
+				}
 			}, endCal[Calendar.YEAR], endCal[Calendar.MONTH], endCal[Calendar.DAY_OF_MONTH]).show()
 		}
 
@@ -166,7 +180,7 @@ class AddAlarmActivity : AppCompatActivity() {
 		}
 
 		// Setting submit the input
-		submit_button.setOnClickListener {
+		submit_btn.setOnClickListener {
 			val count = add_times_switch.tag as Int
 
 			if (radioGroup.getCheckedIndex() == -1) {
@@ -175,10 +189,10 @@ class AddAlarmActivity : AppCompatActivity() {
 			}
 
 			val lTimes = mutableListOf<String>()
-			for (i in 0..count - 1) {
+			for (i in 0..count-1) {
 				val holder =
 					add_time_container.getChildViewHolder(add_time_container[i]) as AddTimeRecyclerAdapter.ViewHolder
-				lTimes.add(sdf_time_save.format(sdf_time_show.parse(holder.time.text.toString())))
+				lTimes.add(SDF.time.format(SDF.timeInKorean.parse(holder.time.text.toString())))
 			}
 			lTimes.sort()
 			lTimes.toString()
@@ -205,17 +219,23 @@ class AddAlarmActivity : AppCompatActivity() {
 			json.addProperty("alarm_title", add_title.text.toString())
 			json.addProperty("alarm_user", UserData.id)
 			json.addProperty("alarm_label", radioGroup.radios[radioGroup.getCheckedIndex()].tag as Int)
-			json.addProperty("alarm_start_date", sdf_date_save.format(startCal.time))
-			json.addProperty("alarm_end_date", sdf_date_save.format(endCal.time))
+			json.addProperty("alarm_start_date", SDF.dateBar.format(startCal.time))
+			json.addProperty("alarm_end_date", SDF.dateBar.format(endCal.time))
 			json.addProperty("alarm_times", lTimes.joinToString("/"))
 			json.addProperty("alarm_repeats", lRepeats.joinToString("/"))
-			json.addProperty("alarm_enabled", if (add_times_switch.isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
-			json.addProperty("created_date", sdf_date_save.format(curCal.time))
-			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
+			json.addProperty(
+				"alarm_enabled",
+				if (add_times_switch.isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status
+			)
 
-			val result = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_ALARM, json)
+			val result =
+				if (UserData.careUser == null) ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_ALARM, json)
+				else ServerHandler.send(this@AddAlarmActivity, EndOfAPI.SYNC_ADD_ALARM, json, UserData.careUser)
 
-			if (HttpHelper.isOK(result)) {
+			if (!HttpHelper.isOK(result)) return@setOnClickListener
+
+			if (UserData.careUser == null) {
+				val jData = result["data"].asJsonObject
 				val json2 = JsonObject()
 				val lImages = JsonArray()
 
@@ -225,16 +245,16 @@ class AddAlarmActivity : AppCompatActivity() {
 
 				json2.add("image", lImages)
 
-				val result2 = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_IMAGE, json2, result["data"].asInt)
+				val result2 = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_IMAGE, json2, jData["id"].asInt)
 
-				if (HttpHelper.isOK(result2))
-					finish()
+				if (!HttpHelper.isOK(result2)) return@setOnClickListener
 			}
+
+			finish()
 		}
 	}
 
 	fun refreshImages() {
-		Log.i("@@@", "Refresh images")
 		val adapter = PhotoRecyclerAdapter()
 		val lm = LinearLayoutManager(this@AddAlarmActivity, LinearLayoutManager.HORIZONTAL, false)
 		image_container.layoutManager = lm
@@ -286,6 +306,7 @@ class AddAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
+		// TODO("Server: Get sync user labels")
 		val lLabels = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
 		val labelSize = lLabels.size()
 		var count = 0
@@ -301,7 +322,7 @@ class AddAlarmActivity : AppCompatActivity() {
 		var unselected: GradientDrawable
 
 		add_label_container.removeAllViews()
-		label@while (count < labelSize) {
+		label@ while (count < labelSize) {
 			labelLine = AlarmLabelLine(this@AddAlarmActivity)
 			add_label_container.addView(labelLine)
 			for (i in 0..3) {
@@ -339,7 +360,7 @@ class AddAlarmActivity : AppCompatActivity() {
 			add_label_container.addView(labelLine)
 		}
 
-		labelBox = findViewById<LinearLayout>(resources.getIdentifier("label_box_0${count%4}", "id", packageName))
+		labelBox = findViewById<LinearLayout>(resources.getIdentifier("label_box_0${count % 4}", "id", packageName))
 
 		val addLabelbox = AlarmLabelPlus(this@AddAlarmActivity)
 		labelBox?.addView(addLabelbox)
@@ -379,11 +400,11 @@ class AddAlarmActivity : AppCompatActivity() {
 			holder.time.text = lTimes[position].asString
 			holder.time.setOnClickListener {
 				val cal = Calendar.getInstance()
-				cal.time = sdf_time_show.parse(holder.time.text.toString())
+				cal.time = SDF.timeInKorean.parse(holder.time.text.toString())
 				TimePickerDialog(this@AddAlarmActivity, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
 					cal[Calendar.HOUR_OF_DAY] = hourOfDay
 					cal[Calendar.MINUTE] = minute
-					holder.time.text = sdf_time_show.format(cal.time)
+					holder.time.text = SDF.timeInKorean.format(cal.time)
 				}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
 			}
 		}

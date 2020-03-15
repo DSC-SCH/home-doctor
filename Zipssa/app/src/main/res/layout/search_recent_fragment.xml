@@ -14,7 +14,7 @@
 		android:textSize="@dimen/search_recent_text"
 		android:textColor="@color/text_color" />
 
-	<LinearLayout
+	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/search_recent_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

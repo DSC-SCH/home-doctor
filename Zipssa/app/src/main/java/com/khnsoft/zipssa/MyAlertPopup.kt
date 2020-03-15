@@ -1,8 +1,8 @@
 package com.khnsoft.zipssa
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,9 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 class MyAlertPopup: AppCompatActivity() {
 
 	companion object {
-		const val EXTRA_DATA = "data_id"
-		const val EXTRA_RESULT = "result"
 		const val RC = 100
+
+		fun needOnline(context: Context?) {
+			val data = Data(AlertType.CONFIRM)
+			data.alertTitle = "서비스 제한"
+			data.alertContent = "로그인이 필요한 서비스입니다."
+			val dataId = DataPasser.insert(data)
+
+			val intent = Intent(context, MyAlertPopup::class.java)
+			intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
+			context?.startActivity(intent)
+		}
 	}
 
 	class Data(var type: AlertType) {
@@ -24,13 +33,11 @@ class MyAlertPopup: AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		val data_id = intent.getIntExtra(EXTRA_DATA, -1)
+		val data_id = intent.getIntExtra(ExtraAttr.POPUP_DATA, -1)
 		val data = DataPasser.pop(data_id)
 		if (data == null) finish()
 
 		val type = data!!.type
-
-		Log.i("@@@", "Open")
 
 		if (type == AlertType.CONFIRM) {
 			setContentView(R.layout.popup_confirm)
@@ -48,7 +55,7 @@ class MyAlertPopup: AppCompatActivity() {
 				data.confirmListener.onClick(it)
 
 				val resultIntent = Intent()
-				resultIntent.putExtra(EXTRA_RESULT, StatusCode.SUCCESS.status)
+				resultIntent.putExtra(ExtraAttr.POPUP_RESULT, StatusCode.SUCCESS.status)
 				setResult(RC, resultIntent)
 
 				finish()

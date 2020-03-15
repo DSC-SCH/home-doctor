@@ -25,7 +25,7 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
 			android:text="약관 명칭"
-			android:fontFamily="@font/bmjua"
+			android:fontFamily="@font/lotte_dream_bold"
 			android:textSize="@dimen/titlebar_title_text"
 			android:textColor="#FFFFFF" />
 	</FrameLayout>
@@ -34,6 +34,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:padding="@dimen/join_padding"
+		android:background="#FFFFFF"
+		android:layout_marginTop="@dimen/mypage_marginV"
 		android:orientation="vertical">
 
 		<CheckBox

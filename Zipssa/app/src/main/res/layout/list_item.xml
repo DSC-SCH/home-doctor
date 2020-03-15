@@ -15,7 +15,7 @@
 		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:elevation="@dimen/shadow_size"
-		android:fontFamily="@font/bmjua"
+		android:fontFamily="@font/lotte_dream_bold"
 		android:textSize="@dimen/main_item_remain_text"
 		android:textColor="@color/main_list_remain_time"
 		android:text="0h 00m"
@@ -81,7 +81,7 @@
 						android:layout_marginHorizontal="@dimen/main_item_title_marginH"
 						android:paddingHorizontal="@dimen/main_item_title_paddingH"
 						android:paddingVertical="@dimen/main_item_title_paddingV"
-						android:fontFamily="@font/bmjua"
+						android:fontFamily="@font/bareun_dotum"
 						android:text="감기약"
 						android:textSize="@dimen/main_item_title_text"
 						android:textColor="@color/text_color"/>
@@ -117,7 +117,7 @@
 						android:layout_height="wrap_content"
 						android:gravity="center"
 						android:layout_marginHorizontal="@dimen/main_item_content_distanceH"
-						android:fontFamily="@font/daylight_210"
+						android:fontFamily="@font/nanum_square_ac"
 						android:text="1회 복용"
 						android:textSize="@dimen/main_item_content_text"
 						android:textColor="@color/text_color"/>
@@ -147,7 +147,7 @@
 						android:layout_height="wrap_content"
 						android:gravity="center"
 						android:layout_marginHorizontal="@dimen/main_item_content_distanceH"
-						android:fontFamily="@font/daylight_210"
+						android:fontFamily="@font/nanum_square_ac"
 						android:text="D-0"
 						android:textSize="@dimen/main_item_content_text"
 						android:textColor="@color/text_color"/>
@@ -172,7 +172,7 @@
 						android:layout_height="wrap_content"
 						android:gravity="center"
 						android:layout_marginLeft="@dimen/main_item_content_distanceH"
-						android:fontFamily="@font/daylight_210"
+						android:fontFamily="@font/nanum_square_ac"
 						android:text="00.00.00"
 						android:textSize="@dimen/main_date_text"
 						android:textColor="@color/text_color"/>
@@ -181,7 +181,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:gravity="center"
-						android:fontFamily="@font/daylight_210"
+						android:fontFamily="@font/nanum_square_ac"
 						android:text=" ~ "
 						android:textSize="@dimen/main_date_text"
 						android:textColor="@color/text_color"/>
@@ -191,7 +191,7 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:gravity="center"
-						android:fontFamily="@font/daylight_210"
+						android:fontFamily="@font/nanum_square_ac"
 						android:text="00.00.00"
 						android:textSize="@dimen/main_date_text"
 						android:textColor="@color/text_color"/>

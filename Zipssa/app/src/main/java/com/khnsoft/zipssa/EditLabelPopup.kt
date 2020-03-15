@@ -18,21 +18,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class EditLabelPopup : AppCompatActivity() {
-	companion object {
-		const val EXTRA_LABEL = "label"
-	}
 
 	val LABELS_COLORS = listOf<String>(
 		"#FF7070", "#FFD4C4", "#FFFFBE", "#CAFFA7", "#6FD472",
 		"#A9E6DA", "#74B9F2", "#B1E1FE", "#919CD4", "#E3DAF9",
 		"#DFBBE9", "#F194DE", "#FFE2F7", "#D4D4D4", "#B29090")
-	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.edit_label_popup)
 
-		val _jItem = JsonParser.parseString(intent.getStringExtra(EXTRA_LABEL)).asJsonObject
+		val _jItem = JsonParser.parseString(intent.getStringExtra(ExtraAttr.LABEL)).asJsonObject
 
 		// Setting labels
 		val radioGroup = MyRadioGroup()
@@ -79,7 +76,6 @@ class EditLabelPopup : AppCompatActivity() {
 					val json = JsonObject()
 					json.addProperty("label_title", label_title.text.toString())
 					json.addProperty("label_color", LABELS_COLORS[radioGroup.getCheckedIndex()])
-					json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
 					val result = ServerHandler.send(this@EditLabelPopup, EndOfAPI.EDIT_LABEL, json, _jItem["label_id"].asInt)
 					if (!HttpHelper.isOK(result)) return@OnClickListener
@@ -90,14 +86,14 @@ class EditLabelPopup : AppCompatActivity() {
 					val dataId = DataPasser.insert(data)
 
 					val intent = Intent(this@EditLabelPopup, MyAlertPopup::class.java)
-					intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+					intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 					startActivity(intent)
 				}
 			}
 
 			val dataId = DataPasser.insert(data)
 			val intent = Intent(this@EditLabelPopup, MyAlertPopup::class.java)
-			intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+			intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 			startActivityForResult(intent, MyAlertPopup.RC)
 		}
 
@@ -108,7 +104,7 @@ class EditLabelPopup : AppCompatActivity() {
 		super.onActivityResult(requestCode, resultCode, data)
 
 		if (requestCode == MyAlertPopup.RC) {
-			if (data != null && data.getIntExtra(MyAlertPopup.EXTRA_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
+			if (data != null && data.getIntExtra(ExtraAttr.POPUP_RESULT, StatusCode.FAILED.status) == StatusCode.SUCCESS.status)
 				finish()
 		}
 	}

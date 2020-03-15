@@ -7,15 +7,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
 import kotlinx.android.synthetic.main.mypage_history_activity.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MypageHistoryActivity : AppCompatActivity() {
 	companion object {
@@ -24,10 +24,6 @@ class MypageHistoryActivity : AppCompatActivity() {
 	}
 
 	var curPage = PAGE_ALL
-
-	val sdf_date_show = SimpleDateFormat("yy.MM.dd", Locale.KOREA)
-	val sdf_date_created = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
-	val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -41,7 +37,7 @@ class MypageHistoryActivity : AppCompatActivity() {
 
 		radioGroup.setOnChangeListener(object: MyRadioGroup.OnChangeListener {
 			override fun onChange(after: RadioButton) {
-
+				changePage(if (after.id == R.id.history_photo) PAGE_PHOTO else PAGE_ALL)
 			}
 		})
 
@@ -64,10 +60,9 @@ class MypageHistoryActivity : AppCompatActivity() {
 				history_container.adapter = adapter
 			}
 			PAGE_PHOTO -> {
-				// TODO("Get photo from API")
-				val lPhoto = JsonArray()
+				val lPhoto = ServerHandler.send(this@MypageHistoryActivity, EndOfAPI.GET_ALL_IMAGES)["data"].asJsonArray
 
-				val lm = LinearLayoutManager(this@MypageHistoryActivity)
+				val lm = GridLayoutManager(this@MypageHistoryActivity, 2)
 				val adapter = PhotoRecyclerAdapter(lPhoto)
 				history_container.layoutManager = lm
 				history_container.adapter = adapter
@@ -77,31 +72,7 @@ class MypageHistoryActivity : AppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
-
 		refresh()
-	}
-
-	inner class PhotoRecyclerAdapter(val lPhoto: JsonArray) :
-		RecyclerView.Adapter<PhotoRecyclerAdapter.ViewHolder>() {
-
-		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-			val date = itemView.findViewById<TextView>(R.id.notice_date)
-			val title = itemView.findViewById<TextView>(R.id.notice_title)
-		}
-
-		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-			val view = LayoutInflater.from(this@MypageHistoryActivity).inflate(R.layout.mypage_history_photo_item, parent, false)
-			return ViewHolder(view)
-		}
-
-		override fun getItemCount(): Int {
-			return (lPhoto.size() + 1) / 2
-		}
-
-		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-			// TODO("Match data to layout")
-			// TODO("Set onClickListener --> to notice_detail")
-		}
 	}
 
 	inner class HistoryRecyclerAdapter(val lHistory: JsonArray) :
@@ -130,13 +101,47 @@ class MypageHistoryActivity : AppCompatActivity() {
 
 			holder.alarm_title.text = jItem["alarm_title"].asString
 			holder.alarm_title.setBackgroundColor(Color.parseColor(jItem["label_color"].asString))
-			holder.start_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["alarm_start_date"].asString))
-			holder.end_date.text = sdf_date_show.format(sdf_date_save.parse(jItem["alarm_end_date"].asString))
+			holder.start_date.text = SDF.dateDotShort.format(SDF.dateBar.parse(jItem["alarm_start_date"].asString))
+			holder.end_date.text = SDF.dateDotShort.format(SDF.dateBar.parse(jItem["alarm_end_date"].asString))
 			holder.alarm_count.text = AlarmParser.parseTimes(jItem["alarm_times"].asString).size().toString()
-			holder.created_date.text = sdf_date_created.format(sdf_date_save.parse(jItem["created_date"].asString))
+			holder.created_date.text = SDF.dateDot.format(SDF.dateBar.parse(jItem["created_date"].asString))
 			holder.container.setOnClickListener {
 				val intent = Intent(this@MypageHistoryActivity, MainItemPopup::class.java)
-				intent.putExtra(ExtraAttr.EXTRA_ALARM_ID.extra, jItem["alarm_id"].asInt)
+				intent.putExtra(ExtraAttr.ALARM_ID, jItem["alarm_id"].asInt)
+				startActivity(intent)
+			}
+		}
+	}
+
+	inner class PhotoRecyclerAdapter(val lPhoto: JsonArray) :
+		RecyclerView.Adapter<PhotoRecyclerAdapter.ViewHolder>() {
+
+		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+			val container = itemView.findViewById<LinearLayout>(R.id.image_container)
+			val image = itemView.findViewById<ImageView>(R.id.image_item)
+			val title = itemView.findViewById<TextView>(R.id.alarm_title)
+			val created_date = itemView.findViewById<TextView>(R.id.created_date)
+		}
+
+		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+			val view = LayoutInflater.from(this@MypageHistoryActivity).inflate(R.layout.mypage_history_photo_item, parent, false)
+			return ViewHolder(view)
+		}
+
+		override fun getItemCount(): Int {
+			return lPhoto.size()
+		}
+
+		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+			val jItem = ServerHandler.convertKeys(lPhoto[position].asJsonObject, ServerHandler.imageToLocal)
+
+			holder.title.text = jItem["alarm_title"].asString
+			holder.title.setBackgroundColor(Color.parseColor(jItem["label_color"].asString))
+			holder.image.setImageBitmap(ImageHelper.base64ToBitmap(jItem["image"].asString))
+			holder.created_date.text = SDF.dateDot.format(SDF.dateBar.parse(jItem["created_date"].asString))
+			holder.container.setOnClickListener {
+				val intent = Intent(this@MypageHistoryActivity, MypageHistoryPhotoDetailActivity::class.java)
+				intent.putExtra(ExtraAttr.CUR_PHOTO, position)
 				startActivity(intent)
 			}
 		}

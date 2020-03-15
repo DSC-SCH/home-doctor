@@ -54,7 +54,7 @@
 			android:layout_height="wrap_content"
 			android:padding="@dimen/popup_button_padding"
 			android:gravity="center"
-			android:fontFamily="@font/daylight_210"
+			android:fontFamily="@font/nanum_square_ac"
 			android:textSize="@dimen/popup_button_text"
 			android:textColor="@color/text_color"
 			android:text="확인"/>

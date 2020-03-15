@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,11 +17,11 @@ import com.kakao.auth.Session
 import com.khnsoft.zipssa.KakaoLogin.SessionCallback
 import kotlinx.android.synthetic.main.account_login_activity.*
 import java.lang.Exception
-import java.text.SimpleDateFormat
 import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 	companion object {
+		var curActivity : LoginActivity? = null
 		const val SP_LOGIN = "login"
 		const val SP_USER_ID = "user_id"
 
@@ -35,7 +34,9 @@ class LoginActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.account_login_activity)
 
-		val sp = getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+		curActivity = this@LoginActivity
+
+		val sp = SPHandler.getSp(this@LoginActivity)
 		val editor = sp.edit()
 
 		offline_btn.setOnClickListener {
@@ -44,16 +45,14 @@ class LoginActivity : AppCompatActivity() {
 			UserData.accountType = AccountType.OFFLINE
 			UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
 
-			val sdf_date_save = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+
 			val curCal = Calendar.getInstance()
 
 			val json = JsonObject()
 			json.addProperty("user_id", UserData.id)
 			json.addProperty("user_name", "약타미")
-			json.addProperty("created_date", sdf_date_save.format(curCal.time))
-			json.addProperty("last_modified_date", sdf_date_save.format(curCal.time))
 
-			ServerHandler.send(this@LoginActivity, EndOfAPI.USER_REGISTER, json)
+			ServerHandler.send(this@LoginActivity, EndOfAPI.OFFLINE_USER_REGISTER, json)
 			startLoading()
 		}
 
@@ -73,17 +72,15 @@ class LoginActivity : AppCompatActivity() {
 			.build()
 		mGoogleSignInClient = GoogleSignIn.getClient(this@LoginActivity, gso)
 
-		// TODO("Remove above line")
-		// startLoading()
-
 		//*
 		val accountType = AccountType.valueOf(sp.getString(SP_LOGIN, AccountType.NO_LOGIN.type)!!)
 		if (accountType != AccountType.NO_LOGIN) {
-			Log.i("@@@", accountType.type)
+			MyLogger.i("Login Type", accountType.type)
 			when (accountType) {
 				AccountType.OFFLINE -> {
 					UserData.accountType = AccountType.OFFLINE
 					UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
+					startLoading()
 				}
 				AccountType.KAKAO -> {
 					val session = Session.getCurrentSession()
@@ -93,13 +90,12 @@ class LoginActivity : AppCompatActivity() {
 				AccountType.GOOGLE -> {
 					val task = mGoogleSignInClient.silentSignIn()
 					if (task.isSuccessful) {
-						val account = task.getResult()
+						val account = task.result
 						validGoogle(account?:return)
 					}
 				}
 				else -> {}
 			}
-			startLoading()
 		}
 		// */
 	}
@@ -119,7 +115,6 @@ class LoginActivity : AppCompatActivity() {
 		super.onActivityResult(requestCode, resultCode, data)
 
 		if (requestCode == RC_GOOGLE) {
-			Log.i("@@@", "RC_GOOGLE")
 			val task = GoogleSignIn.getSignedInAccountFromIntent(data)
 			try {
 				val account = task.getResult(ApiException::class.java)
@@ -132,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
 
 	fun firebaseAuthWithGoogle(acct : GoogleSignInAccount?) {
 		if (acct == null) {
-			Log.i("Google Login", "Account is null")
+			MyLogger.e("Google Login", "Account is null")
 			return
 		}
 
@@ -141,13 +136,13 @@ class LoginActivity : AppCompatActivity() {
 			.addOnCompleteListener {
 				if (it.isSuccessful) {
 					if (acct.id == null) {
-						Log.i("Google Login", "Token is null")
+						MyLogger.e("Google Login", "Token is null")
 						return@addOnCompleteListener
 					}
 
 					validGoogle(acct)
 				} else {
-					Log.i("@@@", "Sign in failed")
+					MyLogger.e("Google Login", "Sign in failed")
 				}
 			}
 	}
@@ -165,7 +160,7 @@ class LoginActivity : AppCompatActivity() {
 				UserData.token = userData["token"].asString
 				UserData.id = userData["userId"].asInt
 
-				val sp = getSharedPreferences(SharedPreferencesSrc.SP_NAME, Context.MODE_PRIVATE)
+				val sp = SPHandler.getSp(this@LoginActivity)
 				if (sp.getInt(SP_USER_ID, UserData.DEFAULT_ID) != UserData.id) {
 					val editor = sp.edit()
 					editor.putInt(SP_USER_ID, UserData.id)
@@ -181,7 +176,6 @@ class LoginActivity : AppCompatActivity() {
 				intent.putExtra("name", "${acct.familyName}${acct.givenName}")
 				intent.putExtra("email", acct.email)
 				startActivity(intent)
-				finish()
 			}
 			else -> {
 				UserData.accountType = AccountType.NO_NETWORK

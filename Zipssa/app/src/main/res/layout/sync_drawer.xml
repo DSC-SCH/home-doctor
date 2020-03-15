@@ -28,6 +28,7 @@
 			android:layout_gravity="center">
 
 			<TextView
+				android:id="@+id/sync_name"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="이름"
@@ -57,5 +58,20 @@
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/crew_container"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:layout_height="0dp"
+		android:layout_weight="1"/>
+
+	<TextView
+		android:id="@+id/sync_back"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/main_account_back_btn"
+		android:visibility="gone"
+		android:paddingVertical="@dimen/sync_drawer_back_paddingV"
+		android:layout_margin="@dimen/sync_drawer_back_margin"
+		android:gravity="center"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textSize="@dimen/sync_drawer_title_text"
+		android:textColor="@color/text_color"
+		android:text="내 계정으로 나가기"/>
 </LinearLayout>

@@ -3,16 +3,19 @@ package com.khnsoft.zipssa
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.mypage_sync_activity.*
 
 class MypageSyncActivity : AppCompatActivity() {
@@ -36,23 +39,20 @@ class MypageSyncActivity : AppCompatActivity() {
 
 		edit_btn.setOnClickListener {
 			isEdit = !isEdit
-			refresh()
+			checkIsEdit()
 		}
 
-		manage_manager.setOnClickListener {
-			changePage(PAGE_MANAGER)
-		}
-
-		manage_crew.setOnClickListener {
-			changePage(PAGE_CREW)
-		}
-
-		// TODO("Validation code after deadline")
+		radioGroup.setOnChangeListener(object: MyRadioGroup.OnChangeListener {
+			override fun onChange(after: RadioButton) {
+				changePage(if (after.id == R.id.manage_manager) PAGE_MANAGER else PAGE_CREW)
+			}
+		})
 	}
 
 	fun changePage(page: Int) {
 		curPage = page
 		refresh()
+		checkIsEdit()
 	}
 
 	fun refresh() {
@@ -72,9 +72,12 @@ class MypageSyncActivity : AppCompatActivity() {
 		val adapter = SyncRecyclerAdapter(lSync)
 		sync_container.layoutManager = lm
 		sync_container.adapter = adapter
+	}
 
+	fun checkIsEdit() {
 		if (isEdit) {
 			edit_btn.text = "완료"
+
 			for (i in 0..sync_container.size-1) {
 				val holder = sync_container.findViewHolderForAdapterPosition(i) as SyncRecyclerAdapter.ViewHolder
 				holder.remove.visibility = View.VISIBLE
@@ -101,6 +104,10 @@ class MypageSyncActivity : AppCompatActivity() {
 		} else {
 			edit_btn.text = "수정"
 			add_btn.visibility = View.GONE
+			for (i in 0..sync_container.size-1) {
+				val holder = sync_container.findViewHolderForAdapterPosition(i) as SyncRecyclerAdapter.ViewHolder
+				holder.remove.visibility = View.GONE
+			}
 		}
 	}
 
@@ -129,11 +136,11 @@ class MypageSyncActivity : AppCompatActivity() {
 
 		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 			val jItem = lSync[position].asJsonObject
-			holder.name.text = jItem["name"].asString
+			holder.name.text = jItem["username"].asString
 			holder.remove.setOnClickListener {
 				val data = MyAlertPopup.Data(AlertType.ALERT).apply {
-					alertTitle = jItem["name"].asString
-					alertContent = "해당 사용자와 연동을 끊으시겠습니까?"
+					alertTitle = jItem["username"].asString
+					alertContent = "연동을 해지하시겠습니까?\n해지 시 상대방의 리스트에서도 연동이 해지됩니다."
 					alertConfirmText = "삭제"
 					confirmListener = View.OnClickListener {
 						val result = ServerHandler.send(this@MypageSyncActivity, EndOfAPI.SYNC_DELETE, id=jItem["connectionId"].asInt)
@@ -147,16 +154,18 @@ class MypageSyncActivity : AppCompatActivity() {
 						val dataId = DataPasser.insert(data)
 
 						val intent = Intent(this@MypageSyncActivity, MyAlertPopup::class.java)
-						intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+						intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 						startActivity(intent)
 					}
 				}
 
 				val dataId = DataPasser.insert(data)
 				val intent = Intent(this@MypageSyncActivity, MyAlertPopup::class.java)
-				intent.putExtra(MyAlertPopup.EXTRA_DATA, dataId)
+				intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 				startActivity(intent)
 			}
+
+			holder.remove.visibility = if (isEdit) View.VISIBLE else View.GONE
 		}
 	}
 }

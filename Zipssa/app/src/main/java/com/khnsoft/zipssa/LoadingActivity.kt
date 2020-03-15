@@ -10,11 +10,19 @@ class LoadingActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.loading_activity)
 
-		/*
-		val mHandler = DatabaseHandler.open(this@LoadingActivity)
-		mHandler.updateTables(UserData.id)
-		mHandler.close()
-		 */
+		if (UserData.accountType == AccountType.KAKAO || UserData.accountType == AccountType.GOOGLE) {
+			val result = ServerHandler.send(this@LoadingActivity, EndOfAPI.USER_GET)
+
+			MyLogger.d("@@@", result.toString())
+			if (HttpHelper.isOK(result)) {
+				UserData.name = result["data"].asJsonObject["username"].asString
+			}
+		}
+
+		// TODO("Remove above lines")
+		NotificationHandler.notify(this@LoadingActivity)
+
+		UserData.version = packageManager.getPackageInfo(packageName, 0).versionName
 
 		val intent = Intent(this@LoadingActivity, MainActivity::class.java)
 		startActivity(intent)

@@ -10,10 +10,6 @@ class ContractActivity : AppCompatActivity() {
 
 	companion object {
 		const val RC_CONTRACT = 100
-		const val EXTRA_CONTRACT = "contract"
-		const val EXTRA_CHECKED = "checked"
-
-		const val EXTRA_NUM = "num"
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +18,9 @@ class ContractActivity : AppCompatActivity() {
 
 		back_btn.setOnClickListener { onBackPressed() }
 
-		val num = intent.getIntExtra(EXTRA_NUM, -1)
-		val jContract = JsonParser.parseString(intent.getStringExtra(EXTRA_CONTRACT)).asJsonObject
-		val isChecked = intent.getBooleanExtra(EXTRA_CONTRACT, false)
+		val num = intent.getIntExtra(ExtraAttr.CONTRACT_NUM, -1)
+		val jContract = JsonParser.parseString(intent.getStringExtra(ExtraAttr.CONTRACT)).asJsonObject
+		val isChecked = intent.getBooleanExtra(ExtraAttr.CONTRACT_CHECKED, false)
 
 		contract_check.text = jContract["title"].asString
 		contract_check.isChecked = isChecked
@@ -32,8 +28,8 @@ class ContractActivity : AppCompatActivity() {
 
 		contract_confirm_btn.setOnClickListener {
 			val result = Intent()
-			result.putExtra(EXTRA_NUM, num)
-			result.putExtra(EXTRA_CHECKED, contract_check.isChecked)
+			result.putExtra(ExtraAttr.CONTRACT_NUM, num)
+			result.putExtra(ExtraAttr.CONTRACT_CHECKED, contract_check.isChecked)
 			setResult(RC_CONTRACT, result)
 			finish()
 		}

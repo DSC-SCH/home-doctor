@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.*;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import org.hugoandrade.calendarviewlib.R;
@@ -282,7 +283,7 @@ public class MultipleTriangleView extends View {
 
             for (TriangleAttr t : mTriangleAttr) {
                 canvas.drawPath(getBackgroundPath(t, startX, startY, width, iheight), t.mBackgroundPaint);
-                t.mNotePaint.setTextSize(iheight);
+                t.mNotePaint.setTextSize(iheight-5);
                 canvas.drawText(t.mNote, startX, startY+iheight-mSeparatorWidth, t.mNotePaint);
 
                 startY = startY + iheight + mSeparatorWidth;

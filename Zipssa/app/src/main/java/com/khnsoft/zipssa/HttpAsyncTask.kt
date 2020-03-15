@@ -1,7 +1,6 @@
 package com.khnsoft.zipssa
 
 import android.os.AsyncTask
-import android.util.Log
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -25,7 +24,7 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 		var ret = HttpHelper.getError().toString()
 		var httpCon: HttpURLConnection? = null
 
-		Log.i("HttpInfo", "API: ${remote}, METHOD: ${method.method}")
+		MyLogger.i("HttpInfo", "API: ${remote}, METHOD: ${method.method}")
 
 		try {
 			val url = URL("${HttpHelper.SERVER_URL}${remote}")
@@ -35,13 +34,14 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 			httpCon.connectTimeout = 3000
 			httpCon.setRequestProperty("Content-Type", "application/json")
 			httpCon.setRequestProperty("Authorization", UserData.token)
+			httpCon.setRequestProperty("App-Version", UserData.version)
 			httpCon.doInput = true
 
 			if (method == HttpMethod.POST || method == HttpMethod.PUT) {
 				if (sMsg == null)
-					return HttpHelper.getError().toString()
+					return HttpHelper.getError(HttpError.METHOD_NO_DATA).toString()
 
-				Log.i("HttpOutput", sMsg)
+				MyLogger.i("HttpOutput", sMsg)
 
 				val outputStream = httpCon.outputStream
 				outputStream.write(sMsg.toByteArray())
@@ -67,7 +67,7 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 			httpCon?.disconnect()
 		}
 
-		Log.i("HttpInput", ret)
+		MyLogger.i("HttpInput", ret)
 		return ret
 	}
 

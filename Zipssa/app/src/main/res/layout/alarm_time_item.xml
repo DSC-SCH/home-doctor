@@ -8,7 +8,7 @@
 		android:id="@+id/time_item"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:fontFamily="@font/daylight_210"
+		android:fontFamily="@font/nanum_square_ac"
 		android:textSize="@dimen/alarm_page_time_text"
 		android:textColor="@color/text_color"
 		android:paddingVertical="@dimen/alarm_page_time_paddingV"

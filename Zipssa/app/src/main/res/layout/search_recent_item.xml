@@ -7,6 +7,7 @@
 	android:clipToPadding="false">
 
 	<TextView
+		android:id="@+id/recent_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="@drawable/search_recent_box"
@@ -14,7 +15,7 @@
 		android:paddingHorizontal="@dimen/search_recent_item_paddingH"
 		android:elevation="@dimen/shadow_size"
 		android:fontFamily="@font/nanum_square_ac"
-		android:text="타이레놀"
+		android:text="이름"
 		android:textSize="@dimen/search_recent_text"
 		android:textColor="@color/text_color" />
 </LinearLayout>
