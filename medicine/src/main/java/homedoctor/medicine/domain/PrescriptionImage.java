@@ -12,7 +12,7 @@ import java.sql.Blob;
 @Entity
 @Getter @Setter
 @RequiredArgsConstructor
-public class    PrescriptionImage extends DateTimeEntity {
+public class PrescriptionImage extends DateTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "image_id")

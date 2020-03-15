@@ -49,7 +49,7 @@ public class Alarm extends DateTimeEntity {
     @Column(name = "alarm_status", nullable = false)
     private AlarmStatus alarmStatus;
 
-    @OneToMany(mappedBy = "alarm", cascade = ALL)
+    @OneToMany(mappedBy = "alarm", cascade = ALL, orphanRemoval = true)
     private List<PrescriptionImage> prescriptionImageList = new ArrayList<>();
 
     //== 연관관계 메서드 ==//

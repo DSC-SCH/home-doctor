@@ -43,15 +43,8 @@ public class User extends DateTimeEntity {
 
     private String token;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Alarm> alarmList = new ArrayList<>();
-
-    // 쿼리 날리기
-//    @OneToMany(mappedBy = "careUser", cascade = CascadeType.ALL)
-//    private List<ConnectionUser> receiverUserList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    private List<ConnectionUser> managerUserList = new ArrayList<>();
 
     public void setToken(String token) {
         this.token = token;
