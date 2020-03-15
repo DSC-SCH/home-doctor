@@ -3,8 +3,10 @@ package homedoctor.medicine.api.controller;
 import com.sun.org.apache.bcel.internal.generic.ALOAD;
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.alarm.AlarmDto;
+import homedoctor.medicine.api.dto.alarm.ChangeStatusRequest;
 import homedoctor.medicine.api.dto.alarm.ReceiverAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.UpdateAlarmRequest;
+import homedoctor.medicine.api.dto.receiver.CreateReceiverAlarmResponse;
 import homedoctor.medicine.api.dto.receiver.UpdateReceiverAlarm;
 import homedoctor.medicine.api.dto.receiver.createReceiverAlarmRequest;
 import homedoctor.medicine.common.ResponseMessage;
@@ -75,7 +77,7 @@ public class ReceiverUserAlarmController {
                     .build();
 
             alarmService.save(alarm);
-            AlarmDto alarmDto = AlarmDto.builder()
+            CreateReceiverAlarmResponse alarmDto = CreateReceiverAlarmResponse.builder()
                     .alarmId(alarm.getId())
                     .build();
 
@@ -162,11 +164,14 @@ public class ReceiverUserAlarmController {
                     .title(findReceiverAlarm.getTitle())
                     .label(findReceiverAlarm.getLabel().getId())
                     .labelTitle(findReceiverAlarm.getLabel().getTitle())
+                    .color(findReceiverAlarm.getLabel().getColor())
                     .startDate(findReceiverAlarm.getStartDate())
                     .endDate(findReceiverAlarm.getEndDate())
                     .times(findReceiverAlarm.getTimes())
                     .repeats(findReceiverAlarm.getRepeats())
                     .alarmStatus(findReceiverAlarm.getAlarmStatus())
+                    .createdDate(findReceiverAlarm.getCreatedDate())
+                    .lastModifiedDate(findReceiverAlarm.getLastModifiedDate())
                     .build();
 
             return DefaultResponse.response(StatusCode.OK,
@@ -214,6 +219,35 @@ public class ReceiverUserAlarmController {
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.ALARM_UPDATE_SUCCESS);
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
+    @PutMapping("/connect/receiver/alarm/change/{alarm_id}")
+    public DefaultResponse changeAlarmStatus(
+            @RequestHeader("Authorization") final String header,
+            @RequestBody @Valid ChangeStatusRequest changeStatus,
+            @PathVariable("alarm_id") Long alarmId) {
+        try {
+            if (header == null) {
+                DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.UNAUTHORIZED);
+            }
+
+            if (changeStatus.getAlarmStatus() == null) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
+            }
+
+
+            DefaultResponse response = alarmService.changeEnableToCancel(alarmId, changeStatus.getAlarmStatus());
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
 
         } catch (Exception e) {
             log.error(e.getMessage());

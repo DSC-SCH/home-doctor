@@ -90,30 +90,30 @@ public class UserApiController {
             @RequestBody @Valid CreateUserRequest request) {
         try {
 
-            if (request.validProperties()) {
-                User user = User.builder()
-                        .username(request.getUsername())
-                        .birthday(request.getBirthday())
-                        .email(request.getEmail())
-                        .snsId(request.getSnsId())
-                        .snsType(request.getSnsType())
-                        .genderType(request.getGenderType())
-                        .phoneNum(request.getPhoneNum())
-                        .build();
-                DefaultResponse saveResponse = userService.save(user);
-
-                UserCreateDto userCreateDto = UserCreateDto.builder()
-                        .token(user.getToken())
-                        .userId(user.getId())
-                        .build();
-
-                return DefaultResponse.response(saveResponse.getStatus(),
-                        saveResponse.getMessage(),
-                        userCreateDto);
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
             }
 
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.NOT_CONTENT);
+            User user = User.builder()
+                    .username(request.getUsername())
+                    .birthday(request.getBirthday())
+                    .email(request.getEmail())
+                    .snsId(request.getSnsId())
+                    .snsType(request.getSnsType())
+                    .genderType(request.getGenderType())
+                    .phoneNum(request.getPhoneNum())
+                    .build();
+            DefaultResponse saveResponse = userService.save(user);
+
+            UserCreateDto userCreateDto = UserCreateDto.builder()
+                    .token(user.getToken())
+                    .userId(user.getId())
+                    .build();
+
+            return DefaultResponse.response(saveResponse.getStatus(),
+                    saveResponse.getMessage(),
+                    userCreateDto);
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
@@ -139,19 +139,19 @@ public class UserApiController {
                         ResponseMessage.NOT_FOUND_USER);
             }
 
-            UserDto userDto = UserDto.builder()
-                    .id(findUser.getId())
+            UserInfoResponse userInfoResponse = UserInfoResponse.builder()
                     .username(findUser.getUsername())
                     .birthday(findUser.getBirthday())
                     .email(findUser.getEmail())
                     .snsType(findUser.getSnsType())
+                    .snsId(findUser.getSnsId())
                     .genderType(findUser.getGenderType())
                     .phoneNum(findUser.getPhoneNum())
                     .build();
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.USER_SEARCH_SUCCESS,
-                    userDto);
+                    userInfoResponse);
         } catch (Exception e) {
             log.error(e.getMessage());
 
@@ -194,17 +194,6 @@ public class UserApiController {
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
-
-//    @PutMapping("/user/{user_id}")
-//    public UpdateMemberResponse updateMemberResponse(
-//            @PathVariable("user_id") Long id,
-//            @RequestBody @Valid UpdateMemberRequest request) {
-//
-//        userService.update(id, request.getName());
-//        User findUser = userService.findOne(id);
-//
-//        return new UpdateMemberResponse(findUser.getId(), findUser.getUsername());
-//    }
 
     @Auth
     @DeleteMapping("/user")

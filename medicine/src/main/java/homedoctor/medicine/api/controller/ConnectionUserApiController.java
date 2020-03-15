@@ -2,7 +2,7 @@ package homedoctor.medicine.api.controller;
 
 
 import homedoctor.medicine.api.dto.DefaultResponse;
-import homedoctor.medicine.api.dto.connection.ConnectionUserDto;
+import homedoctor.medicine.api.dto.connection.ConnectionUserInfoResponse;
 import homedoctor.medicine.api.dto.connection.CreateConnectionRequest;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.ConnectionCode;
@@ -64,6 +64,7 @@ public class ConnectionUserApiController {
             long diff = currentDate.getTime() - codeCreateTime.getTime();
             long sec = diff / 1000;
 
+            // 3분 이상이면 코드 입력 유효시간 초과.
             if (sec > 180) {
                 DefaultResponse.response(StatusCode.BAD_REQUEST,
                         ResponseMessage.VALID_TIMEOUT);
@@ -106,8 +107,8 @@ public class ConnectionUserApiController {
                         ResponseMessage.NOT_FOUND_CONNECTION, empty);
             }
 
-            List<ConnectionUserDto> managerDtoList = findManagerList.stream()
-                    .map(m -> ConnectionUserDto.builder()
+            List<ConnectionUserInfoResponse> managerDtoList = findManagerList.stream()
+                    .map(m -> ConnectionUserInfoResponse.builder()
                             .connectionId(m.getId())
                             .username(m.getUsername())
                             .user(m.getId())
@@ -143,8 +144,8 @@ public class ConnectionUserApiController {
                         ResponseMessage.NOT_FOUND_CONNECTION, empty);
             }
 
-            List<ConnectionUserDto> managerDtoList = findReceiverList.stream()
-                    .map(m -> ConnectionUserDto.builder()
+            List<ConnectionUserInfoResponse> managerDtoList = findReceiverList.stream()
+                    .map(m -> ConnectionUserInfoResponse.builder()
                             .username(m.getUsername())
                             .connectionId(m.getId())
                             .user(m.getId())
@@ -168,7 +169,7 @@ public class ConnectionUserApiController {
             @PathVariable("connect_id") Long id) {
         try {
             DefaultResponse response = connectionUserService.findConnectionById(id);
-            if (response.getData() != null) {
+            if (response.getData() == null) {
                 return DefaultResponse.response(response.getStatus(),
                         response.getMessage());
             }

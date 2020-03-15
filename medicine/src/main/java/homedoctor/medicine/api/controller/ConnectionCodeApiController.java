@@ -40,21 +40,22 @@ public class ConnectionCodeApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
 
-            if (request.validProperties()) {
-                DefaultResponse response = codeService.saveCode(request.getUserId());
-                ConnectionCode connectionCode = (ConnectionCode) response.getData();
-
-                ResponseCode responseCode = ResponseCode.builder()
-                        .code(connectionCode.getCode())
-                        .userId(connectionCode.getId())
-                        .build();
-
-                return DefaultResponse.response(response.getStatus(),
-                        response.getMessage(),
-                        responseCode);
+            if (request == null) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.CODE_CREATE_FAIL);
             }
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.CODE_CREATE_FAIL);
+
+            DefaultResponse response = codeService.saveCode(request.getUserId());
+            ConnectionCode connectionCode = (ConnectionCode) response.getData();
+
+            ResponseCode responseCode = ResponseCode.builder()
+                    .code(connectionCode.getCode())
+                    .userId(connectionCode.getId())
+                    .build();
+
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage(),
+                    responseCode);
 
         } catch (Exception e) {
             log.error(e.getMessage());

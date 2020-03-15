@@ -49,22 +49,22 @@ public class LabelApiController {
             if (header == null) {
                 return defaultUnAuth;
             }
-            User findUser =
-                    (User) userService.findOneById(jwtService.decode(header)).getData();
+            User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
 
-            if (request.validProperties()) {
-                Label label = Label.builder()
-                        .user(findUser)
-                        .title(request.getTitle())
-                        .color(request.getColor())
-                        .build();
-                DefaultResponse response = labelService.save(label);
-
-                return DefaultResponse.response(response.getStatus(),
-                        response.getMessage());
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
             }
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.LABEL_CREATE_FAIL);
+
+            Label label = Label.builder()
+                    .user(findUser)
+                    .title(request.getTitle())
+                    .color(request.getColor())
+                    .build();
+            DefaultResponse response = labelService.save(label);
+
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
 
         } catch (HttpMessageNotReadableException ex) {
             log.error(ex.getMessage());
@@ -166,19 +166,19 @@ public class LabelApiController {
                 return defaultUnAuth;
             }
 
-            if (request.validProperties()) {
-                Label label = Label.builder()
-                        .title(request.getTitle())
-                        .color(request.getColor())
-                        .build();
-
-                DefaultResponse response = labelService.update(labelId, label);
-                return DefaultResponse.response(response.getStatus(),
-                        response.getMessage());
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
             }
 
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.LABEL_UPDATE_FAIL);
+            Label label = Label.builder()
+                    .title(request.getTitle())
+                    .color(request.getColor())
+                    .build();
+
+            DefaultResponse response = labelService.update(labelId, label);
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
 
         } catch (Exception e) {
             log.error(e.getMessage());

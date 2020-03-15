@@ -265,9 +265,7 @@ public class ImageApiController {
             if (header == null) {
                 return defaultHeaderResponse;
             }
-
             if (id == null) {
-                String[] empty = new String[0];
                 return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_FOUND_PRESCRIPTION);
             }
