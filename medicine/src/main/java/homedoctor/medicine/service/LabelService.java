@@ -96,7 +96,7 @@ public class LabelService {
             }
 
             return DefaultResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
+                    .status(StatusCode.OK)
                     .message(ResponseMessage.NOT_FOUND_LABEL)
                     .build();
         } catch (Exception e) {
@@ -141,7 +141,7 @@ public class LabelService {
 
             if (findLabel == null) {
                 return DefaultResponse.builder()
-                        .status(StatusCode.OK)
+                        .status(StatusCode.METHOD_NOT_ALLOWED)
                         .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
@@ -175,7 +175,7 @@ public class LabelService {
 
         try {
             Label findLabel = labelRepository.findOne(labelId);
-            System.out.println();
+
             if (findLabel != null) {
                 labelRepository.delete(findLabel);
                 return DefaultResponse.builder()

@@ -282,6 +282,7 @@ public class AlarmService {
                         ResponseMessage.PRESCRIPTION_SEARCH_FAIL);
             }
 
+            // 기존에 등록된 알람에 이미지 삭제.
             if (!prescriptionImageList.isEmpty()) {
                 for (PrescriptionImage prescriptionImage : prescriptionImageList) {
                     prescriptionImageRepository.delete(prescriptionImage.getId());

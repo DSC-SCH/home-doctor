@@ -86,7 +86,7 @@ public class ConnectionUserService {
 
             return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .message(ResponseMessage.CONNECTION_SEARCH_FAIL)
+                    .message(ResponseMessage.NOT_FOUND_CONNECTION)
                     .build();
 
         } catch (Exception e) {
