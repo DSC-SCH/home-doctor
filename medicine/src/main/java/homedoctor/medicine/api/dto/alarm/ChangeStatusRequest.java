@@ -11,5 +11,4 @@ public class ChangeStatusRequest {
 
     private AlarmStatus alarmStatus;
 
-    private Long id;
 }

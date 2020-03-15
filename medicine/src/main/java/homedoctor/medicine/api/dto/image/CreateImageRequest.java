@@ -1,27 +1,22 @@
 package homedoctor.medicine.api.dto.image;
 
-import homedoctor.medicine.domain.Alarm;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-import java.sql.Blob;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
+@Getter
 @Builder
 public class CreateImageRequest {
 
-    private Long alarm;
+    private List<String> image;
 
-    private List<String> images;
+    public CreateImageRequest() {
+    }
 
-
-    public final boolean validProperties() {
-        if (alarm != null && images != null) {
-            return true;
-        }
-        return false;
+    public CreateImageRequest(List<String> images) {
+        this.image = images;
     }
 }

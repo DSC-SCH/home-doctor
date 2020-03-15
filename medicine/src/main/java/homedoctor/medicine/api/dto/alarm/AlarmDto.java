@@ -35,9 +35,9 @@ public class AlarmDto {
 
     private AlarmStatus alarmStatus;
 
-    private String createdDate;
+    private Date createdDate;
 
-    private String lastModifiedDate;
+    private Date lastModifiedDate;
 
 
     public static String cutDateTimeTimeValue(Date date) {
