@@ -44,6 +44,7 @@ public class ResponseMessage {
     public static final String CONNECTION_DELETE_SUCCESS   = "연동 해제 성공";
     public static final String CONNECTION_DELETE_FAIL      = "연동 해제 실패";
     public static final String NOT_FOUND_CONNECTION        = "연동된 유저가 없습니다.";
+    public static final String DUPLICATED_CONNECTION       = "이미 연동된 유저입니다.";
 
     // CONNECT CODE
     public static final String CODE_CREATE_SUCCESS         = "코드 생성 성공";
@@ -51,6 +52,8 @@ public class ResponseMessage {
     public static final String CODE_SEARCH_SUCCESS         = "코드 조회 성공";
     public static final String CODE_SEARCH_FAIL            = "코드 조회 실패";
     public static final String NOT_FOUND_CODE              = "등록된 코드가 없습니다.";
+    public static final String NOT_EQUAL_CODE              = "코드 불일치";
+    public static final String VALID_TIMEOUT               = "코드 유효시간 초과";
 
     // Prescription Image
     public static final String PRESCRIPTION_CREATE_SUCCESS = "처방전 등록 성공";
