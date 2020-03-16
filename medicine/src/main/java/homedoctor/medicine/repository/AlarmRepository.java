@@ -1,9 +1,9 @@
 package homedoctor.medicine.repository;
 
 import homedoctor.medicine.domain.Alarm;
-import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -20,10 +20,7 @@ public class AlarmRepository {
     }
 
     public Alarm findOne(Long id) {
-        String query = "select a from Alarm a join fetch a.label where a.id = :id";
-        return em.createQuery(query, Alarm.class)
-                .setParameter("id", id)
-                .getSingleResult();
+        return em.find(Alarm.class, id);
     }
 
     public List<Alarm> findAllByUser(User user) {
@@ -66,7 +63,12 @@ public class AlarmRepository {
                 "delete from Alarm a where a.id = :id")
                 .setParameter("id", alarm.getId())
                 .executeUpdate();
-        em.clear();
+    }
+
+    public void deleteByUser(User user) {
+        em.createQuery("delete from Alarm a where a.user = :user")
+                .setParameter("user", user)
+                .executeUpdate();
     }
 }
 
