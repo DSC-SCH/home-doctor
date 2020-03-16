@@ -9,6 +9,9 @@ public class CreateAlarmResponse {
 
     private Long id;
 
+    public CreateAlarmResponse() {
+    }
+
     public CreateAlarmResponse(Long id) {
         this.id = id;
     }

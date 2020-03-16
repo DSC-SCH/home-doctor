@@ -8,6 +8,9 @@ public class UpdateAlarmResponse {
 
     private Long id;
 
+    public UpdateAlarmResponse() {
+    }
+
     public UpdateAlarmResponse(Long id) {
         this.id = id;
     }
