@@ -151,8 +151,6 @@ public class LabelService {
             findLabel.setColor(label.getColor());
             findLabel.setLastModifiedDate(currentDate);
 
-            labelRepository.save(findLabel);
-
             return DefaultResponse.builder()
                     .status(StatusCode.OK)
                     .message(ResponseMessage.LABEL_UPDATE_SUCCESS)

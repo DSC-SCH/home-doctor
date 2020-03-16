@@ -150,7 +150,6 @@ public class AlarmCountService {
             }
 
             alarmCount.updateCounts(count);
-            alarmCountRepository.save(alarmCount);
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.ALARM_COUNT_UPDATE_SUCCESS);

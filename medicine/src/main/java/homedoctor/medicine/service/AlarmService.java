@@ -242,8 +242,6 @@ public class AlarmService {
             findAlarm.setTimes(alarm.getTimes());
             findAlarm.setLastModifiedDate(currentDate);
 
-            alarmRepository.save(findAlarm);
-
             return DefaultResponse.builder()
                     .status(StatusCode.OK)
                     .message(ResponseMessage.ALARM_UPDATE_SUCCESS)
