@@ -217,7 +217,7 @@ class AddAlarmActivity : AppCompatActivity() {
 
 			val json = JsonObject()
 			json.addProperty("alarm_title", add_title.text.toString())
-			json.addProperty("alarm_user", UserData.id)
+			json.addProperty("alarm_user", UserData.careUser ?: UserData.id)
 			json.addProperty("alarm_label", radioGroup.radios[radioGroup.getCheckedIndex()].tag as Int)
 			json.addProperty("alarm_start_date", SDF.dateBar.format(startCal.time))
 			json.addProperty("alarm_end_date", SDF.dateBar.format(endCal.time))
@@ -306,8 +306,9 @@ class AddAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		// TODO("Server: Get sync user labels")
-		val lLabels = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
+		val lLabels = if (UserData.careUser == null) ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
+		else ServerHandler.send(this@AddAlarmActivity, EndOfAPI.SYNC_GET_LABELS, id=UserData.careUser)["data"].asJsonArray
+
 		val labelSize = lLabels.size()
 		var count = 0
 		var labelLine: AlarmLabelLine

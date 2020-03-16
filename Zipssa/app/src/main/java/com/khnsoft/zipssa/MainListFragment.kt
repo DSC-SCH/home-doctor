@@ -37,6 +37,7 @@ class MainListFragment : Fragment() {
 	}
 
 	// TODO("Reject approach to online only function")
+	// TODO("Set crew name color")
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = inflater.inflate(R.layout.list_fragment, container, false)

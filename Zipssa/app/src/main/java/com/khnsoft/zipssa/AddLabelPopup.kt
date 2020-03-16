@@ -58,13 +58,13 @@ class AddLabelPopup : AppCompatActivity() {
 				return@setOnClickListener
 			}
 
-			val curCal = Calendar.getInstance()
 			val json = JsonObject()
-			json.addProperty("label_user", UserData.id)
+			json.addProperty("label_user", UserData.careUser ?: UserData.id)
 			json.addProperty("label_title", label_title.text.toString())
 			json.addProperty("label_color", LABELS_COLORS[radioGroup.getCheckedIndex()])
 
-			val result = ServerHandler.send(this@AddLabelPopup, EndOfAPI.ADD_LABEL, json)
+			val result = if (UserData.careUser == null) ServerHandler.send(this@AddLabelPopup, EndOfAPI.ADD_LABEL, json)
+			else ServerHandler.send(this@AddLabelPopup, EndOfAPI.SYNC_ADD_LABEL, json, id=UserData.careUser)
 
 			if (HttpHelper.isOK(result)) {
 				finish()

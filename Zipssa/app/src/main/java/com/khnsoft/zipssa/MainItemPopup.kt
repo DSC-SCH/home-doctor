@@ -29,7 +29,7 @@ class MainItemPopup : AppCompatActivity() {
 
         val _id = intent.getIntExtra(ExtraAttr.ALARM_ID, -1)
         val jTemp = if (UserData.careUser == null) ServerHandler.send(this@MainItemPopup, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
-        else ServerHandler.send(this@MainItemPopup, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)
+        else ServerHandler.send(this@MainItemPopup, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)["data"].asJsonObject
         val jItem = ServerHandler.convertKeys(jTemp, ServerHandler.alarmToLocal)
 
         val drawable = alarm_label.background as GradientDrawable
@@ -64,7 +64,7 @@ class MainItemPopup : AppCompatActivity() {
             val result = ServerHandler.send(this@MainItemPopup, EndOfAPI.CHANGE_ALARM_STATE, json, _id)
 
             if (!HttpHelper.isOK(result))
-                alarm_switch.isChecked = false
+                alarm_switch.isChecked = !isChecked
         }
 
         animOpen = AnimationUtils.loadAnimation(this@MainItemPopup, R.anim.floating_open)
@@ -97,10 +97,9 @@ class MainItemPopup : AppCompatActivity() {
         cancel_future.setOnClickListener {
             val calYesterday = Calendar.getInstance()
             calYesterday.add(Calendar.DAY_OF_MONTH, -1)
-            val json = JsonObject()
-            json.addProperty("alarm_end_date", SDF.dateBar.format(calYesterday))
-            val result = if (UserData.careUser == null) ServerHandler.send(this@MainItemPopup, EndOfAPI.EDIT_ALARM, json, _id)
-            else ServerHandler.send(this@MainItemPopup, EndOfAPI.SYNC_EDIT_ALARM, json, UserData.careUser, _id)
+            jItem.addProperty("alarm_end_date", SDF.dateBar.format(calYesterday.time))
+            val result = if (UserData.careUser == null) ServerHandler.send(this@MainItemPopup, EndOfAPI.EDIT_ALARM, jItem, _id)
+            else ServerHandler.send(this@MainItemPopup, EndOfAPI.SYNC_EDIT_ALARM, jItem, UserData.careUser, _id)
 
             if (HttpHelper.isOK(result)) {
                 val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {

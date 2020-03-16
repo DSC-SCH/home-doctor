@@ -11,7 +11,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="match_parent"
 		android:adjustViewBounds="true"
-		android:layout_marginHorizontal="@dimen/alarm_page_imagecontainer_image_margin"/>
+		android:layout_marginHorizontal="@dimen/alarm_page_imagecontainer_image_marginH"/>
 
 	<ImageView
 		android:id="@+id/image_remove"
@@ -20,5 +20,5 @@
 		android:src="@drawable/image_remove_icon"
 		android:elevation="@dimen/shadow_size"
 		android:layout_gravity="top|right"
-		android:layout_margin="@dimen/alarm_page_imagecontainer_image_margin"/>
+		android:layout_marginHorizontal="@dimen/alarm_page_imagecontainer_image_marginH"/>
 </FrameLayout>

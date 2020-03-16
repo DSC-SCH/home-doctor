@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,6 +43,7 @@ class MypageHistoryPhotoDetailActivity : AppCompatActivity() {
 
 		val jItem = ServerHandler.convertKeys(lPhoto[curPhoto].asJsonObject, ServerHandler.imageToLocal)
 		image_item.setImageBitmap(ImageHelper.base64ToBitmap(jItem["image"].asString))
+		created_date.text = SDF.dateDot.format(SDF.dateBar.parse(jItem["created_date"].asString))
 	}
 
 	inner class PhotoRecyclerAdapter(val lPhoto: JsonArray) :
@@ -70,6 +72,7 @@ class MypageHistoryPhotoDetailActivity : AppCompatActivity() {
 			if (position == curPhoto) {
 				holder.image.setBackgroundColor(getColor(R.color.main_theme))
 				image_item.setImageBitmap(ImageHelper.base64ToBitmap(jItem["image"].asString))
+				created_date.text = SDF.dateDot.format(SDF.dateBar.parse(jItem["created_date"].asString))
 			}
 		}
 	}

@@ -136,6 +136,7 @@ class JoinActivity : AppCompatActivity() {
 					editor.apply()
 
 					val userData = result["data"].asJsonObject
+					UserData.accountType = AccountType.valueOf(_sns_type)
 					UserData.id = userData["userId"].asInt
 					UserData.token = userData["token"].asString
 

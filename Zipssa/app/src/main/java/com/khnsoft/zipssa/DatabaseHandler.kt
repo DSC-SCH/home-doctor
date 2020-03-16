@@ -204,19 +204,20 @@ class DatabaseHandler(context: Context?) {
 							val jResult = result[0].asJsonObject
 							val curCal = Calendar.getInstance()
 							curCal.time = SDF.dateBar.parse(jResult["alarm_start_date"].asString)
-							val endTime = SDF.dateBar.parse(jResult["alarm_end_date"].asString)
-							while (curCal.timeInMillis <= endTime.time) {
-								sql = """
-                                    INSERT INTO TAKEN_TB (taken_alarm_id, taken_date, taken_count)
-                                    VALUES (
-                                    ${jResult["alarm_id"].asInt},
-                                    '${SDF.dateBar.format(curCal.time)}',
-                                    0
-                                    )
-                                """.trimIndent()
+							val endTime = SDF.dateBar.parse(jResult["alarm_end_date"].asString).time
+							while (curCal.timeInMillis <= endTime) {
+								if (jItem["alarm_repeats"].asString.contains(curCal[Calendar.DAY_OF_WEEK].toString())) {
+									sql = """
+										INSERT INTO TAKEN_TB (taken_alarm_id, taken_date, taken_count)
+										VALUES (
+										${jResult["alarm_id"].asInt},
+										'${SDF.dateBar.format(curCal.time)}',
+										0
+										)
+									""".trimIndent()
 
-                                mHandler.execNonResult(sql)
-
+									mHandler.execNonResult(sql)
+								}
 								curCal.add(Calendar.DAY_OF_MONTH, 1)
 							}
 

@@ -83,7 +83,7 @@ class ServerHandler {
                 when(api) {
                     EndOfAPI.ADD_ALARM, EndOfAPI.EDIT_ALARM, EndOfAPI.CHANGE_ALARM_STATE,
                     EndOfAPI.SYNC_ADD_ALARM, EndOfAPI.SYNC_EDIT_ALARM -> convertKeys(data, alarmToServer)
-                    EndOfAPI.ADD_LABEL, EndOfAPI.EDIT_LABEL -> convertKeys(data, labelToServer)
+                    EndOfAPI.ADD_LABEL, EndOfAPI.EDIT_LABEL, EndOfAPI.SYNC_ADD_LABEL -> convertKeys(data, labelToServer)
                     else -> data
                 }
             } else if (method == HttpMethod.GET || method == HttpMethod.DELETE) {

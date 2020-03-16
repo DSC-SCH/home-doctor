@@ -59,7 +59,7 @@ class EditAlarmActivity : AppCompatActivity() {
 
 		val _id = intent.getIntExtra(ExtraAttr.ALARM_ID, -1)
 		val _jTemp = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
-		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)
+		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)["data"].asJsonObject
 		val _jItem = ServerHandler.convertKeys(_jTemp, ServerHandler.alarmToLocal)
 
 		// Setting back button
@@ -75,7 +75,7 @@ class EditAlarmActivity : AppCompatActivity() {
 			}
 
 			image_from_gallery.setOnClickListener {
-				val intent = Intent(Intent.ACTION_PICK)
+				val intent = Intent(Intent.ACTION_PICK)   
 				intent.setType(MediaStore.Images.Media.CONTENT_TYPE)
 				startActivityForResult(intent, PhotoAttr.GALLERY.rc)
 			}
@@ -410,8 +410,8 @@ class EditAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		// TODO("Server: Get sync user labels")
-		val lLabels = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
+		val lLabels = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
+		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_LABELS, id=UserData.careUser)["data"].asJsonArray
 
 		val labelSize = lLabels.size()
 		var count = 0

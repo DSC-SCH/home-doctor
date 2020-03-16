@@ -75,7 +75,10 @@ class MainSearchFragment : Fragment() {
 		val json = JsonObject()
 		json.addProperty("type", search_type.getItemAtPosition(type).toString())
 		json.addProperty("keyword", keyword)
-		val lResult = ServerHandler.send(context, EndOfAPI.SEARCH, json)["data"].asJsonArray
+		val result = ServerHandler.send(context, EndOfAPI.SEARCH, json)
+		if (HttpHelper.isOK(result)) {
+			lResult = result["data"].asJsonArray
+		}
 
 		callPage(FRAG_RESULT, lResult)
 	}

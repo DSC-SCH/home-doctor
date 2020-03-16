@@ -21,7 +21,7 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 	fun getResultFromAPI(remote: String?, method: HttpMethod, sMsg: String?) : String{
 		if (remote == null) return HttpHelper.getError().toString()
 
-		var ret = HttpHelper.getError().toString()
+		var ret : String? = null
 		var httpCon: HttpURLConnection? = null
 
 		MyLogger.i("HttpInfo", "API: ${remote}, METHOD: ${method.method}")
@@ -67,6 +67,7 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 			httpCon?.disconnect()
 		}
 
+		if (ret == null) ret = HttpHelper.getError().toString()
 		MyLogger.i("HttpInput", ret)
 		return ret
 	}

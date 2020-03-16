@@ -14,6 +14,8 @@ class MypageActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_activity)
 
+		UserData.careUser = null
+
 		back_btn.setOnClickListener {
 			onBackPressed()
 		}
@@ -62,8 +64,10 @@ class MypageActivity : AppCompatActivity() {
 	val btnClickListener = View.OnClickListener {
 		when (it.id) {
 			R.id.myprofile_btn, R.id.sync_btn -> {
-				MyAlertPopup.needOnline(this@MypageActivity)
-				return@OnClickListener
+				if (!UserData.isOnline()) {
+					MyAlertPopup.needOnline(this@MypageActivity)
+					return@OnClickListener
+				}
 			}
 		}
 
