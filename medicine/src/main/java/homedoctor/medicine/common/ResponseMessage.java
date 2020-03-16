@@ -26,6 +26,18 @@ public class ResponseMessage {
     public static final String ALARM_CHANGE_LABEL_SUCCESS  = "알람 라벨 변경 실패";
     public static final String NOT_FOUND_ALARM             = "등록된 알람이 없습니다.";
 
+    // ALARM COUNT RESPONSE MESSAGE
+    public static final String ALARM_COUNT_CREATE_SUCCESS        = "복용 횟수 등록 성공";
+    public static final String ALARM_COUNT_CREATE_FAIL           = "복용 횟수 등록 실패";
+    public static final String ALARM_COUNT_UPDATE_SUCCESS        = "복용 횟수 수정 성공";
+    public static final String ALARM_COUNT_UPDATE_FAIL           = "복용 횟수 수정 실패";
+    public static final String ALARM_COUNT_DELETE_SUCCESS        = "복용 횟수 삭제 성공";
+    public static final String ALARM_COUNT_DELETE_FAIL           = "복용 횟수 삭제 실패";
+    public static final String ALARM_COUNT_SEARCH_SUCCESS        = "복용 횟수 조회 성공";
+    public static final String ALARM_COUNT_SEARCH_FAIL           = "복용 횟수 조회 실패";
+    public static final String ALARM_COUNT_CHANGE_LABEL_FAIL     = "복용 횟수 라벨 변경 실패";
+    public static final String ALARM_COUNT_CHANGE_LABEL_SUCCESS  = "복용 횟수 라벨 변경 실패";
+    public static final String NOT_FOUND_ALARM_COUNT             = "등록된 알람이 없습니다.";
     // LABEL
     public static final String LABEL_CREATE_SUCCESS        = "라벨 등록 성공";
     public static final String LABEL_CREATE_FAIL           = "라벨 등록 실패";
