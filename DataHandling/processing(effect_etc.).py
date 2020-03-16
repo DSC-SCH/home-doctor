@@ -134,33 +134,18 @@ com['combinataion_ban'] = com['fur']+': '+com['병용품목명']
 com2 = com.groupby(['품목명'])['combinataion_ban'].agg(lambda col: '| '.join(col)).reset_index()
 com2['combinataion_ban'] = com2['combinataion_ban'].str.replace('\\n','',regex=True)
 
+# 병용금기 품목 결합 
 medical_tot = pd.merge(medical_tot3,com2,how='left',left_on=['medicine_name'],right_on=['품목명'])
 
-
-medical_tot['item_code'] = medical_tot['item_code'].astype('int64')
-
-medical_tot['bad_effect']=medical_tot['bad_effect'].replace('없음',np.nan)
-medical_tot['alchol'] = medical_tot['alchol'].replace('없음',np.nan)
-
-medical_df = pd.merge(medical_tot,DUR_ban_list2,left_on="item_code" ,right_on="품목일련번호", how="left")
-medical_df['alchol'] = medical_df['alchol'].fillna('')
-medical_df['bad_effect'] = medical_df['bad_effect'].fillna('')
-medical_df['bad_effect'] = medical_df['bad_effect'].fillna('')
-medical_df['combinataion_ban'] = medical_df['combinataion_ban'].fillna('')
-medical_df['부작용'] = medical_df['부작용'].fillna('')
-
-## 주의사항 필드 생성
-medical = pd.read_json('medical_rev02.json',orient='table')
-medical.columns
-
+# 부작용 필드 생성
 DUR_ban_list = pd.read_excel("부작용_DUR.xlsx")
 DUR_ban_list.dtypes
 
 DUR_ban_list2 = DUR_ban_list.groupby(['품목일련번호'])['부작용'].agg(lambda col: '\n '.join(col)).reset_index()
 
-medical['item_code'] = medical['item_code'].astype('int64')
+medical_tot['item_code'] = medical_tot['item_code'].astype('int64')
 
-medical_df = pd.merge(medical,DUR_ban_list2,left_on="item_code" ,right_on="품목일련번호", how="left")
+medical_df = pd.merge(medical_tot,DUR_ban_list2,left_on="item_code" ,right_on="품목일련번호", how="left")
 
 medical_df['부작용'] = medical_df['부작용'].fillna('')
 medical_df['bad_effect'] = medical_df['bad_effect'].fillna('')
