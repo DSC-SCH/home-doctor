@@ -98,9 +98,9 @@ public class ConnectionUserService {
         }
     }
 
-    public DefaultResponse findALlManagerByUser(User user) {
+    public DefaultResponse findAllManagerByUser(User user) {
         try {
-            List<User> managerList = connectionUserRepository.findAllByManagerUser(user);
+            List<ConnectionUser> managerList = connectionUserRepository.findAllByManagerUser(user);
             if (!managerList.isEmpty()) {
                 return DefaultResponse.builder()
                         .status(StatusCode.OK)
@@ -115,6 +115,7 @@ public class ConnectionUserService {
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
                     .message(ResponseMessage.DB_ERROR)
@@ -124,7 +125,7 @@ public class ConnectionUserService {
 
     public DefaultResponse findAllReceiverByUser(User user) {
         try {
-            List<User> receiverList = connectionUserRepository.findAllByCareUser(user);
+            List<ConnectionUser> receiverList = connectionUserRepository.findAllByCareUser(user);
             if (!receiverList.isEmpty()) {
                 return DefaultResponse.builder()
                         .status(StatusCode.OK)
@@ -139,6 +140,7 @@ public class ConnectionUserService {
                     .build();
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
                     .message(ResponseMessage.DB_ERROR)
@@ -157,6 +159,8 @@ public class ConnectionUserService {
                         .message(ResponseMessage.CONNECTION_DELETE_FAIL)
                         .build();
             }
+
+            connectionUserRepository.delete(connectionUser);
             return DefaultResponse.builder()
                     .status(StatusCode.OK)
                     .message(ResponseMessage.CONNECTION_DELETE_SUCCESS)

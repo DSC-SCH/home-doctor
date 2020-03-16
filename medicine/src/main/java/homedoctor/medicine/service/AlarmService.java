@@ -23,13 +23,10 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class AlarmService {
 
-    @Autowired
     private final AlarmRepository alarmRepository;
 
-    @Autowired
     private final LabelRepository labelRepository;
 
-    @Autowired
     private final PrescriptionImageRepository prescriptionImageRepository;
 
     @Transactional
@@ -274,21 +271,6 @@ public class AlarmService {
                         .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
-
-            List<PrescriptionImage> prescriptionImageList = prescriptionImageRepository.findAllByAlarm(alarm.getId());
-
-            if (prescriptionImageList == null) {
-                return DefaultResponse.response(StatusCode.METHOD_NOT_ALLOWED,
-                        ResponseMessage.PRESCRIPTION_SEARCH_FAIL);
-            }
-
-            // 기존에 등록된 알람에 이미지 삭제.
-            if (!prescriptionImageList.isEmpty()) {
-                for (PrescriptionImage prescriptionImage : prescriptionImageList) {
-                    prescriptionImageRepository.delete(prescriptionImage.getId());
-                }
-            }
-
 
             alarmRepository.delete(findAlarm);
             return DefaultResponse.builder()

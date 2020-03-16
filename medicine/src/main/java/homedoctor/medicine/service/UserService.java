@@ -3,8 +3,10 @@ package homedoctor.medicine.service;
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
+import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.SnsType;
 import homedoctor.medicine.domain.User;
+import homedoctor.medicine.repository.AlarmRepository;
 import homedoctor.medicine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final LabelService labelService;
+
+    private final AlarmRepository alarmRepository;
 
     private final JwtService jwtService;
 
@@ -168,7 +172,7 @@ public class UserService {
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             log.error(e.getMessage());
-
+            e.printStackTrace();
             return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
                     .message(ResponseMessage.DB_ERROR)
