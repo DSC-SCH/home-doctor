@@ -159,13 +159,14 @@ public class ImageApiController {
                         empty);
             }
 
-            List<ImageDto> imageDtoList = images.stream()
-                    .map(m -> ImageDto.builder()
+            List<ImageByUserResponse> imageDtoList = images.stream()
+                    .map(m -> ImageByUserResponse.builder()
                             .imageId(m.getId())
                             .image(m.getImage())
                             .alarm(m.getAlarm().getId())
                             .alarmTitle(m.getAlarm().getTitle())
                             .labelColor(m.getAlarm().getLabel().getColor())
+                            .createdDate(m.getAlarm().getCreatedDate())
                             .build())
                     .collect(Collectors.toList());
 

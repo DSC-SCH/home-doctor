@@ -6,21 +6,23 @@ import homedoctor.medicine.api.dto.alarm.UpdateAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.*;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;
+import homedoctor.medicine.domain.AlarmCount;
 import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.service.AlarmService;
-import homedoctor.medicine.service.JwtService;
-import homedoctor.medicine.service.LabelService;
-import homedoctor.medicine.service.UserService;
+import homedoctor.medicine.service.*;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
+import homedoctor.medicine.utils.DateTimeHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,17 +31,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AlarmApiController {
 
-    @Autowired
     private final AlarmService alarmService;
 
-    @Autowired
     private final UserService userService;
 
-    @Autowired
     private final JwtService jwtService;
 
-    @Autowired
     private final LabelService labelService;
+
+    private final AlarmCountService alarmCountService;
+
 
     @Auth
     @PostMapping("/alarm/new")
@@ -74,6 +75,28 @@ public class AlarmApiController {
                     .alarmStatus(request.getAlarmStatus())
                     .build();
             DefaultResponse response = alarmService.save(alarm);
+
+            // Alarm 기간 만큼 복용 횟수 데이터 생성.
+            Calendar calendar = Calendar.getInstance();
+            DateFormat format = new SimpleDateFormat("yyyy:MM:dd");
+            calendar.setTime(request.getStartDate());
+
+            while (calendar.getTimeInMillis() <= request.getEndDate().getTime()) {
+
+                if (request.getRepeats().contains(calendar.get(Calendar.DAY_OF_WEEK) + "")) {
+                    AlarmCount alarmCount = AlarmCount.builder()
+                            .user(findUser)
+                            .alarm(alarm)
+                            .alarmDate(DateTimeHandler.cutTime(calendar.getTime()))
+                            .count(request.getTimes().split("/").length)
+                            .build();
+                    alarmCountService.countSave(alarmCount);
+                }
+
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+
             CreateAlarmResponse createAlarmResponse = CreateAlarmResponse.builder()
                     .id(alarm.getId())
                     .build();
@@ -250,11 +273,23 @@ public class AlarmApiController {
                     .repeats(request.getRepeats())
                     .build();
 
+            Alarm findAlarm = (Alarm) alarmService.findAlarm(alarmId).getData();
+            Date start = findAlarm.getStartDate();
+            Date end = findAlarm.getEndDate();
             DefaultResponse response = alarmService.update(alarmId, alarm);
+
+            // 알람의 날짜 변경시 변경된 날짜에 맞게 알람 복용 횟수 테이블도 수정.
+            if (!start.equals(request.getStartDate()) ||
+                    !end.equals(request.getEndDate())) {
+                alarmCountService.updateCountByAlarm(findAlarm);
+            }
+
+
             return DefaultResponse.response(response.getStatus(),
                     response.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
+            log.error(Arrays.toString(e.getStackTrace()));
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
@@ -303,8 +338,8 @@ public class AlarmApiController {
             Alarm findAlarm = (Alarm) response.getData();
             // 빈리스트 일때
             if (findAlarm == null) {
-                return DefaultResponse.response(StatusCode.OK,
-                        ResponseMessage.NOT_FOUND_ALARM);
+                return DefaultResponse.response(response.getStatus(),
+                        response.getMessage());
             }
 
             DefaultResponse deleteResponse = alarmService.delete(findAlarm);
@@ -313,6 +348,7 @@ public class AlarmApiController {
                     deleteResponse.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }

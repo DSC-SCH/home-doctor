@@ -50,7 +50,7 @@ public class ConnectionCodeApiController {
 
             ResponseCode responseCode = ResponseCode.builder()
                     .code(connectionCode.getCode())
-                    .userId(connectionCode.getId())
+                    .userId(connectionCode.getUser().getId())
                     .build();
 
             return DefaultResponse.response(response.getStatus(),

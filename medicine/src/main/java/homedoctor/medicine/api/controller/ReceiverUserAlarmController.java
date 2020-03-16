@@ -13,15 +13,21 @@ import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;
+import homedoctor.medicine.domain.AlarmCount;
 import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
 import homedoctor.medicine.service.*;
+import homedoctor.medicine.utils.DateTimeHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.el.parser.AstLambdaExpression;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,17 +40,13 @@ public class ReceiverUserAlarmController {
             DefaultResponse.response(StatusCode.UNAUTHORIZED,
                     ResponseMessage.UNAUTHORIZED);
 
-    private final ConnectionUserService connectionUserService;
-
     private final UserService userService;
-
-    private final JwtService jwtService;
 
     private final AlarmService alarmService;
 
     private final LabelService labelService;
 
-    private final ConnectionCodeService connectionCodeService;
+    private final AlarmCountService alarmCountService;
 
     @Auth
     @PostMapping("/connect/receiver/alarm/{care_user_id}")
@@ -77,6 +79,27 @@ public class ReceiverUserAlarmController {
                     .build();
 
             alarmService.save(alarm);
+
+            // Alarm 기간 만큼 복용 횟수 데이터 생성.
+            Calendar calendar = Calendar.getInstance();
+            DateFormat format = new SimpleDateFormat("yyyy:MM:dd");
+            calendar.setTime(request.getStartDate());
+
+            while (calendar.getTimeInMillis() <= request.getEndDate().getTime()) {
+
+                if (request.getRepeats().contains(calendar.get(Calendar.DAY_OF_WEEK) + "")) {
+                    AlarmCount alarmCount = AlarmCount.builder()
+                            .user(careUser)
+                            .alarm(alarm)
+                            .alarmDate(DateTimeHandler.cutTime(calendar.getTime()))
+                            .count(request.getTimes().split("/").length)
+                            .build();
+                    alarmCountService.countSave(alarmCount);
+                }
+
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
             CreateReceiverAlarmResponse alarmDto = CreateReceiverAlarmResponse.builder()
                     .alarmId(alarm.getId())
                     .build();
@@ -214,8 +237,16 @@ public class ReceiverUserAlarmController {
                     .repeats(request.getRepeats())
                     .build();
 
+            Alarm findAlarm = (Alarm) alarmService.findAlarm(alarmId).getData();
+            Date start = findAlarm.getStartDate();
+            Date end = findAlarm.getEndDate();
             DefaultResponse response = alarmService.update(alarmId, alarm);
 
+            // 알람의 날짜 변경시 변경된 날짜에 맞게 알람 복용 횟수 테이블도 수정.
+            if (!start.equals(request.getStartDate()) ||
+                    !end.equals(request.getEndDate())) {
+                alarmCountService.updateCountByAlarm(findAlarm);
+            }
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.ALARM_UPDATE_SUCCESS);

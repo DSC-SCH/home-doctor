@@ -98,8 +98,8 @@ public class ConnectionUserApiController {
                 return unAuthorizeResponse;
             }
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
-            DefaultResponse response = connectionUserService.findALlManagerByUser(findUser);
-            List<User> findManagerList = (List<User>) response.getData();
+            DefaultResponse response = connectionUserService.findAllManagerByUser(findUser);
+            List<ConnectionUser> findManagerList = (List<ConnectionUser>) response.getData();
 
             if (findManagerList == null) {
                 String[] empty = new String[0];
@@ -110,8 +110,8 @@ public class ConnectionUserApiController {
             List<ConnectionUserInfoResponse> managerDtoList = findManagerList.stream()
                     .map(m -> ConnectionUserInfoResponse.builder()
                             .connectionId(m.getId())
-                            .username(m.getUsername())
-                            .user(m.getId())
+                            .username(m.getUser().getUsername())
+                            .user(m.getUser().getId())
                             .build())
                     .collect(Collectors.toList());
 
@@ -136,7 +136,7 @@ public class ConnectionUserApiController {
 
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
             DefaultResponse response = connectionUserService.findAllReceiverByUser(findUser);
-            List<User> findReceiverList = (List<User>) response.getData();
+            List<ConnectionUser> findReceiverList = (List<ConnectionUser>) response.getData();
 
             if (findReceiverList == null) {
                 String[] empty = new String[0];
@@ -146,9 +146,9 @@ public class ConnectionUserApiController {
 
             List<ConnectionUserInfoResponse> managerDtoList = findReceiverList.stream()
                     .map(m -> ConnectionUserInfoResponse.builder()
-                            .username(m.getUsername())
+                            .username(m.getCareUser().getUsername())
                             .connectionId(m.getId())
-                            .user(m.getId())
+                            .user(m.getCareUser().getId())
                             .build())
                     .collect(Collectors.toList());
 

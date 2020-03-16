@@ -211,12 +211,14 @@ public class UserApiController {
                 return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_EXIST_USER);
             }
+
             userService.delete(findUser.getId());
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.USER_DELETE_SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
