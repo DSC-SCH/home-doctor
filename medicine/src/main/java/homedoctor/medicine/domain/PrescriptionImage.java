@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -21,6 +23,7 @@ public class PrescriptionImage extends DateTimeEntity {
     // cascade = CascadeType.ALL 확인하기.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "alarm_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Alarm alarm;
 
     @Column(name = "image", nullable = false, columnDefinition = "TEXT")

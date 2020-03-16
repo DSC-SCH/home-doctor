@@ -1,6 +1,8 @@
 package homedoctor.medicine.domain;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,10 +19,12 @@ public class ConnectionUser extends DateTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "care_user", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User careUser;
 
     @Builder
@@ -36,4 +40,6 @@ public class ConnectionUser extends DateTimeEntity {
 
         return connectionUser;
     }
+
+
 }

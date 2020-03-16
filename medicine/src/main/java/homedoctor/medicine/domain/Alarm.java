@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,18 +21,19 @@ import static javax.persistence.CascadeType.ALL;
 @RequiredArgsConstructor
 public class Alarm extends DateTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "alarm_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "alarm_user", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "alarm_user")
     private User user;
 
     @Column(name = "alarm_title", length = 64, nullable = false)
     private String title;
 
-    @OneToOne(cascade = ALL, fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "alarm_label")
     private Label label;
 
@@ -49,8 +53,8 @@ public class Alarm extends DateTimeEntity {
     @Column(name = "alarm_status", nullable = false)
     private AlarmStatus alarmStatus;
 
-    @OneToMany(mappedBy = "alarm", cascade = ALL, orphanRemoval = true)
-    private List<PrescriptionImage> prescriptionImageList = new ArrayList<>();
+//    @OneToMany(mappedBy = "alarm", cascade = ALL, orphanRemoval = true)
+//    private List<PrescriptionImage> prescriptionImageList = new ArrayList<>();
 
     //== 연관관계 메서드 ==//
 //    public void creatAlarm(User user) {
@@ -59,7 +63,8 @@ public class Alarm extends DateTimeEntity {
 //    }
 
     @Builder
-    public Alarm(User user, String title, Label label, Date startDate, Date endDate, String times, String repeats, AlarmStatus alarmStatus, List<PrescriptionImage> prescriptionImageList) {
+    public Alarm(User user, String title, Label label, Date startDate, Date endDate,
+                 String times, String repeats, AlarmStatus alarmStatus) {
         this.user = user;
         this.title = title;
         this.label = label;
@@ -68,6 +73,5 @@ public class Alarm extends DateTimeEntity {
         this.times = times;
         this.repeats = repeats;
         this.alarmStatus = alarmStatus;
-        this.prescriptionImageList = prescriptionImageList;
     }
 }
