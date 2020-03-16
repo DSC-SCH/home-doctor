@@ -25,7 +25,7 @@ public class Alarm extends DateTimeEntity {
     @Column(name = "alarm_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "alarm_user")
     private User user;
