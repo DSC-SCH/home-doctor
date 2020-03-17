@@ -88,15 +88,14 @@ public class AlarmApiController {
                             .user(findUser)
                             .alarm(alarm)
                             .alarmDate(DateTimeHandler.cutTime(calendar.getTime()))
-                            .count(request.getTimes().split("/").length)
+                            .count(0)
                             .build();
                     alarmCountService.countSave(alarmCount);
                 }
 
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
             }
-
-
+            
             CreateAlarmResponse createAlarmResponse = CreateAlarmResponse.builder()
                     .id(alarm.getId())
                     .build();

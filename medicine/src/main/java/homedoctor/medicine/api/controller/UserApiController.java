@@ -37,24 +37,24 @@ public class UserApiController {
     public DefaultResponse getTerms() {
         try {
 
-            List<Terms> terms = (List<Terms>) termService.findTerms().getData();
+            List<Terms> terms = (List<Terms>) termService.findTermsAll().getData();
 
-            if (terms == null || terms.isEmpty()) {
+            if (terms.isEmpty()) {
                 String[] empty = new String[0];
                 return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_FOUND_TERMS, empty);
             }
 
-            List<TermsDto> termsDto = terms.stream()
+            List<TermsDto> termsDtoList = terms.stream()
                     .map(m -> TermsDto.builder()
                     .title(m.getTitle())
                     .content(m.getContent())
-                    .build())
-                    .collect(Collectors.toList());
+                    .build()).collect(Collectors.toList());
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.FOUND_TERMS,
-                    termsDto);
+                    termsDtoList);
+
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
@@ -64,6 +64,36 @@ public class UserApiController {
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    @GetMapping("/privacy")
+//    public DefaultResponse getPrivacyInfo() {
+//        try {
+//            Terms privacyInfo = (Terms) termService.findPrivacy().getData();
+//
+//            if (privacyInfo == null) {
+//                String[] empty = new String[0];
+//                return DefaultResponse.response(StatusCode.OK,
+//                        ResponseMessage.NOT_FOUND_TERMS, empty);
+//            }
+//
+//            TermsDto privacyDto = TermsDto.builder()
+//                    .title(privacyInfo.getTitle())
+//                    .content(privacyInfo.getContent())
+//                    .build();
+//
+//            return DefaultResponse.response(StatusCode.OK,
+//                    ResponseMessage.FOUND_TERMS,
+//                    privacyDto);
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            e.printStackTrace();
+//            System.err.println(e.getMessage());
+//
+//            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+//                    ResponseMessage.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
 
     @PostMapping("login")
     public DefaultResponse login(@RequestBody final LoginRequest loginRequest) {

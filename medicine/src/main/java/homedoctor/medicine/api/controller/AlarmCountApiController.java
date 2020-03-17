@@ -43,6 +43,11 @@ public class AlarmCountApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
 
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
+            }
+
             DefaultResponse response = alarmCountService.updateCountByAlarmIdAndDate(alarmId,
                     DateTimeHandler.cutTime(request.getDate()),
                     request.getCount());
@@ -69,12 +74,12 @@ public class AlarmCountApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
 
-            if (request.getAlarmListJsonArray() == null) {
+            if (request.getCounts() == null) {
                 return DefaultResponse.response(StatusCode.BAD_REQUEST,
                         ResponseMessage.NOT_CONTENT);
             }
 
-            DefaultResponse response = alarmCountService.updateCountByAlarmList(request.getAlarmListJsonArray());
+            DefaultResponse response = alarmCountService.updateCountByAlarmList(request.getCounts());
 
             return DefaultResponse.response(response.getStatus(),
                     response.getMessage());
@@ -123,7 +128,7 @@ public class AlarmCountApiController {
      * 유저의 특정 날짜에 대한 모든 알람의 복용 횟수 조회
      */
     @Auth
-    @GetMapping("/alarm/counts")
+    @PostMapping("/alarm/counts")
     public DefaultResponse getCountAllByAlarmDate(
             @RequestHeader("Authorization") final String header,
             @RequestBody CountByAlarmDateRequest request) {
@@ -146,8 +151,10 @@ public class AlarmCountApiController {
             List<AlarmCount> findAlarmCountList = (List<AlarmCount>) userDateResponse.getData();
 
             if (findAlarmCountList == null) {
+                String[] empty = new String[0];
                 return DefaultResponse.response(userDateResponse.getStatus(),
-                        userDateResponse.getMessage());
+                        userDateResponse.getMessage(),
+                        empty);
             }
 
             List<CountOfAlarmDateResponse> response = findAlarmCountList.stream()
@@ -174,7 +181,7 @@ public class AlarmCountApiController {
      * 연동 유저의 특정 날짜에 대한 모든 알람의 복용 횟수 조회
      */
     @Auth
-    @GetMapping("/alarm/counts/{careUser_id}")
+    @PostMapping("/alarm/counts/user/{careUser_id}")
     public DefaultResponse getCareUserCountAllByAlarmDate(
             @RequestHeader("Authorization") final String header,
             @RequestBody CountByAlarmDateRequest request,
@@ -198,8 +205,9 @@ public class AlarmCountApiController {
             List<AlarmCount> findAlarmCountList = (List<AlarmCount>) userDateResponse.getData();
 
             if (findAlarmCountList == null) {
+                String[] empty = new String[0];
                 return DefaultResponse.response(userDateResponse.getStatus(),
-                        userDateResponse.getMessage());
+                        userDateResponse.getMessage(), empty);
             }
 
             List<CountOfAlarmDateResponse> response = findAlarmCountList.stream()
@@ -241,8 +249,9 @@ public class AlarmCountApiController {
             List<AlarmCount> alarmCountList = (List<AlarmCount>) alarmCountService.findAllByAlarm(alarmId).getData();
 
             if (alarmCountList == null) {
+                String[] empty = new String[0];
                 return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                        ResponseMessage.NOT_FOUND_ALARM_COUNT);
+                        ResponseMessage.NOT_FOUND_ALARM_COUNT, empty);
             }
 
             List<AlarmCountResponse> alarmCountResponse = alarmCountList.stream()
