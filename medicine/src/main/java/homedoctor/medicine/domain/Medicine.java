@@ -16,7 +16,7 @@ public class Medicine {
     private Long id;
 
     @Column(name = "item_code", columnDefinition = "TEXT")
-    private Long code;
+    private String code;
 
     @Column(name = "medicine_name", length = 50, columnDefinition = "TEXT")
     private String name;
@@ -33,8 +33,8 @@ public class Medicine {
     @Column(columnDefinition = "TEXT")
     private String dosage;
 
-    @Column(columnDefinition = "TEXT", name = "bad_effect")
-    private String badEffect;
+    @Column(columnDefinition = "TEXT", name = "precaution")
+    private String precaution;
 
 
 }

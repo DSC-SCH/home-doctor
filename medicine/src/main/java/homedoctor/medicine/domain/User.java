@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class User extends DateTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 

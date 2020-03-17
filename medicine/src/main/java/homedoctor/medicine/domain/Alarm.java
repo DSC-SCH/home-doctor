@@ -21,7 +21,7 @@ import static javax.persistence.CascadeType.ALL;
 @RequiredArgsConstructor
 public class Alarm extends DateTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     @Column(name = "alarm_id")
     private Long id;
 
