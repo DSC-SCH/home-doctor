@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import homedoctor.medicine.api.dto.DefaultResponse;
+import homedoctor.medicine.api.dto.alarmCount.AlarmCountRequestDto;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.domain.Alarm;
@@ -76,7 +77,7 @@ public class AlarmCountService {
             AlarmCount alarmCount = alarmCountRepository.findOneByAlarmDate(alarmId, date);
 
             if (alarmCount == null) {
-                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.ALARM_COUNT_SEARCH_FAIL);
             }
 
@@ -105,7 +106,7 @@ public class AlarmCountService {
             List<AlarmCount> alarmCountList = alarmCountRepository.findAllByUserDate(userId, date);
 
             if (alarmCountList == null || alarmCountList.isEmpty()) {
-                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_FOUND_ALARM_COUNT);
             }
 
@@ -127,7 +128,7 @@ public class AlarmCountService {
             List<AlarmCount> alarmCountList = alarmCountRepository.findAllByAlarm(alarmId);
 
             if (alarmCountList == null || alarmCountList.isEmpty()) {
-                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_FOUND_ALARM_COUNT);
             }
             return DefaultResponse.response(StatusCode.OK,
@@ -145,11 +146,11 @@ public class AlarmCountService {
             AlarmCount alarmCount = alarmCountRepository.findOneByAlarmDate(alarmId, date);
 
             if (alarmCount == null) {
-                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.ALARM_COUNT_SEARCH_FAIL);
             }
 
-            alarmCount.updateCounts(count);
+            alarmCount.updateCounts(alarmCount.getCounts() + 1);
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.ALARM_COUNT_UPDATE_SUCCESS);
@@ -161,18 +162,18 @@ public class AlarmCountService {
     }
 
     @Transactional
-    public DefaultResponse updateCountByAlarmList(JsonArray alarmJsonArray) {
+    public DefaultResponse updateCountByAlarmList(List<AlarmCountRequestDto> alarmCountRequestDtos) {
         try {
-            for (int i = 0; i < alarmJsonArray.size(); i++) {
-                JsonObject tmp = (JsonObject) alarmJsonArray.get(i);
+            for (AlarmCountRequestDto alarmCount : alarmCountRequestDtos) {
 
                 // Json 데이터 가져오기
-                Long alarmId = tmp.get("alarmId").getAsLong();
-                Integer count = tmp.get("count").getAsInt();
-                String date = tmp.get("date").getAsString();
+                Long alarmId = alarmCount.getAlarmId();
+                Integer count = alarmCount.getCount();
+                Date date = alarmCount.getDate();
 
                 // alarmId, date 값으로 변경할 복용 횟수 테이블 고유값 가져오기
-                AlarmCount findAlarmCount = alarmCountRepository.findOneByAlarmDate(alarmId, date);
+                AlarmCount findAlarmCount = alarmCountRepository.findOneByAlarmDate(
+                        alarmId, DateTimeHandler.cutTime(date));
                 findAlarmCount.updateCounts(count);
                 alarmCountRepository.save(findAlarmCount);
             }
@@ -202,7 +203,7 @@ public class AlarmCountService {
             // Alarm 기간 만큼 복용 횟수 데이터 생성.
             Calendar calendar = Calendar.getInstance();
             DateFormat format = new SimpleDateFormat("yyyy:MM:dd");
-            calendar.setTime(alarm.getStartDate());
+            calendar.setTime(alarm.getLastModifiedDate());
 
             while (calendar.getTimeInMillis() <= alarm.getEndDate().getTime()) {
 
@@ -211,7 +212,7 @@ public class AlarmCountService {
                             .user(alarm.getUser())
                             .alarm(alarm)
                             .alarmDate(DateTimeHandler.cutTime(calendar.getTime()))
-                            .count(alarm.getTimes().split("/").length)
+                            .count(0)
                             .build();
                     alarmCountRepository.save(alarmCount);
                 }
