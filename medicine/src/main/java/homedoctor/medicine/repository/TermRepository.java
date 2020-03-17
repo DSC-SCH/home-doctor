@@ -22,4 +22,11 @@ public class TermRepository {
                 .getResultList();
     }
 
+    public Terms findTermsByTitle(String title) {
+        return em.createQuery("select t from Terms t where t.title = :title",
+                Terms.class)
+                .setParameter("title", title)
+                .getSingleResult();
+    }
+
 }

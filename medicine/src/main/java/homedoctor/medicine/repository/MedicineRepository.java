@@ -21,61 +21,39 @@ public class MedicineRepository {
     }
 
     public List<Medicine> findAllByName(String name) {
-        return em.createQuery("select m from Medicine m where m.name = :name", Medicine.class)
-                .setParameter("name", name)
-                .getResultList();
-    }
-
-    public List<Medicine> findAllByEffect(String effect) {
-        return em.createQuery("select m from Medicine m where m.effect = :effect", Medicine.class)
-                .setParameter("effect", effect)
+        return em.createQuery("select m from Medicine m where m.name like :name", Medicine.class)
+                .setParameter("name", "%" + name + "%")
                 .getResultList();
     }
 
     public List<Medicine> findAllByKeyword(String keyword) {
+
+
         List<Medicine> nameSearch = em.createQuery("select m from Medicine m " +
                 "where m.name like :keyword", Medicine.class)
-                .setParameter("keyword", keyword)
+                .setParameter("keyword", "%" + keyword + "%")
                 .getResultList();
 
         List<Medicine> effectSearch = em.createQuery("select m from Medicine m " +
                 "where m.effect like :keyword", Medicine.class)
-                .setParameter("keyword", keyword)
+                .setParameter("keyword", "%" + keyword + "%")
                 .getResultList();
 
-        List<Medicine> saveMethodSearch = em.createQuery("select m from Medicine m " +
-                "where m.saveMethod like :keyword", Medicine.class)
-                .setParameter("keyword", keyword)
-                .getResultList();
-
-        List<Medicine> dosageSearch = em.createQuery("select m from Medicine m " +
-                "where m.dosage like :keyword", Medicine.class)
-                .setParameter("keyword", keyword)
-                .getResultList();
-
-        List<Medicine> badEffectSearch = em.createQuery("select m from Medicine m " +
-                "where m.badEffect like :keyword", Medicine.class)
-                .setParameter("keyword", keyword)
+        List<Medicine> precautions = em.createQuery("select m from Medicine m " +
+                "where m.precaution like :keyword", Medicine.class)
+                .setParameter("keyword", "%" + keyword + "%")
                 .getResultList();
         List<Medicine> result = new ArrayList<>();
 
-        for (Medicine search : badEffectSearch) {
-            result.add(search);
+        for (Medicine medicine : nameSearch) {
+            result.add(medicine);
         }
 
-        for (Medicine search : dosageSearch) {
+        for (Medicine search : precautions) {
             result.add(search);
-        }
-
-        for (Medicine methodSearch : saveMethodSearch) {
-            result.add(methodSearch);
         }
 
         for (Medicine search : effectSearch) {
-            result.add(search);
-        }
-
-        for (Medicine search : nameSearch) {
             result.add(search);
         }
 
