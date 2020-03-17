@@ -95,4 +95,8 @@ public class ResponseMessage {
     public static final String AUTHORIZED                  = "인증 성공.";
     public static final String FOUND_TERMS                 = "약관 조회 성공.";
     public static final String NOT_FOUND_TERMS             = "약관 조회 실패.";
+
+    public static final String FOUND_NOTICE                 = "공지사항 조회 성공.";
+    public static final String NOT_FOUND_NOTICE             = "공지사 조회 실패.";
+    public static final String SUCCESS_QUESTION             = "문의하기 성공 실패.";
 }
