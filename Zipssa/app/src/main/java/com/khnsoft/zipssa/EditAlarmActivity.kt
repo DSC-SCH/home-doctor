@@ -27,7 +27,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.edit_alarm_activity.*
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 
 class EditAlarmActivity : AppCompatActivity() {
@@ -58,8 +57,14 @@ class EditAlarmActivity : AppCompatActivity() {
 		setContentView(R.layout.edit_alarm_activity)
 
 		val _id = intent.getIntExtra(ExtraAttr.ALARM_ID, -1)
-		val _jTemp = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_ALARM, id=_id)["data"].asJsonObject
-		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)["data"].asJsonObject
+		val result = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_ALARM, id=_id)
+		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)
+
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@EditAlarmActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
+		}
+		val _jTemp = result["data"].asJsonObject
 		val _jItem = ServerHandler.convertKeys(_jTemp, ServerHandler.alarmToLocal)
 
 		// Setting back button
@@ -67,6 +72,8 @@ class EditAlarmActivity : AppCompatActivity() {
 			onBackPressed()
 		}
 
+		image_section.visibility = View.GONE
+		/*
 		// Setting image
 		if (UserData.careUser == null) {
 			image_from_camera.setOnClickListener {
@@ -80,7 +87,10 @@ class EditAlarmActivity : AppCompatActivity() {
 				startActivityForResult(intent, PhotoAttr.GALLERY.rc)
 			}
 
-			val lImages = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_IMAGES, id = _id)["data"].asJsonArray
+			val result = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_IMAGES, id = _id)
+
+			if (!HttpHelper.isOK(result)) finish()
+			val lImages = result["data"].asJsonArray
 			for (image in lImages) {
 				val jItem = ServerHandler.convertKeys(image.asJsonObject, ServerHandler.imageToLocal)
 				images.add(ImageHelper.base64ToBitmap(jItem["image"].asString))
@@ -89,6 +99,7 @@ class EditAlarmActivity : AppCompatActivity() {
 		} else {
 			image_section.visibility = View.GONE
 		}
+		 */
 
 		// Setting title
 		edit_title.setText(_jItem["alarm_title"].asString)
@@ -99,7 +110,8 @@ class EditAlarmActivity : AppCompatActivity() {
 		arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
 		alarm_times.adapter = arrayAdapter
 
-		edit_times_switch.isChecked = AlarmParser.parseStatus(_jItem["alarm_enabled"].asString) == AlarmStatus.ENABLED
+		edit_times_switch.isChecked = AlarmParser.parseStatus(_jItem["alarm_enabled"].asString) == AlarmStatus.ENABLE
+		if (UserData.careUser != null) edit_times_switch.isEnabled = false
 
 		val _jTimesRaw = AlarmParser.parseTimes(_jItem["alarm_times"].asString)
 		val _jTimes = JsonArray()
@@ -243,17 +255,31 @@ class EditAlarmActivity : AppCompatActivity() {
 					val result = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.DELETE_ALARM, id=_id)
 					else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_DELETE_ALARM, id=UserData.careUser, id2=_id)
 					if (!HttpHelper.isOK(result)) {
+						Toast.makeText(this@EditAlarmActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 						return@OnClickListener
 					}
 
-					val data = MyAlertPopup.Data(AlertType.CONFIRM)
-					data.alertTitle = alertTitle
-					data.alertContent = "해당 알림이 삭제되었습니다."
-					val dataId = DataPasser.insert(data)
+					if (UserData.careUser == null) {
+						AlarmHandler.clearAlarmById(this@EditAlarmActivity, _id)
 
-					val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
-					intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
-					startActivity(intent)
+						val data = MyAlertPopup.Data(AlertType.CONFIRM)
+						data.alertTitle = alertTitle
+						data.alertContent = "해당 알림이 삭제되었습니다."
+						val dataId = DataPasser.insert(data)
+
+						val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
+						intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
+						startActivity(intent)
+					} else {
+						val data = MyAlertPopup.Data(AlertType.CONFIRM)
+						data.alertTitle = alertTitle
+						data.alertContent = "해당 알림이 삭제되었습니다. 변경 사항이 적용되려면 크루의 어플을 한 번 재실행 해야합니다."
+						val dataId = DataPasser.insert(data)
+
+						val intent = Intent(this@EditAlarmActivity, MyAlertPopup::class.java)
+						intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
+						startActivity(intent)
+					}
 				}
 			}
 
@@ -273,10 +299,9 @@ class EditAlarmActivity : AppCompatActivity() {
 			}
 
 			val lTimes = mutableListOf<String>()
+			val adapter = edit_time_container.adapter as EditTimeRecyclerAdapter
 			for (i in 0..count - 1) {
-				val holder =
-					edit_time_container.getChildViewHolder(edit_time_container[i]) as EditTimeRecyclerAdapter.ViewHolder
-				lTimes.add(SDF.time.format(SDF.timeInKorean.parse(holder.time.text.toString())))
+				lTimes.add(SDF.time.format(SDF.timeInKorean.parse(adapter.curTimes[i])))
 			}
 			lTimes.sort()
 			lTimes.toString()
@@ -310,14 +335,18 @@ class EditAlarmActivity : AppCompatActivity() {
 					json.addProperty("alarm_end_date", SDF.dateBar.format(endCal.time))
 					json.addProperty("alarm_times", lTimes.joinToString("/"))
 					json.addProperty("alarm_repeats", lRepeats.joinToString("/"))
-					json.addProperty("alarm_enabled", if (edit_times_switch.isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status)
+					json.addProperty("alarm_enabled", if (edit_times_switch.isChecked) AlarmStatus.ENABLE.status else AlarmStatus.CANCEL.status)
 
 					val result = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_ALARM, json, _id)
 					else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_EDIT_ALARM, json, UserData.careUser, _id)
 
-					if (!HttpHelper.isOK(result)) return@OnClickListener
+					if (!HttpHelper.isOK(result)) {
+						Toast.makeText(this@EditAlarmActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+						return@OnClickListener
+					}
 
 					if (UserData.careUser == null) {
+						/*
 						val json2 = JsonObject()
 						val lImages = JsonArray()
 
@@ -329,6 +358,11 @@ class EditAlarmActivity : AppCompatActivity() {
 						val result2 = ServerHandler.send(this@EditAlarmActivity, EndOfAPI.EDIT_IMAGES, json2, _id)
 
 						if (!HttpHelper.isOK(result2)) return@OnClickListener
+						 */
+
+						json.addProperty("alarm_id", _id)
+						AlarmHandler.clearAlarmById(this@EditAlarmActivity, _id)
+						AlarmHandler.createAlarm(this@EditAlarmActivity, json)
 					}
 
 					val data = MyAlertPopup.Data(AlertType.CONFIRM)
@@ -410,8 +444,15 @@ class EditAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		val lLabels = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
-		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_LABELS, id=UserData.careUser)["data"].asJsonArray
+		val result = if (UserData.careUser == null) ServerHandler.send(this@EditAlarmActivity, EndOfAPI.GET_LABELS)
+		else ServerHandler.send(this@EditAlarmActivity, EndOfAPI.SYNC_GET_LABELS, id=UserData.careUser)
+
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@EditAlarmActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
+		}
+
+		val lLabels = result["data"].asJsonArray
 
 		val labelSize = lLabels.size()
 		var count = 0
@@ -487,6 +528,7 @@ class EditAlarmActivity : AppCompatActivity() {
 
 	inner class EditTimeRecyclerAdapter(val lTimes: JsonArray) :
 		RecyclerView.Adapter<EditTimeRecyclerAdapter.ViewHolder>() {
+		val curTimes = mutableListOf<String>()
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 			val time = itemView.findViewById<TextView>(R.id.time_item)
@@ -502,14 +544,18 @@ class EditAlarmActivity : AppCompatActivity() {
 		}
 
 		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-			holder.time.text = lTimes[position].asString
+			val sTime = lTimes[position].asString
+			if (curTimes.size < lTimes.size()) curTimes.add(sTime)
+			holder.time.text = sTime
 			holder.time.setOnClickListener {
 				val cal = Calendar.getInstance()
 				cal.time = SDF.timeInKorean.parse(holder.time.text.toString())
 				TimePickerDialog(this@EditAlarmActivity, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
 					cal[Calendar.HOUR_OF_DAY] = hourOfDay
 					cal[Calendar.MINUTE] = minute
-					holder.time.text = SDF.timeInKorean.format(cal.time)
+					val sTime = SDF.timeInKorean.format(cal.time)
+					curTimes.set(position, sTime)
+					holder.time.text = sTime
 				}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
 			}
 		}

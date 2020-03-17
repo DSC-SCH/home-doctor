@@ -12,10 +12,13 @@
 
 	<dimen name="arrow_updown_paddingR">10sp</dimen>
 
+	<dimen name="alarm_title_paddingV">3dp</dimen>
+	<dimen name="alarm_title_paddingH">5dp</dimen>
+
 	<!-- loading page -->
 	<dimen name="loading_paddingV">40dp</dimen>
 
-	<!-- loading page -->
+	<!-- permission page -->
 	<dimen name="permission_paddingH">50dp</dimen>
 	<dimen name="permission_img_sizeH">50dp</dimen>
 	<dimen name="permission_img_sizeV">40dp</dimen>
@@ -46,6 +49,7 @@
 	<dimen name="join_input_padding">5dp</dimen>
 	<dimen name="join_check_paddingH">15dp</dimen>
 	<dimen name="join_check_marginL">10dp</dimen>
+	<dimen name="join_item_marginL">5dp</dimen>
 	<dimen name="join_item_marginT">15dp</dimen>
 	<dimen name="join_contract_marginT">40dp</dimen>
 	<dimen name="join_contract_warning_marginT">20dp</dimen>
@@ -88,8 +92,6 @@
 	<dimen name="main_item_split_marginH">10dp</dimen>
 	<dimen name="main_item_remain_paddingV">5dp</dimen>
 	<dimen name="main_item_times_paddingB">10dp</dimen>
-	<dimen name="main_item_title_paddingV">3dp</dimen>
-	<dimen name="main_item_title_paddingH">5dp</dimen>
 	<dimen name="main_item_title_marginH">20dp</dimen>
 
 	<dimen name="main_item_icon_size">60dp</dimen>
@@ -238,6 +240,7 @@
 	<dimen name="search_recent_item_padding">5dp</dimen>
 
 	<dimen name="search_recent_title_marginV">10dp</dimen>
+	<dimen name="search_result_marginV">5dp</dimen>
 
 	<dimen name="search_recent_text">13sp</dimen>
 
@@ -255,6 +258,7 @@
 	<dimen name="search_result_page_item_size">20dp</dimen>
 
 	<dimen name="search_result_text">13sp</dimen>
+	<dimen name="search_result_content_text">11sp</dimen>
 	<dimen name="search_result_en_text">10sp</dimen>
 	<dimen name="search_result_page_item_text">13dp</dimen>
 
@@ -330,8 +334,6 @@
 	<dimen name="sync_item_marginV">15dp</dimen>
 	<dimen name="sync_item_icon_paddingV">5dp</dimen>
 	<dimen name="sync_item_icon_size">17dp</dimen>
-	<dimen name="sync_item_text_paddingV">3dp</dimen>
-	<dimen name="sync_item_text_paddingH">5dp</dimen>
 
 	<dimen name="sync_editbtn_text">13sp</dimen>
 	<dimen name="sync_addbtn_text">18sp</dimen>
@@ -361,8 +363,6 @@
 	<dimen name="history_all_content_paddingV">10dp</dimen>
 	<dimen name="history_all_content_paddingH">20dp</dimen>
 	<dimen name="history_all_split_marginV">5dp</dimen>
-	<dimen name="history_all_title_paddingV">3dp</dimen>
-	<dimen name="history_all_title_paddingH">5dp</dimen>
 
 	<dimen name="history_all_title_text">15sp</dimen>
 	<dimen name="history_all_content_text">15sp</dimen>
@@ -372,8 +372,6 @@
 	<dimen name="history_photo_image_sizeH">120dp</dimen>
 	<dimen name="history_photo_image_sizeV">160dp</dimen>
 	<dimen name="history_photo_split_marginV">3dp</dimen>
-	<dimen name="history_photo_title_paddingH">5dp</dimen>
-	<dimen name="history_photo_title_paddingV">3dp</dimen>
 	<dimen name="history_photo_detail_content_paddingH">30dp</dimen>
 	<dimen name="history_photo_detail_content_paddingT">20dp</dimen>
 	<dimen name="history_photo_detail_content_paddingB">10dp</dimen>
@@ -439,4 +437,14 @@
 
 	<dimen name="popup_content_text">15sp</dimen>
 	<dimen name="popup_button_text">15sp</dimen>
+
+	<!-- Notification -->
+	<dimen name="notify_padding">20dp</dimen>
+	<dimen name="notify_icon_sizeH">30dp</dimen>
+	<dimen name="notify_icon_sizeV">20dp</dimen>
+	<dimen name="notify_title_marginH">10dp</dimen>
+
+	<dimen name="notify_time_text">20sp</dimen>
+	<dimen name="notify_title_text">15sp</dimen>
+	<dimen name="notify_content_text">13sp</dimen>
 </resources>

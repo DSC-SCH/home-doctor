@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.search_result_fragment.*
 
 class SearchResultFragment : Fragment() {
 	var lResult: JsonArray? = null
+	var keyword: String = ""
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = inflater.inflate(R.layout.search_result_fragment, container, false)
@@ -38,10 +39,9 @@ class SearchResultFragment : Fragment() {
 		refresh()
 	}
 
-	// TODO("Remove page system: Due to not enough data")
-
 	fun refresh() {
 		if (lResult == null) return
+		keyword_view.text = "${keyword} - ${lResult!!.size()} 건"
 		val adapter = SearchResultRecyclerAdapter(lResult!!)
 		val lm = LinearLayoutManager(context)
 		search_result_container.layoutManager = lm
@@ -54,8 +54,6 @@ class SearchResultFragment : Fragment() {
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 			val container = itemView.findViewById<LinearLayout>(R.id.medicine_container)
 			val name_ko = itemView.findViewById<TextView>(R.id.medicine_name_ko)
-			val name_ = itemView.findViewById<TextView>(R.id.medicine_name_en)
-			val function = itemView.findViewById<TextView>(R.id.medicine_function)
 			val effect = itemView.findViewById<TextView>(R.id.medicine_effect)
 		}
 
@@ -76,7 +74,10 @@ class SearchResultFragment : Fragment() {
 				intent.putExtra(ExtraAttr.MEDICINE, jItem.toString())
 				startActivity(intent)
 			}
-			// TODO("Server: Assign data to TextView")
+
+			holder.name_ko.text = jItem["name"].asString
+			val sEffect = jItem["effect"].asString.replace("\n", "\t")
+			holder.effect.text = if (sEffect.length > 30) "${sEffect.substring(0, 30)}..." else sEffect
 		}
 	}
 }

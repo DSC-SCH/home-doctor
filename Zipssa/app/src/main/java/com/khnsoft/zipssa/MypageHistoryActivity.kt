@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,13 +30,25 @@ class MypageHistoryActivity : AppCompatActivity() {
 
 		val radioGroup = MyRadioGroup()
 		radioGroup.add(history_all)
-		radioGroup.add(history_photo)
+		// radioGroup.add(history_photo)
 
 		radioGroup.setOnChangeListener(object: MyRadioGroup.OnChangeListener {
 			override fun onChange(after: RadioButton) {
 				changePage(if (after.id == R.id.history_photo) PAGE_PHOTO else PAGE_ALL)
 			}
 		})
+
+		history_photo.setOnClickListener {
+			history_photo.isChecked = false
+			val data = MyAlertPopup.Data(AlertType.CONFIRM)
+			data.alertTitle = "서비스 준비중"
+			data.alertContent = "베타 서비스 준비중입니다."
+			val dataId = DataPasser.insert(data)
+
+			val intent = Intent(this@MypageHistoryActivity, MyAlertPopup::class.java)
+			intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
+			startActivity(intent)
+		}
 
 		changePage(curPage)
 	}
@@ -52,7 +61,12 @@ class MypageHistoryActivity : AppCompatActivity() {
 	fun refresh() {
 		when (curPage) {
 			PAGE_ALL -> {
-				val lHistory = ServerHandler.send(this@MypageHistoryActivity, EndOfAPI.GET_ALL_ALARMS)["data"].asJsonArray
+				val result = ServerHandler.send(this@MypageHistoryActivity, EndOfAPI.GET_ALL_ALARMS)
+				if (!HttpHelper.isOK(result)) {
+					Toast.makeText(this@MypageHistoryActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+					return
+				}
+				val lHistory = result["data"].asJsonArray
 
 				val lm = LinearLayoutManager(this@MypageHistoryActivity)
 				val adapter = HistoryRecyclerAdapter(lHistory)
@@ -60,7 +74,12 @@ class MypageHistoryActivity : AppCompatActivity() {
 				history_container.adapter = adapter
 			}
 			PAGE_PHOTO -> {
-				val lPhoto = ServerHandler.send(this@MypageHistoryActivity, EndOfAPI.GET_ALL_IMAGES)["data"].asJsonArray
+				val result = ServerHandler.send(this@MypageHistoryActivity, EndOfAPI.GET_ALL_IMAGES)
+				if (!HttpHelper.isOK(result)) {
+					Toast.makeText(this@MypageHistoryActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+					return
+				}
+				val lPhoto = result["data"].asJsonArray
 
 				val lm = GridLayoutManager(this@MypageHistoryActivity, 2)
 				val adapter = PhotoRecyclerAdapter(lPhoto)

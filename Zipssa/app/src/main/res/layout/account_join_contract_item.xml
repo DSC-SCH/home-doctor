@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:orientation="vertical">
+	android:orientation="horizontal">
 
 	<CheckBox
 		android:id="@+id/contract_title"
@@ -18,12 +18,12 @@
 
 	<TextView
 		android:id="@+id/contract_content"
-		android:layout_width="match_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:background="@drawable/account_stroke_box"
-		android:padding="@dimen/join_input_padding"
-		android:minLines="3"
+		android:layout_marginLeft="@dimen/join_item_marginL"
+		android:layout_marginTop="@dimen/join_item_marginT"
 		android:fontFamily="@font/nanum_square_ac"
-		android:textColor="@color/text_color"
-		android:textSize="@dimen/join_contract_text" />
+		android:textColor="@color/main_theme"
+		android:textSize="@dimen/join_contract_text"
+		android:text="상세 보기" />
 </LinearLayout>

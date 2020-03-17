@@ -178,7 +178,7 @@
 					android:fontFamily="@font/nanum_square_ac"
 					android:textSize="@dimen/leaving_warning_title_text"
 					android:textColor="@color/text_color"
-					android:text="불량 이용자의 부정한 이용의 재발(타인의 개인정보 이용 등)을 방지하기 위해 회원의 개인정보를 회원 탈퇴일로부터 3개월까지 보유합니다. 소셜 로그인의 경우 약손과 연결된 계정을 직접 해제해주셔야 삭제가 완료됩니다. (알아보기)\n그 후 개인정보 및 이용기록은 모두 삭제되며, 삭제된 계정은 복구할 수 없습니다."
+					android:text="불량 이용자의 부정한 이용의 재발(타인의 개인정보 이용 등)을 방지하기 위해 회원의 개인정보를 회원 탈퇴일로부터 3개월까지 보유합니다. 소셜 로그인의 경우 약손과 연결된 계정을 직접 해제해주셔야 삭제가 완료됩니다.\n그 후 개인정보 및 이용기록은 모두 삭제되며, 삭제된 계정은 복구할 수 없습니다."
 					android:lineSpacingExtra="5dp"/>
 
 				<TextView

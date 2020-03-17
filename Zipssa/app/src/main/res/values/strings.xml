@@ -1,6 +1,8 @@
 <resources>
-	<string name="app_name">Zipssa</string>
+	<string name="app_name">약손</string>
 	<string name="kakao_app_key">a09040141b3138be2ba1d46e923b3faa</string>
+	<string name="imp_key">3269528787150082</string>
+	<string name="imp_secret">u8zFVb2fqE9XW0GLMRiQTb3bw672X7ysg87bj9qKOAIKApwmgPca0glwmtzjA8LRgT2A3slS23CDs9ZJ</string>
 
 	<string name="home">홈</string>
 	<string name="back">뒤로가기</string>

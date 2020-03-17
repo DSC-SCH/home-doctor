@@ -18,6 +18,12 @@ class PermissionActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.permission_activity)
 
+		val intent = Intent(this@PermissionActivity, LoginActivity::class.java)
+		startActivity(intent)
+		finish()
+
+		return
+
 		val sp = SPHandler.getSp(this@PermissionActivity)
 		val isPermissionChecked = sp.getBoolean(SP_PERMISSION, false)
 

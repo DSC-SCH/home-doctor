@@ -66,9 +66,11 @@ class AddLabelPopup : AppCompatActivity() {
 			val result = if (UserData.careUser == null) ServerHandler.send(this@AddLabelPopup, EndOfAPI.ADD_LABEL, json)
 			else ServerHandler.send(this@AddLabelPopup, EndOfAPI.SYNC_ADD_LABEL, json, id=UserData.careUser)
 
-			if (HttpHelper.isOK(result)) {
-				finish()
+			if (!HttpHelper.isOK(result)) {
+				Toast.makeText(this@AddLabelPopup, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+				return@setOnClickListener
 			}
+			finish()
 		}
 	}
 }

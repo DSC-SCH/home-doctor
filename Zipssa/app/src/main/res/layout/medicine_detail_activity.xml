@@ -67,6 +67,7 @@
 				android:padding="@dimen/medicine_content_padding">
 				
 				<TextView
+					android:id="@+id/medicine_name"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/medicine_context_distance"
@@ -75,6 +76,7 @@
 					android:textSize="@dimen/medicine_content_text"
 					android:text="약물명"/>
 
+				<!--
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -83,6 +85,7 @@
 					android:textColor="@color/text_color_gray"
 					android:textSize="@dimen/medicine_content_en_text"
 					android:text="Medicine name"/>
+				-->
 			</LinearLayout>
 
 			<LinearLayout
@@ -120,6 +123,7 @@
 				android:visibility="gone">
 
 				<TextView
+					android:id="@+id/medicine_effect"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/medicine_context_distance"
@@ -164,6 +168,7 @@
 				android:visibility="gone">
 
 				<TextView
+					android:id="@+id/medicine_dosage"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/medicine_context_distance"
@@ -208,6 +213,7 @@
 				android:visibility="gone">
 
 				<TextView
+					android:id="@+id/medicine_validity"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/medicine_context_distance"
@@ -227,11 +233,11 @@
 
 				<TextView
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="match_parent"
 					android:fontFamily="@font/lotte_dream_bold"
+					android:text="@string/underline_medicine_preservation"
 					android:textColor="@color/main_theme"
-					android:textSize="@dimen/medicine_title_text"
-					android:text="@string/underline_medicine_preservation" />
+					android:textSize="@dimen/medicine_title_text" />
 
 				<ImageView
 					android:id="@+id/preservation_icon"
@@ -252,6 +258,7 @@
 				android:visibility="gone">
 
 				<TextView
+					android:id="@+id/medicine_preservation"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/medicine_context_distance"
@@ -296,6 +303,7 @@
 				android:visibility="gone">
 
 				<TextView
+					android:id="@+id/medicine_warning"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_margin="@dimen/medicine_context_distance"

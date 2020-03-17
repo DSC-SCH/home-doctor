@@ -28,7 +28,10 @@ class MypageServiceEnquireActivity : AppCompatActivity() {
 						json.addProperty("email", email_input.text.toString())
 
 						val result = ServerHandler.send(this@MypageServiceEnquireActivity, EndOfAPI.ENQUIRE, json)
-						if (!HttpHelper.isOK(result)) return@OnClickListener
+						if (!HttpHelper.isOK(result)) {
+							Toast.makeText(this@MypageServiceEnquireActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+							return@OnClickListener
+						}
 
 						val data = MyAlertPopup.Data(AlertType.CONFIRM)
 						data.alertTitle = alertTitle

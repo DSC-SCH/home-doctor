@@ -1,12 +1,14 @@
 package com.khnsoft.zipssa
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
@@ -22,7 +24,12 @@ class MypageServiceContractActivity : AppCompatActivity() {
 			onBackPressed()
 		}
 
-		val lContract = ServerHandler.send(this@MypageServiceContractActivity, EndOfAPI.GET_CONTRACTS)["data"].asJsonArray
+		val result = ServerHandler.send(this@MypageServiceContractActivity, EndOfAPI.GET_CONTRACTS)
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@MypageServiceContractActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
+		}
+		val lContract = result["data"].asJsonArray
 
 		val adapter = ContractRecyclerAdapter(lContract)
 		val lm = LinearLayoutManager(this@MypageServiceContractActivity)
@@ -52,8 +59,9 @@ class MypageServiceContractActivity : AppCompatActivity() {
 			holder.title.text = jItem["title"].asString
 
 			holder.title.setOnClickListener {
-				val intent = Intent(this@MypageServiceContractActivity, MypageNoticeDetailActivity::class.java)
-				intent.putExtra(ExtraAttr.CONTRACT, jItem.toString())
+				val intent = Intent(Intent.ACTION_VIEW)
+				val uri = Uri.parse(jItem["content"].asString)
+				intent.setData(uri)
 				startActivity(intent)
 			}
 		}

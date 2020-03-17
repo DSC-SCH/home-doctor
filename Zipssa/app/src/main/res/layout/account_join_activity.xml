@@ -294,6 +294,7 @@
 				android:digits="0123456789-"
 				android:fontFamily="@font/nanum_square_ac"
 				android:inputType="numberSigned"
+				android:maxLength="15"
 				android:padding="@dimen/join_input_padding"
 				android:textColor="@color/text_color"
 				android:textSize="@dimen/join_item_text" />

@@ -1,8 +1,8 @@
 package com.khnsoft.zipssa
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,10 +20,21 @@ import kotlinx.android.synthetic.main.account_join_activity.*
 import java.util.*
 
 class JoinActivity : AppCompatActivity() {
+	companion object {
+		const val RC_IDENTIFY = 100
+
+		const val BIRTHDAY_NO_SELECT = -1L
+		const val BIRTHDAY_AGE = -2L
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.account_join_activity)
+
+		/*
+		val identifyIntent = Intent(this@JoinActivity, AuthWebActivity::class.java)
+		startActivityForResult(identifyIntent, RC_IDENTIFY)
+		 */
 
 		val _name = intent.getStringExtra("name")
 		val _gender = intent.getStringExtra("gender")
@@ -38,7 +50,12 @@ class JoinActivity : AppCompatActivity() {
 			else -> {}
 		}
 
-		val lContract = ServerHandler.send(this@JoinActivity, EndOfAPI.GET_CONTRACTS)["data"].asJsonArray
+		val result = ServerHandler.send(this@JoinActivity, EndOfAPI.GET_CONTRACTS)
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@JoinActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
+		}
+		val lContract = result["data"].asJsonArray
 
 		val adapter = ContractRecyclerAdapter(lContract)
 		val lm = LinearLayoutManager(this@JoinActivity)
@@ -46,15 +63,17 @@ class JoinActivity : AppCompatActivity() {
 		contract_container.adapter = adapter
 
 		val curCal = Calendar.getInstance()
-		var birthdaySelected = false
+		var birthdayTime = BIRTHDAY_NO_SELECT
 
 		val birthdayListener = View.OnClickListener {
+			if (birthdayTime != BIRTHDAY_NO_SELECT) curCal.time = SDF.dateInKorean.parse(birthday_input.text.toString())
 			DatePickerDialog(this@JoinActivity, { view, year, month, dayOfMonth ->
 				curCal[Calendar.YEAR] = year
 				curCal[Calendar.MONTH] = month
 				curCal[Calendar.DAY_OF_MONTH] = dayOfMonth
 				birthday_input.text = SDF.dateInKorean.format(curCal.time)
-				birthdaySelected = true
+				curCal.add(Calendar.YEAR, 14)
+				birthdayTime = curCal.timeInMillis
 			}, curCal[Calendar.YEAR], curCal[Calendar.MONTH], curCal[Calendar.DAY_OF_MONTH]).show()
 		}
 
@@ -77,9 +96,12 @@ class JoinActivity : AppCompatActivity() {
 				join_gender_check_warning.text = ""
 			}
 
-			if (!birthdaySelected) {
+			if (birthdayTime == BIRTHDAY_NO_SELECT) {
 				isOK = false
 				join_birthday_check_warning.text = "생년월일을 입력해주세요"
+			} else if (birthdayTime > System.currentTimeMillis()) {
+				isOK = false
+				join_birthday_check_warning.text = "14세 미만의 청소년은 가입이 제한됩니다"
 			} else {
 				join_birthday_check_warning.text = ""
 			}
@@ -111,7 +133,7 @@ class JoinActivity : AppCompatActivity() {
 			if (isOK) {
 				val json = JsonObject()
 				json.addProperty("username", name_input.text.toString())
-				json.addProperty("birthday", SDF.dateBar.format(curCal.time))
+				json.addProperty("birthday", SDF.dateBar.format(SDF.dateInKorean.parse(birthday_input.text.toString())))
 				json.addProperty("email", email_input.text.toString())
 				json.addProperty("snsType", _sns_type)
 				json.addProperty("snsId", _sns_id)
@@ -120,39 +142,43 @@ class JoinActivity : AppCompatActivity() {
 
 				val result = ServerHandler.send(this@JoinActivity, EndOfAPI.USER_REGISTER, json)
 
-				if (HttpHelper.isOK(result)) {
-					val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {
-						alertTitle = "가입 성공"
-						alertContent = "서비스에 가입되었습니다."
-					}
-					val dataId = DataPasser.insert(data)
-					val intent = Intent(this@JoinActivity, MyAlertPopup::class.java)
-					intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
-					startActivity(intent)
-
-					val sp = SPHandler.getSp(this@JoinActivity)
-					val editor = sp.edit()
-					editor.putString(LoginActivity.SP_LOGIN, _sns_type)
-					editor.apply()
-
-					val userData = result["data"].asJsonObject
-					UserData.accountType = AccountType.valueOf(_sns_type)
-					UserData.id = userData["userId"].asInt
-					UserData.token = userData["token"].asString
-
-					val intent2 = Intent(this@JoinActivity, LoadingActivity::class.java)
-					startActivity(intent2)
-					LoginActivity.curActivity?.finish()
-					finish()
+				if (!HttpHelper.isOK(result)) {
+					Toast.makeText(this@JoinActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+					return@setOnClickListener
 				}
+
+				val data = MyAlertPopup.Data(AlertType.CONFIRM).apply {
+					alertTitle = "가입 성공"
+					alertContent = "서비스에 가입되었습니다."
+				}
+				val dataId = DataPasser.insert(data)
+				val intent = Intent(this@JoinActivity, MyAlertPopup::class.java)
+				intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
+				startActivity(intent)
+
+				val sp = SPHandler.getSp(this@JoinActivity)
+				val editor = sp.edit()
+				editor.putString(LoginActivity.SP_LOGIN, _sns_type)
+				editor.apply()
+
+				val userData = result["data"].asJsonObject
+				UserData.accountType = AccountType.valueOf(_sns_type)
+				UserData.id = userData["userId"].asInt
+				UserData.token = userData["token"].asString
+
+				val intent2 = Intent(this@JoinActivity, LoadingActivity::class.java)
+				startActivity(intent2)
+				LoginActivity.curActivity?.finish()
+				finish()
 			}
 		}
 	}
 
 	fun checkContracts() : Boolean {
-		for (i in 0..contract_container.size-1) {
-			val holder = contract_container.findViewHolderForAdapterPosition(i) as ContractRecyclerAdapter.ViewHolder
-			if (!holder.title.isChecked) {
+		val adapter = contract_container.adapter as ContractRecyclerAdapter
+		val checkes = adapter.curCheckes
+		for (i in 0..checkes.size-1) {
+			if (!checkes[i]) {
 				return false
 			}
 		}
@@ -162,6 +188,7 @@ class JoinActivity : AppCompatActivity() {
 
 	inner class ContractRecyclerAdapter(val lContract: JsonArray) :
 		RecyclerView.Adapter<ContractRecyclerAdapter.ViewHolder>() {
+		val curCheckes = MutableList(lContract.size()) {false}
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 			val title = itemView.findViewById<CheckBox>(R.id.contract_title)
@@ -181,23 +208,29 @@ class JoinActivity : AppCompatActivity() {
 			val jItem = lContract[position].asJsonObject
 
 			holder.title.text = jItem["title"].asString
-			holder.content.text = jItem["content"].asString
+			holder.title.setOnCheckedChangeListener { buttonView, isChecked ->
+				curCheckes.set(position, isChecked)
+			}
 			holder.content.setOnClickListener {
-				val intent = Intent(this@JoinActivity, ContractActivity::class.java)
-				intent.putExtra(ExtraAttr.CONTRACT_NUM, position)
-				intent.putExtra(ExtraAttr.CONTRACT, jItem.toString())
-				intent.putExtra(ExtraAttr.CONTRACT_CHECKED, holder.title.isChecked)
-				startActivityForResult(intent, ContractActivity.RC_CONTRACT)
+				val intent = Intent(Intent.ACTION_VIEW)
+				val uri = Uri.parse(jItem["content"].asString)
+				intent.setData(uri)
+				startActivity(intent)
 			}
 		}
 	}
 
+	/*
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
 		if (requestCode == ContractActivity.RC_CONTRACT && data != null) {
 			val holder = contract_container.findViewHolderForAdapterPosition(data!!.getIntExtra(ExtraAttr.CONTRACT_NUM, -1)) as ContractRecyclerAdapter.ViewHolder
 			holder.title.isChecked = data.getBooleanExtra(ExtraAttr.CONTRACT_CHECKED, false)
+		} else if (requestCode == RC_IDENTIFY) {
+			if (data == null) finish()
+			MyLogger.d("@@@", "RECEIVED DATA")
 		}
 	}
+	 */
 }

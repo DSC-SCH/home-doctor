@@ -46,6 +46,7 @@
 			android:paddingHorizontal="@dimen/label_paddingH" />
 
 		<TextView
+			android:id="@+id/add_label_btn"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:background="@drawable/label_edit_btn"

@@ -19,7 +19,12 @@ class MedicineDetailActivity : AppCompatActivity() {
 
 		val jItem = JsonParser.parseString(intent.getStringExtra(ExtraAttr.MEDICINE)).asJsonObject
 
-		// TODO("Server: Set medicine data")
+		medicine_name.text = jItem["name"].asString
+		medicine_effect.text = jItem["effect"].asString
+		medicine_dosage.text = jItem["dosage"].asString
+		medicine_validity.text = jItem["validDate"].asString
+		medicine_preservation.text = jItem["saveMethod"].asString
+		medicine_warning.text = jItem["precaution"].asString
 
 		effect_btn.setOnClickListener {
 			if (isEffectExpanded) {

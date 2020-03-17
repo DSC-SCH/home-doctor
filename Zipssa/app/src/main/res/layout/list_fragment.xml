@@ -65,6 +65,7 @@
 						android:textSize="@dimen/main_title_text" />
 
 					<TextView
+						android:id="@+id/main_name_sub"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:fontFamily="@font/lotte_dream_bold"

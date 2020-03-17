@@ -26,8 +26,8 @@
 			android:textSize="@dimen/main_remain_title_text"
 			android:textColor="@color/text_color"
 			android:text="Title"
-			android:paddingHorizontal="@dimen/main_item_title_paddingH"
-			android:paddingVertical="@dimen/main_item_title_paddingV"/>
+			android:paddingHorizontal="@dimen/alarm_title_paddingH"
+			android:paddingVertical="@dimen/alarm_title_paddingV"/>
 
 		<View
 			android:layout_width="match_parent"

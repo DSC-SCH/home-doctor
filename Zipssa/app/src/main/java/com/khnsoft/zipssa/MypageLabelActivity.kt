@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
@@ -21,6 +22,11 @@ class MypageLabelActivity : AppCompatActivity() {
 		setContentView(R.layout.mypage_label_activity)
 
 		back_btn.setOnClickListener { onBackPressed() }
+
+		add_label_btn.setOnClickListener {
+			val intent = Intent(this@MypageLabelActivity, AddLabelPopup::class.java)
+			startActivity(intent)
+		}
 	}
 
 	override fun onResume() {
@@ -29,7 +35,13 @@ class MypageLabelActivity : AppCompatActivity() {
 	}
 
 	fun refresh() {
-		val lLabels = ServerHandler.send(this@MypageLabelActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
+		val result = ServerHandler.send(this@MypageLabelActivity, EndOfAPI.GET_LABELS)
+
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@MypageLabelActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			return
+		}
+		val lLabels = result["data"].asJsonArray
 
 		val adapter = LabelRecyclerAdapter(lLabels)
 		val lm = LinearLayoutManager(this@MypageLabelActivity)
@@ -62,6 +74,11 @@ class MypageLabelActivity : AppCompatActivity() {
 			val drawable = holder.color.background as GradientDrawable
 			drawable.setColor(Color.parseColor(jItem["label_color"].asString))
 			holder.title.text = jItem["label_title"].asString
+			if (position == 0) {
+				holder.edit.visibility = View.GONE
+				holder.delete.visibility = View.GONE
+			}
+
 			holder.edit.setOnClickListener {
 				val intent = Intent(this@MypageLabelActivity, EditLabelPopup::class.java)
 				intent.putExtra(ExtraAttr.LABEL, jItem.toString())
@@ -76,6 +93,7 @@ class MypageLabelActivity : AppCompatActivity() {
 					confirmListener = View.OnClickListener {
 						val result = ServerHandler.send(this@MypageLabelActivity,EndOfAPI.DELETE_LABEL, id=jItem["label_id"].asInt)
 						if (!HttpHelper.isOK(result)) {
+							Toast.makeText(this@MypageLabelActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 							return@OnClickListener
 						}
 

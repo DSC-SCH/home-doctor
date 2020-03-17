@@ -12,9 +12,12 @@ enum class HttpMethod(val method: String) {
     DELETE("DELETE")
 }
 
-enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: Boolean = false, val isId2Needed: Boolean = false) {
+enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: Boolean = false, val isId2Needed: Boolean = false, val isStringNeeded: Boolean = false) {
     // ONLINE only
-    OFFLINE_USER_REGISTER("/user", HttpMethod.POST),
+    LOCAL_USER_REGISTER("/user", HttpMethod.POST),
+    LOCAL_PUT_COUNT_ALARM_FAILED("/", HttpMethod.PUT, true), // alarm_id
+    LOCAL_GET_OFFLINE_COUNT("/", HttpMethod.GET), // alarm_id
+    LOCAL_CLEAR_OFFLINE_COUNT("/", HttpMethod.DELETE), // alarm_id
     USER_REGISTER("/user", HttpMethod.POST),
     USER_LOGIN("/login", HttpMethod.POST),
     USER_GET("/user", HttpMethod.GET),
@@ -31,8 +34,10 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     SYNC_EDIT_ALARM("/connect/receiver/alarm", HttpMethod.PUT, true, true),
     SYNC_DELETE_ALARM("/connect/receiver/alarm", HttpMethod.DELETE, true, true),
     SYNC_ADD_ALARM("/connect/receiver/alarm", HttpMethod.POST, true),
+    SYNC_GET_LABELS("/label/connect", HttpMethod.GET, true),
+    SYNC_ADD_LABEL("/label", HttpMethod.POST, true),
 
-    ENQUIRE("/", HttpMethod.POST),
+    ENQUIRE("/question", HttpMethod.POST),
 
     // Both of OFFLINE and ONLINE
     ADD_ALARM("/alarm/new", HttpMethod.POST),
@@ -51,14 +56,13 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     EDIT_IMAGES("/image", HttpMethod.PUT, true),
     GET_ALL_IMAGES("/image/user", HttpMethod.GET),
 
-    SYNC_GET_LABELS("/label/connect", HttpMethod.GET, true),
-    SYNC_ADD_LABEL("/label", HttpMethod.POST, true),
-    DELETE_IMAGE("/image", HttpMethod.DELETE, true),
-    GET_COUNT_DATE("/", HttpMethod.POST, false),
-    GET_COUNT("/", HttpMethod.GET, true),
-    GET_COUNT_ALARM("/", HttpMethod.GET, true),
-    GET_NOTICES("/", HttpMethod.GET),
-    SEARCH("/", HttpMethod.POST),
+    GET_COUNT_DATE("/alarm/counts", HttpMethod.POST),
+    SYNC_GET_COUNT_DATE("/alarm/counts/user", HttpMethod.POST, true),
+    PUT_COUNT_ALARM("/alarm/counts", HttpMethod.PUT, true), // alarm_id
+    PUT_COUNT_ALARMS("/alarm/counts/many", HttpMethod.PUT), // alarm_id
+    GET_NOTICES("/notice", HttpMethod.GET),
+    SEARCH_NAME("/search/name", HttpMethod.POST),
+    SEARCH_TOTAL("/search/keyword", HttpMethod.POST),
 }
 
 enum class AccountType(val type: String) {
@@ -70,8 +74,8 @@ enum class AccountType(val type: String) {
 }
 
 enum class AlarmStatus(val status: String) {
-    ENABLED("ENABLE"),
-    DISABLED("CANCEL")
+    ENABLE("ENABLE"),
+    CANCEL("CANCEL")
 }
 
 enum class AlertType() {
@@ -82,6 +86,8 @@ enum class AlertType() {
 class ExtraAttr {
     companion object {
         const val ALARM_ID = "alarm_id"
+        const val SELECTED_DATE = "selected_date"
+        const val SELECTED_COUNT = "selected_count"
         const val CUR_PHOTO = "cur_photo"
         const val CONTRACT_NUM = "contract_num"
         const val CONTRACT = "contract"
@@ -92,6 +98,13 @@ class ExtraAttr {
         const val CALENDAR_DATE = "date"
         const val CALENDAR_START = "calendarstart"
         const val MEDICINE = "medicine"
+        const val NOTICE = "notice"
+
+        const val NOTIFY_DATA = "notify_data"
+        const val NOTIFY_TIME = "notify_time"
+
+        const val IDENTIFY_RESULT = "identify_result"
+        const val IDENTIFY_IMPKEY = "identify_imp_key"
     }
 }
 
@@ -125,9 +138,14 @@ class HttpError {
     companion object {
         const val METHOD_NO_DATA = "No data for POST or PUT method"
         const val METHOD_ERROR = "Given method is wrong"
+        const val OFFLINE_API_ERROR = "No such api for offline"
         const val NO_ID1 = "Id1 is needed but not given"
         const val NO_ID2 = "Id2 is needed but not given"
         const val NO_CONTEXT = "No context is given for offline"
+        const val DATABASE = "Database error"
+        const val ASYNC_METHOD = "Wrong async method"
+        const val AUTH_TOKEN = "Error while getting token"
+        const val AUTH_CERTIFY = "Error while certifying"
     }
 }
 
@@ -153,4 +171,9 @@ class SDF {
         val monthDateInKorean = SimpleDateFormat("M월 d일", Locale.KOREA)
         val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA)
     }
+}
+
+enum class AuthMethod {
+    GET_TOKEN,
+    CERTIFICATION,
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.google.gson.JsonArray
 import kotlinx.android.synthetic.main.list_calendar_activity.*
 import org.hugoandrade.calendarviewlib.CalendarView
@@ -18,9 +19,14 @@ class MainListCalendarActivity : AppCompatActivity() {
 
 		back_btn.setOnClickListener { onBackPressed() }
 
-		val lAlarms: JsonArray =
-			if (UserData.careUser == null) ServerHandler.send(this@MainListCalendarActivity, EndOfAPI.GET_ENABLED_ALARMS)["data"].asJsonArray
-			else ServerHandler.send(this@MainListCalendarActivity, EndOfAPI.SYNC_GET_ALL_ALARMS, id = UserData.careUser)["data"].asJsonArray
+		val result =
+			if (UserData.careUser == null) ServerHandler.send(this@MainListCalendarActivity, EndOfAPI.GET_ENABLED_ALARMS)
+			else ServerHandler.send(this@MainListCalendarActivity, EndOfAPI.SYNC_GET_ALL_ALARMS, id = UserData.careUser)
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@MainListCalendarActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
+		}
+		val lAlarms = result["data"].asJsonArray
 
 		val _curDate = intent.getStringExtra(ExtraAttr.CALENDAR_START)
 		val curCal = Calendar.getInstance()

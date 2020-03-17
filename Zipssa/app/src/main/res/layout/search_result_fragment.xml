@@ -4,62 +4,37 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<TextView
+	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginVertical="@dimen/search_recent_title_marginV"
-		android:layout_marginHorizontal="@dimen/search_recent_item_padding"
-		android:fontFamily="@font/lotte_dream_bold"
-		android:text="검색결과"
-		android:textSize="@dimen/search_recent_text"
-		android:textColor="@color/text_color" />
+		android:orientation="horizontal">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginVertical="@dimen/search_recent_title_marginV"
+			android:layout_marginHorizontal="@dimen/search_recent_item_padding"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:text="검색결과 :"
+			android:textSize="@dimen/search_recent_text"
+			android:textColor="@color/text_color" />
+
+		<TextView
+			android:id="@+id/keyword_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginVertical="@dimen/search_recent_title_marginV"
+			android:layout_marginHorizontal="@dimen/search_recent_item_padding"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:text="키워드"
+			android:textSize="@dimen/search_recent_text"
+			android:textColor="@color/text_color" />
+	</LinearLayout>
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/search_result_container"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1"/>
-
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="center"
-		android:layout_marginVertical="@dimen/search_result_pagebar_marginV">
-
-		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="@dimen/search_result_arrow_sizeH"
-			android:adjustViewBounds="true"
-			android:padding="@dimen/search_result_arrow_padding"
-			android:src="@drawable/move_to_start" />
-
-		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="@dimen/search_result_arrow_sizeH"
-			android:adjustViewBounds="true"
-			android:padding="@dimen/search_result_arrow_padding"
-			android:src="@drawable/move_to_before" />
-
-		<LinearLayout
-			android:id="@+id/search_result_page"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"
-			android:layout_marginHorizontal="@dimen/search_result_page_marginH" />
-
-		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="@dimen/search_result_arrow_sizeH"
-			android:adjustViewBounds="true"
-			android:padding="@dimen/search_result_arrow_padding"
-			android:src="@drawable/move_to_next" />
-
-		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="@dimen/search_result_arrow_sizeH"
-			android:adjustViewBounds="true"
-			android:padding="@dimen/search_result_arrow_padding"
-			android:src="@drawable/move_to_end" />
-	</LinearLayout>
+		android:layout_weight="1"
+		android:layout_marginVertical="@dimen/search_result_marginV"/>
 </LinearLayout>

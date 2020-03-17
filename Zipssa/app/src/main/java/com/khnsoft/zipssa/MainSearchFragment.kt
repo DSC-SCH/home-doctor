@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.google.gson.JsonArray
@@ -50,7 +51,7 @@ class MainSearchFragment : Fragment() {
 			manager.hideSoftInputFromWindow(search_text.windowToken, 0)
 		}
 
-		callPage(curPage, lResult)
+		callPage(curPage)
 	}
 
 	fun search(type: Int, keyword: String) {
@@ -72,15 +73,31 @@ class MainSearchFragment : Fragment() {
 
 		search_text.setText(keyword)
 
+		val result: JsonObject
 		val json = JsonObject()
-		json.addProperty("type", search_type.getItemAtPosition(type).toString())
 		json.addProperty("keyword", keyword)
-		val result = ServerHandler.send(context, EndOfAPI.SEARCH, json)
-		if (HttpHelper.isOK(result)) {
-			lResult = result["data"].asJsonArray
+		result = when (type) {
+			0 -> {
+				ServerHandler.send(context, EndOfAPI.SEARCH_TOTAL, json)
+			}
+			else -> {
+				ServerHandler.send(context, EndOfAPI.SEARCH_NAME, json)
+			}
 		}
 
-		callPage(FRAG_RESULT, lResult)
+		if (HttpHelper.isOK(result)) {
+			lResult = result["data"].asJsonArray
+			val frag = SearchResultFragment.getInstance()
+			frag.keyword = keyword
+			frag.lResult = lResult
+			if (curPage == FRAG_RESULT) {
+				frag.refresh()
+			}
+		} else {
+			Toast.makeText(context, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+		}
+
+		callPage(FRAG_RESULT)
 	}
 
 	override fun onDestroy() {
@@ -95,7 +112,7 @@ class MainSearchFragment : Fragment() {
 		transaction.commit()
 	}
 
-	fun callPage(no: Int, lResult: JsonArray? = null) {
+	fun callPage(no: Int) {
 		val transaction = (context as FragmentActivity).supportFragmentManager.beginTransaction()
 
 		when (no) {

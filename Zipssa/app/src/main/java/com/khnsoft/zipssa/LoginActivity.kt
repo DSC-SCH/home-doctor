@@ -1,6 +1,5 @@
 package com.khnsoft.zipssa
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -52,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
 			json.addProperty("user_id", UserData.id)
 			json.addProperty("user_name", "약타미")
 
-			ServerHandler.send(this@LoginActivity, EndOfAPI.OFFLINE_USER_REGISTER, json)
+			ServerHandler.send(this@LoginActivity, EndOfAPI.LOCAL_USER_REGISTER, json)
 			startLoading()
 		}
 

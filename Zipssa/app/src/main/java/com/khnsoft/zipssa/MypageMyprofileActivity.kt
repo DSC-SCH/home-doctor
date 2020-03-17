@@ -2,6 +2,7 @@ package com.khnsoft.zipssa
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import kotlinx.android.synthetic.main.mypage_myprofile_activity.*
 
 class MypageMyprofileActivity : AppCompatActivity() {
@@ -20,6 +21,9 @@ class MypageMyprofileActivity : AppCompatActivity() {
 			user_phone.text = userData["phoneNum"].asString
 			user_gender.text = if (Gender.valueOf(userData["genderType"].asString) == Gender.MEN) "남" else "여"
 			user_birthday.text = SDF.dateInKorean.format(SDF.dateBar.parse(userData["birthday"].asString))
+		} else {
+			Toast.makeText(this@MypageMyprofileActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
 		}
 	}
 }

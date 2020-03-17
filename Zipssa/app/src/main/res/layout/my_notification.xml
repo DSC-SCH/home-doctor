@@ -4,26 +4,55 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:orientation="vertical">
-
-	<CheckBox
-		android:id="@+id/contract_title"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/join_item_marginT"
-		android:fontFamily="@font/lotte_dream_bold"
-		android:textColor="@color/text_color"
-		android:textSize="@dimen/join_contract_text"
-		android:text="개인정보 처리 방침 동의" />
+	android:orientation="vertical"
+	android:padding="@dimen/notify_padding">
 
 	<TextView
-		android:id="@+id/contract_content"
-		android:layout_width="match_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:background="@drawable/account_stroke_box"
-		android:padding="@dimen/join_input_padding"
-		android:minLines="3"
-		android:fontFamily="@font/nanum_square_ac"
+		android:fontFamily="@font/lotte_dream_bold"
 		android:textColor="@color/text_color"
-		android:textSize="@dimen/join_contract_text" />
+		android:textSize="@dimen/notify_content_text"
+		android:text="약손"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<ImageView
+			android:layout_width="@dimen/notify_icon_sizeH"
+			android:layout_height="@dimen/notify_icon_sizeV"
+			android:src="@drawable/mypage_notice_icon"
+			android:layout_marginRight="@dimen/notify_title_marginH"/>
+
+		<TextView
+			android:id="@+id/notify_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/notify_time_text"
+			android:text="오전 9:00"/>
+
+		<TextView
+			android:id="@+id/notify_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingVertical="@dimen/alarm_title_paddingV"
+			android:paddingHorizontal="@dimen/alarm_title_paddingH"
+			android:layout_marginHorizontal="@dimen/notify_title_marginH"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/notify_title_text"
+			android:text="제목"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/notify_content_text"
+			android:text="복용할 시간이에요!"/>
+	</LinearLayout>
 </LinearLayout>

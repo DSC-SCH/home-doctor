@@ -7,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -56,17 +53,24 @@ class MypageSyncActivity : AppCompatActivity() {
 	}
 
 	fun refresh() {
-		val lSync: JsonArray = when (curPage) {
+		val result = when (curPage) {
 			PAGE_MANAGER -> {
-				ServerHandler.send(this@MypageSyncActivity, EndOfAPI.SYNC_GET_MANAGERS)["data"].asJsonArray
+				ServerHandler.send(this@MypageSyncActivity, EndOfAPI.SYNC_GET_MANAGERS)
 			}
 
 			PAGE_CREW -> {
-				ServerHandler.send(this@MypageSyncActivity, EndOfAPI.SYNC_GET_CREWS)["data"].asJsonArray
+				ServerHandler.send(this@MypageSyncActivity, EndOfAPI.SYNC_GET_CREWS)
 			}
 
 			else -> return
 		}
+
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@MypageSyncActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			return
+		}
+
+		val lSync = result["data"].asJsonArray
 
 		val lm = LinearLayoutManager(this@MypageSyncActivity)
 		val adapter = SyncRecyclerAdapter(lSync)
@@ -145,6 +149,7 @@ class MypageSyncActivity : AppCompatActivity() {
 					confirmListener = View.OnClickListener {
 						val result = ServerHandler.send(this@MypageSyncActivity, EndOfAPI.SYNC_DELETE, id=jItem["connectionId"].asInt)
 						if (!HttpHelper.isOK(result)) {
+							Toast.makeText(this@MypageSyncActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 							return@OnClickListener
 						}
 

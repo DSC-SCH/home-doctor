@@ -79,8 +79,8 @@
 						android:layout_height="wrap_content"
 						android:layout_gravity="left|center"
 						android:layout_marginHorizontal="@dimen/main_item_title_marginH"
-						android:paddingHorizontal="@dimen/main_item_title_paddingH"
-						android:paddingVertical="@dimen/main_item_title_paddingV"
+						android:paddingHorizontal="@dimen/alarm_title_paddingH"
+						android:paddingVertical="@dimen/alarm_title_paddingV"
 						android:fontFamily="@font/bareun_dotum"
 						android:text="감기약"
 						android:textSize="@dimen/main_item_title_text"
@@ -122,11 +122,23 @@
 						android:textSize="@dimen/main_item_content_text"
 						android:textColor="@color/text_color"/>
 
+					<TextView
+						android:id="@+id/main_item_cur_count"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:gravity="center"
+						android:fontFamily="@font/nanum_square_ac"
+						android:text="0"
+						android:textSize="@dimen/main_item_content_text"
+						android:textColor="@color/text_color"/>
+
+					<!--
 					<LinearLayout
 						android:id="@+id/main_item_check_container"
 						android:layout_width="wrap_content"
 						android:layout_height="match_parent"
 						android:orientation="horizontal" />
+					-->
 				</LinearLayout>
 
 				<LinearLayout

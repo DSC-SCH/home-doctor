@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,13 @@ class MypageHistoryPhotoDetailActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.mypage_history_photo_detail_activity)
 
-		val lPhoto = ServerHandler.send(this@MypageHistoryPhotoDetailActivity, EndOfAPI.GET_ALL_IMAGES)["data"].asJsonArray
+		val result = ServerHandler.send(this@MypageHistoryPhotoDetailActivity, EndOfAPI.GET_ALL_IMAGES)
+
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@MypageHistoryPhotoDetailActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
+		}
+		val lPhoto = result["data"].asJsonArray
 		curPhoto = intent.getIntExtra(ExtraAttr.CUR_PHOTO, -1)
 
 		val lm = LinearLayoutManager(this@MypageHistoryPhotoDetailActivity, LinearLayoutManager.HORIZONTAL, false)

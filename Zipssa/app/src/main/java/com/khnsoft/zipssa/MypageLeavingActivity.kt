@@ -37,6 +37,7 @@ class MypageLeavingActivity : AppCompatActivity() {
 				confirmListener = View.OnClickListener {
 					val result = ServerHandler.send(this@MypageLeavingActivity,EndOfAPI.USER_DELETE)
 					if (!HttpHelper.isOK(result)) {
+						Toast.makeText(this@MypageLeavingActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 						return@OnClickListener
 					}
 
@@ -96,9 +97,9 @@ class MypageLeavingActivity : AppCompatActivity() {
 	}
 
 	fun killApplication() {
-		finishAffinity();
-		System.runFinalization();
-		System.exit(0);
+		finishAffinity()
+		System.runFinalization()
+		System.exit(0)
 	}
 
 	fun deleteCache(dir: File) : Boolean{

@@ -3,6 +3,7 @@ package com.khnsoft.zipssa
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -18,14 +19,18 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.view.get
+import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.android.synthetic.main.add_alarm_activity.*
+import kotlinx.android.synthetic.main.add_alarm_activity.back_btn
+import kotlinx.android.synthetic.main.search_fragment.*
 import java.io.File
 import java.util.*
 
@@ -60,6 +65,8 @@ class AddAlarmActivity : AppCompatActivity() {
 		}
 
 		// Setting image button
+		image_section.visibility = View.GONE
+		/*
 		if (UserData.careUser == null) {
 			image_from_camera.setOnClickListener {
 				val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -74,6 +81,7 @@ class AddAlarmActivity : AppCompatActivity() {
 		} else {
 			image_section.visibility = View.GONE
 		}
+		 */
 
 		// Setting alarm time
 		val alarm_counts_array = resources.getStringArray(R.array.alarm_times)
@@ -189,10 +197,9 @@ class AddAlarmActivity : AppCompatActivity() {
 			}
 
 			val lTimes = mutableListOf<String>()
+			val adapter = add_time_container.adapter as AddTimeRecyclerAdapter
 			for (i in 0..count-1) {
-				val holder =
-					add_time_container.getChildViewHolder(add_time_container[i]) as AddTimeRecyclerAdapter.ViewHolder
-				lTimes.add(SDF.time.format(SDF.timeInKorean.parse(holder.time.text.toString())))
+				lTimes.add(SDF.time.format(SDF.timeInKorean.parse(adapter.curTimes[i])))
 			}
 			lTimes.sort()
 			lTimes.toString()
@@ -225,17 +232,22 @@ class AddAlarmActivity : AppCompatActivity() {
 			json.addProperty("alarm_repeats", lRepeats.joinToString("/"))
 			json.addProperty(
 				"alarm_enabled",
-				if (add_times_switch.isChecked) AlarmStatus.ENABLED.status else AlarmStatus.DISABLED.status
+				if (add_times_switch.isChecked) AlarmStatus.ENABLE.status else AlarmStatus.CANCEL.status
 			)
 
 			val result =
 				if (UserData.careUser == null) ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_ALARM, json)
 				else ServerHandler.send(this@AddAlarmActivity, EndOfAPI.SYNC_ADD_ALARM, json, UserData.careUser)
 
-			if (!HttpHelper.isOK(result)) return@setOnClickListener
+			if (!HttpHelper.isOK(result)) {
+				Toast.makeText(this@AddAlarmActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+				return@setOnClickListener
+			}
+			val jData = result["data"].asJsonObject
+			val alarmId = jData["alarmId"].asInt
 
 			if (UserData.careUser == null) {
-				val jData = result["data"].asJsonObject
+				/*
 				val json2 = JsonObject()
 				val lImages = JsonArray()
 
@@ -244,10 +256,20 @@ class AddAlarmActivity : AppCompatActivity() {
 				}
 
 				json2.add("image", lImages)
-
-				val result2 = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_IMAGE, json2, jData["id"].asInt)
-
+				val result2 = ServerHandler.send(this@AddAlarmActivity, EndOfAPI.ADD_IMAGE, json2, alarmId)
 				if (!HttpHelper.isOK(result2)) return@setOnClickListener
+				 */
+				json.addProperty("alarm_id", alarmId)
+				AlarmHandler.createAlarm(this@AddAlarmActivity, json)
+			} else {
+				val data = MyAlertPopup.Data(AlertType.CONFIRM)
+				data.alertTitle = "추가 성공"
+				data.alertContent = "변경 사항이 적용되려면 크루의 어플을 한 번 재실행 해야합니다."
+				val dataId = DataPasser.insert(data)
+
+				val intent = Intent(this@AddAlarmActivity, MyAlertPopup::class.java)
+				intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
+				startActivity(intent)
 			}
 
 			finish()
@@ -306,8 +328,14 @@ class AddAlarmActivity : AppCompatActivity() {
 		radioGroup = MyRadioGroup()
 		radioGroup.setOnChangeListener(LabelSelectedListener)
 
-		val lLabels = if (UserData.careUser == null) ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)["data"].asJsonArray
-		else ServerHandler.send(this@AddAlarmActivity, EndOfAPI.SYNC_GET_LABELS, id=UserData.careUser)["data"].asJsonArray
+		val result = if (UserData.careUser == null) ServerHandler.send(this@AddAlarmActivity, EndOfAPI.GET_LABELS)
+		else ServerHandler.send(this@AddAlarmActivity, EndOfAPI.SYNC_GET_LABELS, id=UserData.careUser)
+
+		if (!HttpHelper.isOK(result)) {
+			Toast.makeText(this@AddAlarmActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+			finish()
+		}
+		val lLabels = result["data"].asJsonArray
 
 		val labelSize = lLabels.size()
 		var count = 0
@@ -383,6 +411,7 @@ class AddAlarmActivity : AppCompatActivity() {
 
 	inner class AddTimeRecyclerAdapter(val lTimes: JsonArray) :
 		RecyclerView.Adapter<AddTimeRecyclerAdapter.ViewHolder>() {
+		val curTimes = mutableListOf<String>()
 
 		inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 			val time = itemView.findViewById<TextView>(R.id.time_item)
@@ -398,14 +427,18 @@ class AddAlarmActivity : AppCompatActivity() {
 		}
 
 		override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-			holder.time.text = lTimes[position].asString
+			val sTime = lTimes[position].asString
+			if (curTimes.size < lTimes.size()) curTimes.add(sTime)
+			holder.time.text = sTime
 			holder.time.setOnClickListener {
 				val cal = Calendar.getInstance()
 				cal.time = SDF.timeInKorean.parse(holder.time.text.toString())
 				TimePickerDialog(this@AddAlarmActivity, { timePicker: TimePicker, hourOfDay: Int, minute: Int ->
 					cal[Calendar.HOUR_OF_DAY] = hourOfDay
 					cal[Calendar.MINUTE] = minute
-					holder.time.text = SDF.timeInKorean.format(cal.time)
+					val sTime = SDF.timeInKorean.format(cal.time)
+					curTimes.set(position, sTime)
+					holder.time.text = sTime
 				}, cal[Calendar.HOUR_OF_DAY], cal[Calendar.MINUTE], false).show()
 			}
 		}

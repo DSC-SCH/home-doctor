@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+    var IMP = window.IMP;
+    IMP.init('imp23095895');
+
+    /* 중략 */
+    IMP.certification({
+        merchant_uid: 'merchant_' + new Date().getTime()
+    }, function (rsp) {
+        if (rsp.success) {
+            window.AndroidBridge.resultAuth(0, rsp.imp_uid)
+        } else {
+            window.AndroidBridge.resultAuth(1, null)
+        }
+    });
+
+    function takeResponseAndHandle(rsp) {
+        if (rsp.success) {
+            window.AndroidBridge.resultAuth("success")
+        } else {
+            window.AndroidBridge.resultAuth("failure")
+        }
+    }
+</script>
+</body>
+</html>

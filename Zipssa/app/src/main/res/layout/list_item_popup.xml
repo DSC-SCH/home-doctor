@@ -117,27 +117,11 @@
 						android:orientation="horizontal">
 
 						<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:fontFamily="@font/nanum_square_ac"
-							android:text="하루 "
-							android:textColor="@color/text_color"
-							android:textSize="@dimen/main_popup_content_text" />
-
-						<TextView
 							android:id="@+id/alarm_count"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
 							android:fontFamily="@font/nanum_square_ac"
-							android:text="0"
-							android:textColor="@color/text_color"
-							android:textSize="@dimen/main_popup_content_text" />
-
-						<TextView
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:fontFamily="@font/nanum_square_ac"
-							android:text="회 복용"
+							android:text="하루 0회 복용"
 							android:textColor="@color/text_color"
 							android:textSize="@dimen/main_popup_content_text" />
 					</LinearLayout>

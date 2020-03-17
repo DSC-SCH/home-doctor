@@ -75,10 +75,13 @@ class MainActivity : AppCompatActivity() {
 	override fun onBackPressed() {
 		if (cur_frag == FRAG_HOME) {
 			val frag = MainListFragment.getInstance()
-			if (frag.sync_drawer.isDrawerOpen(Gravity.RIGHT))
+			if (frag.sync_drawer.isDrawerOpen(Gravity.RIGHT)) {
 				frag.sync_drawer.closeDrawer(Gravity.RIGHT)
-			else
-				super.onBackPressed()
+			} else {
+				finishAffinity()
+				System.runFinalization()
+				System.exit(0)
+			}
 		} else if (MainSearchFragment.getInstance().curPage == MainSearchFragment.FRAG_RESULT) {
 			MainSearchFragment.getInstance().callPage(MainSearchFragment.FRAG_RECENT)
 			MainSearchFragment.getInstance().search_text.setText("")

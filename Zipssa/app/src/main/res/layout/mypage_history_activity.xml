@@ -49,7 +49,7 @@
 			android:padding="@dimen/mypage_tab_padding"
 			android:fontFamily="@font/lotte_dream_bold"
 			android:textSize="@dimen/mypage_tabbtn_text"
-			android:textColor="@drawable/mypage_tab_text_color"
+			android:textColor="@drawable/text_color_selector"
 			android:text="전체 내역" />
 
 		<RadioButton
@@ -63,7 +63,7 @@
 			android:padding="@dimen/mypage_tab_padding"
 			android:fontFamily="@font/lotte_dream_bold"
 			android:textSize="@dimen/mypage_tabbtn_text"
-			android:textColor="@drawable/mypage_tab_text_color"
+			android:textColor="@drawable/text_color_selector"
 			android:text="처방전 내역" />
 	</LinearLayout>
 

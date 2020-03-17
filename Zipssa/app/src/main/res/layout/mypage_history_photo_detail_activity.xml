@@ -84,8 +84,8 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:paddingHorizontal="@dimen/history_photo_title_paddingH"
-			android:paddingVertical="@dimen/history_photo_title_paddingV"
+			android:paddingHorizontal="@dimen/alarm_title_paddingH"
+			android:paddingVertical="@dimen/alarm_title_paddingV"
 			android:fontFamily="@font/lotte_dream_bold"
 			android:textSize="@dimen/history_photo_title_text"
 			android:textColor="@color/text_color" />

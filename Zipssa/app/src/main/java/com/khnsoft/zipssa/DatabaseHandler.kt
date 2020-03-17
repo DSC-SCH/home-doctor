@@ -2,6 +2,7 @@ package com.khnsoft.zipssa
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.text.format.DateUtils
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import java.lang.Exception
@@ -68,7 +69,7 @@ class DatabaseHandler(context: Context?) {
 
 			try {
 				when (api) {
-					EndOfAPI.OFFLINE_USER_REGISTER -> {
+					EndOfAPI.LOCAL_USER_REGISTER -> {
 						val jItem = data!!
 						val sql = """
                             INSERT INTO USER_TB (user_id, user_name, created_date, last_modified_date) 
@@ -89,7 +90,7 @@ class DatabaseHandler(context: Context?) {
 							alarm_repeats, alarm_enabled, ALARM_TB.created_date, ALARM_TB.last_modified_date, label_title, label_color 
 							FROM ALARM_TB 
 							LEFT OUTER JOIN LABEL_TB ON ALARM_TB.alarm_label=LABEL_TB.label_id 
-							WHERE alarm_user=${UserData.id} AND alarm_enabled='${AlarmStatus.ENABLED.status}'
+							WHERE alarm_user=${UserData.id} AND alarm_enabled='${AlarmStatus.ENABLE.status}'
 						""".trimIndent()
 
 						val lAlarms = mHandler.execResult(sql)
@@ -208,10 +209,11 @@ class DatabaseHandler(context: Context?) {
 							while (curCal.timeInMillis <= endTime) {
 								if (jItem["alarm_repeats"].asString.contains(curCal[Calendar.DAY_OF_WEEK].toString())) {
 									sql = """
-										INSERT INTO TAKEN_TB (taken_alarm_id, taken_date, taken_count)
+										INSERT INTO TAKEN_TB (taken_alarm_id, taken_date, taken_count, send_failed)
 										VALUES (
 										${jResult["alarm_id"].asInt},
 										'${SDF.dateBar.format(curCal.time)}',
+										0,
 										0
 										)
 									""".trimIndent()
@@ -230,7 +232,7 @@ class DatabaseHandler(context: Context?) {
 					}
 					EndOfAPI.EDIT_ALARM -> {
 						val jItem = data!!
-						val sql = """
+						var sql = """
                             UPDATE ALARM_TB SET 
                             alarm_title='${jItem["alarm_title"].asString}',
                             alarm_label=${jItem["alarm_label"].asInt},
@@ -244,6 +246,37 @@ class DatabaseHandler(context: Context?) {
                         """.trimIndent()
 
 						mHandler.execNonResult(sql)
+
+						sql = """
+							DELETE FROM TAKEN_TB WHERE taken_alarm_id=${id}
+						""".trimIndent()
+
+						mHandler.execNonResult(sql)
+
+						val curCal = Calendar.getInstance()
+						val curTime = curCal.timeInMillis
+						val startTime = SDF.dateBar.parse(jItem["alarm_start_date"].asString).time
+						curCal.timeInMillis = startTime
+						val endTime = SDF.dateBar.parse(jItem["alarm_end_date"].asString).time
+						while (curCal.timeInMillis <= endTime) {
+							if (curCal.timeInMillis < curTime - DateUtils.DAY_IN_MILLIS &&
+								jItem["alarm_repeats"].asString.contains(curCal[Calendar.DAY_OF_WEEK].toString())) {
+								val sDate = SDF.dateBar.format(curCal.time)
+								sql = """
+										INSERT INTO TAKEN_TB (taken_alarm_id, taken_date, taken_count, send_failed)
+										VALUES (
+										${id},
+										'${sDate}',
+										0,
+										0
+										)
+									""".trimIndent()
+
+								mHandler.execNonResult(sql)
+							}
+							curCal.add(Calendar.DAY_OF_MONTH, 1)
+						}
+
 						return HttpHelper.getOK()
 					}
 					EndOfAPI.CHANGE_ALARM_STATE -> {
@@ -335,13 +368,48 @@ class DatabaseHandler(context: Context?) {
 
 						return HttpHelper.getOK(lImages)
 					}
-					else -> {
+					EndOfAPI.LOCAL_GET_OFFLINE_COUNT -> {
+						val sql = """
+							SELECT taken_alarm_id, taken_date, send_failed FROM TAKEN_TB
+						""".trimIndent()
+
+						val lCounts = mHandler.execResult(sql)
+						return HttpHelper.getOK(lCounts)
+					}
+					EndOfAPI.LOCAL_CLEAR_OFFLINE_COUNT -> {
+						val sql = """
+							UPDATE TAKEN_TB SET 
+							send_failed=0
+						""".trimIndent()
+
+						mHandler.execNonResult(sql)
+						return HttpHelper.getOK()
+					}
+					EndOfAPI.LOCAL_PUT_COUNT_ALARM_FAILED -> {
+						var sql = """
+							SELECT taken_count, send_failed FROM TAKEN_TB WHERE taken_alarm_id=${id}
+						""".trimIndent()
+
+						val lCounts = mHandler.execResult(sql)
+						if (lCounts.size() > 0) {
+							val jCount = lCounts[0].asJsonObject
+							sql = """
+								UPDATE TAKEN_TB SET taken_count=${jCount["taken_count"].asInt + 1}, send_failed=${jCount["send_failed"].asInt + 1}
+							""".trimIndent()
+
+							mHandler.execNonResult(sql)
+
+							return HttpHelper.getOK()
+						}
 						return HttpHelper.getError()
+					}
+					else -> {
+						return HttpHelper.getError(HttpError.OFFLINE_API_ERROR)
 					}
 				}
 			} catch (e: Exception) {
 				e.printStackTrace()
-				return HttpHelper.getError()
+				return HttpHelper.getError(HttpError.DATABASE)
 			} finally {
 				mHandler.close()
 			}

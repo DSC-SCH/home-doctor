@@ -107,13 +107,22 @@ class ServerHandler {
                 api.remote
             }
 
-            // /*
-            if (UserData.accountType == AccountType.OFFLINE || api == EndOfAPI.OFFLINE_USER_REGISTER) {
-                if (context == null)
-                    return HttpHelper.getError(HttpError.NO_CONTEXT)
-                return DatabaseHandler.execOfflineAPI(context, api, data, id)
+
+            when (api) {
+                EndOfAPI.LOCAL_PUT_COUNT_ALARM_FAILED, EndOfAPI.LOCAL_USER_REGISTER,
+                EndOfAPI.LOCAL_GET_OFFLINE_COUNT, EndOfAPI.LOCAL_CLEAR_OFFLINE_COUNT-> {
+                    if (context == null)
+                        return HttpHelper.getError(HttpError.NO_CONTEXT)
+                    return DatabaseHandler.execOfflineAPI(context, api, data, id)
+                }
+                else -> {
+                    if (UserData.accountType == AccountType.OFFLINE) {
+                        if (context == null)
+                            return HttpHelper.getError(HttpError.NO_CONTEXT)
+                        return DatabaseHandler.execOfflineAPI(context, api, data, id)
+                    }
+                }
             }
-            // */
 
             return JsonParser.parseString(HttpAsyncTask().execute(remote, method.method, json.toString()).get()).asJsonObject
         }

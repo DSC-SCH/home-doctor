@@ -78,7 +78,10 @@ class EditLabelPopup : AppCompatActivity() {
 					json.addProperty("label_color", LABELS_COLORS[radioGroup.getCheckedIndex()])
 
 					val result = ServerHandler.send(this@EditLabelPopup, EndOfAPI.EDIT_LABEL, json, _jItem["label_id"].asInt)
-					if (!HttpHelper.isOK(result)) return@OnClickListener
+					if (!HttpHelper.isOK(result)) {
+						Toast.makeText(this@EditLabelPopup, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
+						return@OnClickListener
+					}
 
 					val data = MyAlertPopup.Data(AlertType.CONFIRM)
 					data.alertTitle = alertTitle

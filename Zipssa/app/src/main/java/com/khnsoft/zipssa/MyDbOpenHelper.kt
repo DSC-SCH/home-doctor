@@ -117,6 +117,7 @@ class MyDbOpenHelper(val context: Context?, name: String?, factory: SQLiteDataba
 			taken_alarm_id INTEGER REFERENCES ALARM_TB(alarm_id) ON DELETE CASCADE,
 			taken_date CHAR(10),
 			taken_count INTEGER,
+			send_failed INTEGER,
 			PRIMARY KEY (taken_alarm_id, taken_date)
 			)
 		""".trimIndent()
