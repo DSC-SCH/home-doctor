@@ -5,16 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
+import java.util.List;
+
 @Data
 @Getter
 public class AlarmListCountChangeRequest {
 
-    private JsonArray alarmListJsonArray;
+    private List<AlarmCountRequestDto> counts;
 
     public AlarmListCountChangeRequest() {
     }
 
-    public AlarmListCountChangeRequest(JsonArray alarmListJsonArray) {
-        this.alarmListJsonArray = alarmListJsonArray;
+    public AlarmListCountChangeRequest(List<AlarmCountRequestDto> counts) {
+        this.counts = counts;
     }
 }

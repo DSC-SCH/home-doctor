@@ -1,17 +1,22 @@
-package homedoctor.medicine.api.dto.user;
+package homedoctor.medicine.api.dto.notice;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @Builder @Getter
-public class TermsDto {
+public class NoticeDto {
+
+    private Long noticeId;
 
     private String title;
 
     private String content;
+
+    private Date createdDate;
 }

@@ -16,5 +16,5 @@ public class MedicineDto {
     private String saveMethod;
     private String validDate;
     private String dosage;
-    private String badEffect;
+    private String precaution;
 }
