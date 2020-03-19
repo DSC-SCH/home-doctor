@@ -17,6 +17,7 @@
 
 	<!-- loading page -->
 	<dimen name="loading_paddingV">40dp</dimen>
+	<dimen name="loading_text_sizeH">50dp</dimen>
 
 	<!-- permission page -->
 	<dimen name="permission_paddingH">50dp</dimen>
@@ -34,7 +35,7 @@
 	<!-- login page -->
 	<dimen name="login_paddingH">40dp</dimen>
 	<dimen name="login_logo_sizeH">120dp</dimen>
-	<dimen name="login_logo_sizeV">75dp</dimen>
+	<dimen name="login_logo_sizeV">120dp</dimen>
 	<dimen name="login_input_padding">5dp</dimen>
 	<dimen name="login_input_title_sizeH">70sp</dimen>
 	<dimen name="login_input_marginV">8dp</dimen>

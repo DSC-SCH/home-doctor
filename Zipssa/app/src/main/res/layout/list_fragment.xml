@@ -23,35 +23,12 @@
 				android:layout_height="?attr/actionBarSize"
 				android:background="@color/background_theme">
 
-				<ImageView
-					android:layout_width="wrap_content"
-					android:layout_height="match_parent"
-					android:layout_gravity="center"
-					android:src="@drawable/app_logo_horizontal"
-					android:adjustViewBounds="true"
-					android:layout_margin="@dimen/main_logo_margin"/>
-
-				<ImageView
-					android:id="@+id/drawer_open_btn"
-					android:layout_width="@dimen/sync_drawer_editbtn_size"
-					android:layout_height="@dimen/sync_drawer_editbtn_size"
-					android:layout_gravity="right|center"
-					android:adjustViewBounds="true"
-					android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
-					android:src="@drawable/drawer_open_icon" />
-			</FrameLayout>
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:orientation="vertical">
-
 				<LinearLayout
 					android:id="@+id/main_name_bar"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"
-					android:layout_gravity="top|center"
+					android:layout_gravity="center|bottom"
 					android:gravity="center|bottom"
 					android:paddingVertical="@dimen/main_title_marginV">
 
@@ -73,6 +50,22 @@
 						android:textColor="@color/text_color"
 						android:textSize="@dimen/main_subtitle_text" />
 				</LinearLayout>
+
+				<ImageView
+					android:id="@+id/drawer_open_btn"
+					android:layout_width="@dimen/sync_drawer_editbtn_size"
+					android:layout_height="@dimen/sync_drawer_editbtn_size"
+					android:layout_gravity="right|bottom"
+					android:adjustViewBounds="true"
+					android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
+					android:layout_marginVertical="@dimen/main_title_marginV"
+					android:src="@drawable/drawer_open_icon" />
+			</FrameLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical">
 
 				<View
 					android:layout_width="match_parent"

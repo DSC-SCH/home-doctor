@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.khnsoft.zipssa">
+	package="com.khnsoft.medihand">
 
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.CAMERA" />
@@ -8,7 +8,7 @@
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 	<application
-		android:name=".KakaoLogin.GlobalApplication"
+		android:name="com.khnsoft.medihand.KakaoLogin.GlobalApplication"
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
@@ -21,59 +21,59 @@
 			android:name="com.kakao.sdk.AppKey"
 			android:value="@string/kakao_app_key" />
 
-		<activity android:name=".MypageMyprofileActivity" />
-		<activity android:name=".MainActivity" />
-		<activity android:name=".AddAlarmActivity" />
-		<activity android:name=".EditAlarmActivity" />
-		<activity android:name=".MedicineDetailActivity" />
-		<activity android:name=".MypageActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageMyprofileActivity" />
+		<activity android:name="com.khnsoft.medihand.MainActivity" />
+		<activity android:name="com.khnsoft.medihand.AddAlarmActivity" />
+		<activity android:name="com.khnsoft.medihand.EditAlarmActivity" />
+		<activity android:name="com.khnsoft.medihand.MedicineDetailActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageActivity" />
 		<activity
-			android:name=".MyAlertPopup"
+			android:name="com.khnsoft.medihand.MyAlertPopup"
 			android:theme="@style/PopupTheme" />
 		<activity
-			android:name=".AddLabelPopup"
+			android:name="com.khnsoft.medihand.AddLabelPopup"
 			android:theme="@style/PopupTheme" />
 		<activity
-			android:name=".MainItemPopup"
+			android:name="com.khnsoft.medihand.MainItemPopup"
 			android:theme="@style/PopupTheme" />
-		<activity android:name=".MypageNoticeActivity" />
-		<activity android:name=".MypageNoticeDetailActivity" />
-		<activity android:name=".MypageSyncActivity" />
-		<activity android:name=".MypageHistoryActivity" />
-		<activity android:name=".MypageHistoryPhotoDetailActivity" />
-		<activity android:name=".MypageSettingActivity" />
-		<activity android:name=".MypageLeavingActivity" />
-		<activity android:name=".MypageServiceActivity" />
-		<activity android:name=".MypageServiceContractActivity" />
-		<activity android:name=".MypageServiceEnquireActivity" />
-		<activity android:name=".LoginActivity" />
-		<activity android:name=".JoinActivity" />
-		<activity android:name=".PermissionActivity">
+		<activity android:name="com.khnsoft.medihand.MypageNoticeActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageNoticeDetailActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageSyncActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageHistoryActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageHistoryPhotoDetailActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageSettingActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageLeavingActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageServiceActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageServiceContractActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageServiceEnquireActivity" />
+		<activity android:name="com.khnsoft.medihand.LoginActivity" />
+		<activity android:name="com.khnsoft.medihand.JoinActivity" />
+		<activity android:name="com.khnsoft.medihand.PermissionActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ContractActivity" />
-		<activity android:name=".MainListCalendarActivity" />
-		<activity android:name=".LoadingActivity" />
-		<activity android:name=".MypageLabelActivity" />
+		<activity android:name="com.khnsoft.medihand.ContractActivity" />
+		<activity android:name="com.khnsoft.medihand.MainListCalendarActivity" />
+		<activity android:name="com.khnsoft.medihand.LoadingActivity" />
+		<activity android:name="com.khnsoft.medihand.MypageLabelActivity" />
 		<activity
-			android:name=".EditLabelPopup"
+			android:name="com.khnsoft.medihand.EditLabelPopup"
 			android:theme="@style/PopupTheme" />
 		<activity
-			android:name=".MypageSyncManagerPopup"
+			android:name="com.khnsoft.medihand.MypageSyncManagerPopup"
 			android:theme="@style/PopupTheme" />
 		<activity
-			android:name=".MypageSyncCrewPopup"
+			android:name="com.khnsoft.medihand.MypageSyncCrewPopup"
 			android:theme="@style/PopupTheme" />
-		<activity android:name=".AuthWebActivity" />
+		<activity android:name="com.khnsoft.medihand.AuthWebActivity" />
 
-		<receiver android:name=".AlarmReceiver" >
+		<receiver android:name="com.khnsoft.medihand.AlarmReceiver" >
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
-		<service android:name=".AlarmService" />
+		<service android:name="com.khnsoft.medihand.AlarmService" />
 	</application>
 </manifest>
