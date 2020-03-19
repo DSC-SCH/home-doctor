@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.util.Lazy;
@@ -21,20 +23,22 @@ import static javax.persistence.CascadeType.ALL;
 @RequiredArgsConstructor
 public class Alarm extends DateTimeEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "alarm_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "alarm_user")
+    @JoinColumn(name = "alarm_user", nullable = false)
     private User user;
 
     @Column(name = "alarm_title", length = 64, nullable = false)
     private String title;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "alarm_label")
+    @OneToOne(fetch = FetchType.LAZY, cascade = ALL)
+    @JoinColumn(name = "alarm_label", nullable = false)
     private Label label;
 
     @Column(name = "alarm_start_date", nullable = false)

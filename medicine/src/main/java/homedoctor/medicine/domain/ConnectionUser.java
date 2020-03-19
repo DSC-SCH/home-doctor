@@ -1,6 +1,7 @@
 package homedoctor.medicine.domain;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -13,18 +14,20 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class ConnectionUser extends DateTimeEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "connection_user_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "manager_user")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "care_user", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "care_user")
     private User careUser;
 
     @Builder
