@@ -29,6 +29,13 @@ public class LabelRepository {
                 .getResultList();
     }
 
+    public Label findDefaultLabel(Long userId) {
+        return em.createQuery("select l from Label l where l.user.id = :id and l.title = :title", Label.class)
+                .setParameter("title", "없음")
+                .setParameter("id", userId)
+                .getSingleResult();
+    }
+
     public void delete(Label label) {
         em.createQuery("delete from Label l where l.id = :id")
                 .setParameter("id", label.getId())

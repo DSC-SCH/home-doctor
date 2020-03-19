@@ -30,6 +30,13 @@ public class AlarmRepository {
                 .getResultList();
     }
 
+    public Alarm findByUserLabel(Long userId, Long labelId) {
+        return em.createQuery("select a from Alarm a where a.user.id = :userId and a.label.id = :labelId", Alarm.class)
+                .setParameter("userId", userId)
+                .setParameter("labelId", labelId)
+                .getSingleResult();
+    }
+
     public List<Alarm> findAllByLabel(Long user, Long label) {
 
         String query = "select a from Alarm a " +
@@ -38,13 +45,6 @@ public class AlarmRepository {
                 .setParameter("user", user)
                 .setParameter("label", label)
                 .getResultList();
-    }
-
-    public void updateLabel(Long userId, Long alarmId) {
-        em.createQuery("update Alarm a set a.label=1L where a.user.id = :userId and a.id = :alarm")
-                .setParameter("userId", userId)
-                .setParameter("alarm", alarmId)
-                .executeUpdate();
     }
 
     public List<Alarm> findAllByEnable(User user) {

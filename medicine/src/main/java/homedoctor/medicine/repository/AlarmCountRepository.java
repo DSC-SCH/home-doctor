@@ -34,11 +34,19 @@ public class AlarmCountRepository {
 
     public AlarmCount findOneByAlarmDate(Long alarmId, String date) {
         // 두개 이상일때 장애. -> 장애 대처할 수 있는 코드나 방지법 고민
-       return em.createQuery("select a from AlarmCount a" +
+       List<AlarmCount> alarmCountList =  em.createQuery("select a from AlarmCount a" +
                 " where a.alarmId.id = :alarmId and a.alarmDate = :date", AlarmCount.class)
                 .setParameter("alarmId", alarmId)
                 .setParameter("date", date)
-                .getSingleResult();
+                .getResultList();
+
+       if (alarmCountList.isEmpty()) {
+           return null;
+       } else if (alarmCountList.size() == 1) {
+           return alarmCountList.get(0);
+       } else {
+           return null;
+       }
     }
 
     public List<AlarmCount> findAllByDate(String date) {

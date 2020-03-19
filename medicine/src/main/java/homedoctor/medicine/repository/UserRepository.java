@@ -66,6 +66,6 @@ public class UserRepository {
     public void deleteByUserId(User user) {
         em.createQuery("delete from User u where u = :id")
                 .setParameter("id", user)
-                .executeUpdate();
+                . executeUpdate();
     }
 }
