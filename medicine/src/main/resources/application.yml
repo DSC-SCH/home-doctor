@@ -1,16 +1,12 @@
-#spring:
-#  datasource:
-#    url: jdbc:h2:tcp://localhost/~/home-doctor
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-# mysql
+server:
+  port: 8081
+
 spring:
   datasource:
-    url: jdbc:mysql:///%s${MYSQL_HOST:localhost}:3306/medicine?serverTimezone=UTC&characterEncoding=UTF-8
-    username: nathan
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/medicine?serverTimezone=UTC&characterEncoding=UTF-8
+    username: username
     password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
 
   jpa:
     hibernate:
@@ -25,7 +21,7 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
-#  org.hibernate.type: trace
+  org.hibernate.type: trace
 
 
 
