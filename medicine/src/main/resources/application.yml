@@ -1,25 +1,26 @@
-spring:
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/home-doctor
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-# mysql
 #spring:
 #  datasource:
-#    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/medicine?serverTimezone=UTC&characterEncoding=UTF-8
-#    username: nathan
-#    password: password
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:h2:tcp://localhost/~/home-doctor
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+# mysql
+spring:
+  datasource:
+    url: jdbc:mysql:///%s${MYSQL_HOST:localhost}:3306/medicine?serverTimezone=UTC&characterEncoding=UTF-8
+    username: nathan
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-       ddl-auto: update
+       ddl-auto: none
     properties:
       hibernate:
         show_sql: true
         format_sql: true
-        use_sql_comments: true;
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQL5Dialect
 
 
 logging.level:
