@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.cloud.appId",
+      "type": "java.lang.String",
+      "description": "Description for spring.cloud.appId."
+  }
+] }
