@@ -6,6 +6,7 @@ import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.SnsType;
 import homedoctor.medicine.domain.User;
+import homedoctor.medicine.domain.UserStatus;
 import homedoctor.medicine.repository.AlarmRepository;
 import homedoctor.medicine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,8 +68,13 @@ public class UserService {
                 userRepository.findByEmail(user);
 
         if (!findUsers.isEmpty()) {
-            return false;
+            for (User findUser : findUsers) {
+                if (findUser.getUserStatus().equals(UserStatus.ACTIVATE)) {
+                    return false;
+                }
+            }
         }
+
         return true;
     }
 
@@ -157,7 +163,8 @@ public class UserService {
         try {
             User findUser = userRepository.findOneById(id);
             if (findUser != null) {
-                userRepository.deleteByUserId(findUser);
+                findUser.deactivateUser();
+                userRepository.save(findUser);
 
                 return DefaultResponse.builder()
                         .status(StatusCode.OK)

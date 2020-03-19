@@ -195,7 +195,9 @@ public class AlarmService {
             if (findAlarm != null || !findAlarm.isEmpty()) {
 
                 for (Alarm alarm : findAlarm) {
-                    alarmRepository.updateLabel(userId, alarm.getId());
+                    Label label = labelRepository.findDefaultLabel(userId);
+                    alarm.setLabel(label);
+                    alarmRepository.save(alarm);
                 }
 
                 return DefaultResponse.builder()

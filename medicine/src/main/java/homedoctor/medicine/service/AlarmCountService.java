@@ -174,8 +174,13 @@ public class AlarmCountService {
                 // alarmId, date 값으로 변경할 복용 횟수 테이블 고유값 가져오기
                 AlarmCount findAlarmCount = alarmCountRepository.findOneByAlarmDate(
                         alarmId, DateTimeHandler.cutTime(date));
-                findAlarmCount.updateCounts(count);
-                alarmCountRepository.save(findAlarmCount);
+
+                if (findAlarmCount == null) {
+                    continue;
+                } else {
+                    findAlarmCount.updateCounts(count);
+                    alarmCountRepository.save(findAlarmCount);
+                }
             }
 
             return DefaultResponse.response(StatusCode.OK,

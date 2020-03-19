@@ -26,7 +26,7 @@ public class AuthService {
 
         if(user !=null){
             final String tokenDto = jwtService.create(user.getId());
-            LogInResponse logInResponse = new LogInResponse(user.getId(), user.getToken());
+            LogInResponse logInResponse = new LogInResponse(user.getId(), user.getToken(), user.getUsername());
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.LOGIN_SUCCESS, logInResponse);
 
