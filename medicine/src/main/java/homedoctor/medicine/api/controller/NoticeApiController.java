@@ -58,8 +58,10 @@ public class NoticeApiController {
             List<Notice> noticeList = (List<Notice>) response.getData();
 
             if (noticeList == null) {
-                return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                        ResponseMessage.NOT_FOUND_NOTICE);
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_NOTICE,
+                        empty);
             }
 
             List<NoticeDto> dtoList = noticeList.stream()

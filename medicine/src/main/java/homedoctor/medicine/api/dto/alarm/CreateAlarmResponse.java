@@ -7,12 +7,12 @@ import lombok.Data;
 @Builder
 public class CreateAlarmResponse {
 
-    private Long id;
+    private Long alarmId;
 
     public CreateAlarmResponse() {
     }
 
     public CreateAlarmResponse(Long id) {
-        this.id = id;
+        this.alarmId = id;
     }
 }

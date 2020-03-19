@@ -41,6 +41,11 @@ public class AlarmApiController {
 
     private final AlarmCountService alarmCountService;
 
+    @GetMapping("/internet")
+    public DefaultResponse testInternet() {
+        return DefaultResponse.response(StatusCode.OK,
+                ResponseMessage.SUCCESS_QUESTION);
+    }
 
     @Auth
     @PostMapping("/alarm/new")
@@ -97,7 +102,7 @@ public class AlarmApiController {
             }
             
             CreateAlarmResponse createAlarmResponse = CreateAlarmResponse.builder()
-                    .id(alarm.getId())
+                    .alarmId(alarm.getId())
                     .build();
 
             return DefaultResponse.response(response.getStatus(),

@@ -5,9 +5,12 @@ import homedoctor.medicine.api.dto.user.CreateUserRequest;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.common.auth.Auth;
+import homedoctor.medicine.domain.DeactivationReason;
 import homedoctor.medicine.domain.Terms;
 import homedoctor.medicine.domain.User;
 import homedoctor.medicine.api.dto.user.*;
+import homedoctor.medicine.domain.UserStatus;
+import homedoctor.medicine.repository.DeactivationReasonRepository;
 import homedoctor.medicine.service.AuthService;
 import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.TermService;
@@ -33,13 +36,15 @@ public class UserApiController {
 
     private final TermService termService;
 
+    private final DeactivationReasonRepository deactivationReasonRepository;
+
     @GetMapping("/terms")
     public DefaultResponse getTerms() {
         try {
 
             List<Terms> terms = (List<Terms>) termService.findTermsAll().getData();
 
-            if (terms.isEmpty()) {
+            if (terms == null||terms.isEmpty()) {
                 String[] empty = new String[0];
                 return DefaultResponse.response(StatusCode.OK,
                         ResponseMessage.NOT_FOUND_TERMS, empty);
@@ -133,6 +138,7 @@ public class UserApiController {
                     .snsType(request.getSnsType())
                     .genderType(request.getGenderType())
                     .phoneNum(request.getPhoneNum())
+                    .userStatus(UserStatus.ACTIVATE)
                     .build();
             DefaultResponse saveResponse = userService.save(user);
 
@@ -146,6 +152,7 @@ public class UserApiController {
                     userCreateDto);
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
@@ -226,9 +233,10 @@ public class UserApiController {
     }
 
     @Auth
-    @DeleteMapping("/user")
+    @PostMapping("/user/delete")
     public DefaultResponse deleteUser(
-             @RequestHeader("Authorization") final String header) { // token 인증 방식으로 변경
+             @RequestHeader("Authorization") final String header,
+             @RequestBody ReasonMessageRequest request) { // token 인증 방식으로 변경
         try {
             if (header == null) {
                 return DefaultResponse.response(StatusCode.UNAUTHORIZED,
@@ -242,6 +250,12 @@ public class UserApiController {
                         ResponseMessage.NOT_EXIST_USER);
             }
 
+            DeactivationReason reason = DeactivationReason.builder()
+                    .content(request.getContent())
+                    .build();
+
+            // 탈퇴 사유 저장
+            deactivationReasonRepository.saveReason(reason);
             userService.delete(findUser.getId());
 
             return DefaultResponse.response(StatusCode.OK,

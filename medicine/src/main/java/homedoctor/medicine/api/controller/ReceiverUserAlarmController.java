@@ -1,13 +1,10 @@
 package homedoctor.medicine.api.controller;
 
-import com.sun.org.apache.bcel.internal.generic.ALOAD;
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.alarm.AlarmDto;
 import homedoctor.medicine.api.dto.alarm.ChangeStatusRequest;
-import homedoctor.medicine.api.dto.alarm.ReceiverAlarmRequest;
 import homedoctor.medicine.api.dto.alarm.UpdateAlarmRequest;
 import homedoctor.medicine.api.dto.receiver.CreateReceiverAlarmResponse;
-import homedoctor.medicine.api.dto.receiver.UpdateReceiverAlarm;
 import homedoctor.medicine.api.dto.receiver.createReceiverAlarmRequest;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
@@ -20,7 +17,6 @@ import homedoctor.medicine.service.*;
 import homedoctor.medicine.utils.DateTimeHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.el.parser.AstLambdaExpression;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -202,6 +198,7 @@ public class ReceiverUserAlarmController {
                     alarmDto);
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
