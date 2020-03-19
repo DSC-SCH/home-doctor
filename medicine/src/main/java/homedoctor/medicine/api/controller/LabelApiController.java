@@ -5,8 +5,10 @@ import homedoctor.medicine.api.dto.label.LabelDto;
 import homedoctor.medicine.api.dto.label.CreateLabelRequest;
 import homedoctor.medicine.api.dto.label.UpdateLabelRequest;
 import homedoctor.medicine.common.auth.Auth;
+import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.Label;
 import homedoctor.medicine.domain.User;
+import homedoctor.medicine.service.AlarmService;
 import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.LabelService;
 import homedoctor.medicine.service.UserService;
@@ -32,6 +34,8 @@ public class LabelApiController {
 
     private final JwtService jwtService;
 
+    private final AlarmService alarmService;
+
     private final DefaultResponse defaultUnAuth =
             DefaultResponse.response(StatusCode.UNAUTHORIZED,
                     ResponseMessage.UNAUTHORIZED);
@@ -45,23 +49,22 @@ public class LabelApiController {
             if (header == null) {
                 return defaultUnAuth;
             }
-            User findUser =
-                    (User) userService.findOneById(jwtService.decode(header)).getData();
+            User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
 
-            if (request.validProperties()) {
-                Label label = Label.builder()
-                        .user(findUser)
-                        .title(request.getTitle())
-                        .color(request.getColor())
-                        .build();
-                DefaultResponse response = labelService.save(label);
-
-                return DefaultResponse.response(response.getStatus(),
-                        response.getMessage(),
-                        label);
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
             }
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.LABEL_CREATE_FAIL);
+
+            Label label = Label.builder()
+                    .user(findUser)
+                    .title(request.getTitle())
+                    .color(request.getColor())
+                    .build();
+            DefaultResponse response = labelService.save(label);
+
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
 
         } catch (HttpMessageNotReadableException ex) {
             log.error(ex.getMessage());
@@ -88,6 +91,12 @@ public class LabelApiController {
 
             DefaultResponse response = labelService.findOne(id);
             Label label = (Label) response.getData();
+
+            if (label == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_LABEL);
+            }
+
             LabelDto labelDto = LabelDto.builder()
                     .labelId(label.getId())
                     .user(label.getUser().getId())
@@ -117,6 +126,13 @@ public class LabelApiController {
             DefaultResponse response = labelService.fineLabelsByUser(findUser);
             List<Label> labels = (List<Label>) response.getData();
 
+            if (labels == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_LABEL,
+                        empty);
+            }
+
             List<LabelDto> alarmDtoList = labels.stream()
                     .map(m -> LabelDto.builder()
                             .labelId(m.getId())
@@ -140,7 +156,7 @@ public class LabelApiController {
     }
 
     @Auth
-    @PutMapping("/label/{label_id}/edit")
+    @PutMapping("/label/{label_id}")
     public DefaultResponse updateLabel(
             @RequestHeader("Authorization") final String header,
             @PathVariable("label_id") Long labelId,
@@ -150,19 +166,19 @@ public class LabelApiController {
                 return defaultUnAuth;
             }
 
-            if (request.validProperties()) {
-                Label label = Label.builder()
-                        .title(request.getTitle())
-                        .color(request.getColor())
-                        .build();
-
-                DefaultResponse response = labelService.update(labelId, label);
-                return DefaultResponse.response(response.getStatus(),
-                        response.getMessage());
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
             }
 
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.LABEL_UPDATE_FAIL);
+            Label label = Label.builder()
+                    .title(request.getTitle())
+                    .color(request.getColor())
+                    .build();
+
+            DefaultResponse response = labelService.update(labelId, label);
+            return DefaultResponse.response(response.getStatus(),
+                    response.getMessage());
 
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -180,7 +196,11 @@ public class LabelApiController {
             if (header == null) {
                 return defaultUnAuth;
             }
+
+            Long userId= jwtService.decode(header);
+            alarmService.changeAlarmLabelIfDeleteLabel(userId, labelId);
             DefaultResponse response = labelService.delete(labelId);
+
             return DefaultResponse.response(response.getStatus(),
                     response.getMessage());
 

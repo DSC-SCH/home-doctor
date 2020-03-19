@@ -3,6 +3,7 @@ package homedoctor.medicine.api.controller;
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.api.dto.code.CodeDto;
 import homedoctor.medicine.api.dto.code.CreateCodeRequest;
+import homedoctor.medicine.api.dto.code.ResponseCode;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.ConnectionCode;
 import homedoctor.medicine.domain.User;
@@ -29,7 +30,7 @@ public class ConnectionCodeApiController {
     private final JwtService jwtService;
 
     @Auth
-    @PostMapping("/code/new")
+    @PostMapping("/code")
     public DefaultResponse createCode(
             @RequestHeader("Authorization") final String header,
             @RequestBody @Valid final CreateCodeRequest request) {
@@ -38,53 +39,23 @@ public class ConnectionCodeApiController {
                 return DefaultResponse.response(StatusCode.UNAUTHORIZED,
                         ResponseMessage.UNAUTHORIZED);
             }
-            User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
 
-            if (request.validProperties()) {
-                ConnectionCode code = ConnectionCode.builder()
-                        .user(findUser)
-                        .code(request.getCode())
-                        .life(request.getLife())
-                        .build();
-                DefaultResponse response = codeService.saveCode(code);
-
-                return DefaultResponse.response(response.getStatus(),
-                        response.getMessage());
-            }
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.CODE_CREATE_FAIL);
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-
-            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
-                    ResponseMessage.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Auth
-    @GetMapping("/code/{code_id}")
-    public DefaultResponse getCode(
-            @RequestHeader("Authorization") final String header,
-            @PathVariable("code_id") Long id) {
-        try {
-            if (header == null) {
-                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
-                        ResponseMessage.UNAUTHORIZED);
+            if (request == null) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.CODE_CREATE_FAIL);
             }
 
-            DefaultResponse response = codeService.findCode(id);
-            ConnectionCode code = (ConnectionCode) response.getData();
-            CodeDto codeDto = CodeDto.builder()
-                    .id(id)
-                    .user(code.getUser().getId())
-                    .code(code.getCode())
-                    .life(code.getLife())
+            DefaultResponse response = codeService.saveCode(request.getUserId());
+            ConnectionCode connectionCode = (ConnectionCode) response.getData();
+
+            ResponseCode responseCode = ResponseCode.builder()
+                    .code(connectionCode.getCode())
+                    .userId(connectionCode.getUser().getId())
                     .build();
 
             return DefaultResponse.response(response.getStatus(),
                     response.getMessage(),
-                    codeDto);
+                    responseCode);
 
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -93,5 +64,4 @@ public class ConnectionCodeApiController {
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
-
 }

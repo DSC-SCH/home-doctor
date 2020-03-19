@@ -4,6 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,19 +23,22 @@ import static javax.persistence.CascadeType.ALL;
 @RequiredArgsConstructor
 public class Alarm extends DateTimeEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "alarm_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "alarm_user", nullable = false)
     private User user;
 
     @Column(name = "alarm_title", length = 64, nullable = false)
     private String title;
 
-    @OneToOne(cascade = ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "alarm_label")
+    @OneToOne(fetch = FetchType.LAZY, cascade = ALL)
+    @JoinColumn(name = "alarm_label", nullable = false)
     private Label label;
 
     @Column(name = "alarm_start_date", nullable = false)
@@ -49,8 +57,8 @@ public class Alarm extends DateTimeEntity {
     @Column(name = "alarm_status", nullable = false)
     private AlarmStatus alarmStatus;
 
-    @OneToMany(mappedBy = "alarm", cascade = ALL)
-    private List<PrescriptionImage> prescriptionImageList = new ArrayList<>();
+//    @OneToMany(mappedBy = "alarm", cascade = ALL, orphanRemoval = true)
+//    private List<PrescriptionImage> prescriptionImageList = new ArrayList<>();
 
     //== 연관관계 메서드 ==//
 //    public void creatAlarm(User user) {
@@ -59,7 +67,8 @@ public class Alarm extends DateTimeEntity {
 //    }
 
     @Builder
-    public Alarm(User user, String title, Label label, Date startDate, Date endDate, String times, String repeats, AlarmStatus alarmStatus, List<PrescriptionImage> prescriptionImageList) {
+    public Alarm(User user, String title, Label label, Date startDate, Date endDate,
+                 String times, String repeats, AlarmStatus alarmStatus) {
         this.user = user;
         this.title = title;
         this.label = label;
@@ -68,6 +77,5 @@ public class Alarm extends DateTimeEntity {
         this.times = times;
         this.repeats = repeats;
         this.alarmStatus = alarmStatus;
-        this.prescriptionImageList = prescriptionImageList;
     }
 }

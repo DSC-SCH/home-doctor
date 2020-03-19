@@ -1,5 +1,6 @@
 package homedoctor.medicine.repository;
 
+import homedoctor.medicine.domain.SnsType;
 import homedoctor.medicine.domain.User;
 import homedoctor.medicine.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ public class UserRepository {
 
     public void save(User user) {
         em.persist(user);
-//        User findUser = findOneById(user.getId());
         String setToken = jwtService.create(user.getId());
 
         user.setToken(setToken);
@@ -34,7 +34,15 @@ public class UserRepository {
     }
 
     public User findOneById(Long id) {
-        return em.find(User.class, id);
+        User user = em.find(User.class, id);
+        return user;
+    }
+
+    public User findOneBySnsId(String snsId, SnsType snsType) {
+        return em.createQuery("select u from User u where u.snsId = :snsId and u.snsType = :snsType", User.class)
+                .setParameter("snsId", snsId)
+                .setParameter("snsType", snsType)
+                .getSingleResult();
     }
 
     public List<User> findByEmail(User user) {
@@ -56,9 +64,8 @@ public class UserRepository {
     }
 
     public void deleteByUserId(User user) {
-        em.createQuery("delete from User u where u.id = :id")
-                .setParameter("id", user.getId())
-                .executeUpdate();
-        em.clear();
+        em.createQuery("delete from User u where u = :id")
+                .setParameter("id", user)
+                . executeUpdate();
     }
 }

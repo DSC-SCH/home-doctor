@@ -7,19 +7,22 @@ import lombok.Data;
 import lombok.Getter;
 
 @Data
-@AllArgsConstructor
 @Builder
 @Getter
 public class CreateCodeRequest {
 
     private Long userId;
 
-    private String code;
+    public CreateCodeRequest() {
 
-    private Integer life;
+    }
+
+    public CreateCodeRequest(Long userId) {
+        this.userId = userId;
+    }
 
     public final boolean validProperties() {
-        if (userId != null && code != null && life != null) {
+        if (userId != null) {
             return true;
         }
 

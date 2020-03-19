@@ -18,5 +18,7 @@ public class ImageDto {
 
     private String image;
 
+    private String alarmTitle;
 
+    private String labelColor;
 }

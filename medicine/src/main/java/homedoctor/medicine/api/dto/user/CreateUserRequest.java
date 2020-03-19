@@ -28,11 +28,10 @@ public class CreateUserRequest {
 
     private String phoneNum;
 
-    private String token;
 
     public final boolean validProperties() {
         if (username != null && birthday != null && email != null &&
-        email != null && snsType != null && genderType != null &&
+        email != null && snsId != null && snsType != null && genderType != null &&
         phoneNum != null) {
             return true;
         }

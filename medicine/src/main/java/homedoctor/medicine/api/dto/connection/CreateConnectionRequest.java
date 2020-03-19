@@ -10,13 +10,7 @@ import lombok.Data;
 @Builder
 public class CreateConnectionRequest {
 
-    private Long manager;
-    private Long receiver;
+    private String code;
 
-    public final boolean validProperties() {
-        if (manager != null && receiver != null) {
-            return true;
-        }
-        return false;
-    }
+    private Long manager;
 }

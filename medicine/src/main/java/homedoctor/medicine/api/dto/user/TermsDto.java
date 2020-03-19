@@ -12,5 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TermsDto {
 
     private String title;
+
     private String content;
 }

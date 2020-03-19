@@ -20,30 +20,38 @@ public class PrescriptionImageRepository {
     }
 
     public PrescriptionImage findOne(Long id) {
-        return em.find(PrescriptionImage.class, id);
+        String query = "select p from PrescriptionImage p join fetch p.alarm where p.id = :id";
+        return em.createQuery(query, PrescriptionImage.class)
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
-    public List<PrescriptionImage> findAllByAlarm(Alarm alarm) {
-        return em.createQuery("select p from PrescriptionImage p where p.alarm = :alarm", PrescriptionImage.class)
-                .setParameter("alarm", alarm)
+    public List<PrescriptionImage> findAllByAlarm(Long alarmId) {
+        String query = "select p from PrescriptionImage p join fetch p.alarm where p.alarm.id = :alarm";
+
+        return em.createQuery(query, PrescriptionImage.class)
+                .setParameter("alarm", alarmId)
                 .getResultList();
     }
 
     // 명시적 Join 사용하기.
-    public List<PrescriptionImage> findAllByUser(User user) {
+    public List<PrescriptionImage> findAllByUser(Long userId) {
+        String query = "select p from PrescriptionImage p join fetch " +
+                "p.alarm join p.alarm a where a.user.id = :id";
+
         List<PrescriptionImage> prescriptionImages =
-                em.createQuery("select p from PrescriptionImage p where p.alarm.user.id = :id",
+                em.createQuery(query,
                         PrescriptionImage.class)
-                .setParameter("id", user.getId())
+                .setParameter("id", userId)
                 .getResultList();
 
         return prescriptionImages;
     }
 
-    public void delete(PrescriptionImage prescriptionImage) {
+    public void delete(Long imageId) {
         em.createQuery(
                 "delete from PrescriptionImage p where p.id = :id")
-                .setParameter("id", prescriptionImage.getId())
+                .setParameter("id", imageId)
                 .executeUpdate();
         em.clear();
     }

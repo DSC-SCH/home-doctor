@@ -23,9 +23,17 @@ public class LabelRepository {
     }
 
     public List<Label> findAllByUser(User user) {
-        return em.createQuery("select l from Label l where l.user = :user", Label.class)
+        String query = "select l from Label l join fetch l.user where l.user = :user";
+        return em.createQuery(query, Label.class)
                 .setParameter("user", user)
                 .getResultList();
+    }
+
+    public Label findDefaultLabel(Long userId) {
+        return em.createQuery("select l from Label l where l.user.id = :id and l.title = :title", Label.class)
+                .setParameter("title", "없음")
+                .setParameter("id", userId)
+                .getSingleResult();
     }
 
     public void delete(Label label) {

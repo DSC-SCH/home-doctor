@@ -11,6 +11,7 @@ public class ResponseMessage {
     public static final String USER_SEARCH_FAIL           = "회원 조회 실패";
     public static final String NOT_FOUND_USER             = "등록된 회원이 없습니다.";
     public static final String DUPLICATED_USER            = "이미 등록된 회원입니다.";
+    public static final String NOT_EXIST_USER             = "존재하지 않는 유저입니다.";
 
     // ALARM RESPONSE MESSAGE
     public static final String ALARM_CREATE_SUCCESS        = "알람 등록 성공";
@@ -21,8 +22,22 @@ public class ResponseMessage {
     public static final String ALARM_DELETE_FAIL           = "알람 삭제 실패";
     public static final String ALARM_SEARCH_SUCCESS        = "알람 조회 성공";
     public static final String ALARM_SEARCH_FAIL           = "알람 조회 실패";
+    public static final String ALARM_CHANGE_LABEL_FAIL     = "알람 라벨 변경 실패";
+    public static final String ALARM_CHANGE_LABEL_SUCCESS  = "알람 라벨 변경 실패";
     public static final String NOT_FOUND_ALARM             = "등록된 알람이 없습니다.";
 
+    // ALARM COUNT RESPONSE MESSAGE
+    public static final String ALARM_COUNT_CREATE_SUCCESS        = "복용 횟수 등록 성공";
+    public static final String ALARM_COUNT_CREATE_FAIL           = "복용 횟수 등록 실패";
+    public static final String ALARM_COUNT_UPDATE_SUCCESS        = "복용 횟수 수정 성공";
+    public static final String ALARM_COUNT_UPDATE_FAIL           = "복용 횟수 수정 실패";
+    public static final String ALARM_COUNT_DELETE_SUCCESS        = "복용 횟수 삭제 성공";
+    public static final String ALARM_COUNT_DELETE_FAIL           = "복용 횟수 삭제 실패";
+    public static final String ALARM_COUNT_SEARCH_SUCCESS        = "복용 횟수 조회 성공";
+    public static final String ALARM_COUNT_SEARCH_FAIL           = "복용 횟수 조회 실패";
+    public static final String ALARM_COUNT_CHANGE_LABEL_FAIL     = "복용 횟수 라벨 변경 실패";
+    public static final String ALARM_COUNT_CHANGE_LABEL_SUCCESS  = "복용 횟수 라벨 변경 실패";
+    public static final String NOT_FOUND_ALARM_COUNT             = "등록된 알람이 없습니다.";
     // LABEL
     public static final String LABEL_CREATE_SUCCESS        = "라벨 등록 성공";
     public static final String LABEL_CREATE_FAIL           = "라벨 등록 실패";
@@ -41,6 +56,7 @@ public class ResponseMessage {
     public static final String CONNECTION_DELETE_SUCCESS   = "연동 해제 성공";
     public static final String CONNECTION_DELETE_FAIL      = "연동 해제 실패";
     public static final String NOT_FOUND_CONNECTION        = "연동된 유저가 없습니다.";
+    public static final String DUPLICATED_CONNECTION       = "이미 연동된 유저입니다.";
 
     // CONNECT CODE
     public static final String CODE_CREATE_SUCCESS         = "코드 생성 성공";
@@ -48,6 +64,8 @@ public class ResponseMessage {
     public static final String CODE_SEARCH_SUCCESS         = "코드 조회 성공";
     public static final String CODE_SEARCH_FAIL            = "코드 조회 실패";
     public static final String NOT_FOUND_CODE              = "등록된 코드가 없습니다.";
+    public static final String NOT_EQUAL_CODE              = "코드 불일치";
+    public static final String VALID_TIMEOUT               = "코드 유효시간 초과";
 
     // Prescription Image
     public static final String PRESCRIPTION_CREATE_SUCCESS = "처방전 등록 성공";
@@ -77,4 +95,8 @@ public class ResponseMessage {
     public static final String AUTHORIZED                  = "인증 성공.";
     public static final String FOUND_TERMS                 = "약관 조회 성공.";
     public static final String NOT_FOUND_TERMS             = "약관 조회 실패.";
+
+    public static final String FOUND_NOTICE                 = "공지사항 조회 성공.";
+    public static final String NOT_FOUND_NOTICE             = "공지사 조회 실패.";
+    public static final String SUCCESS_QUESTION             = "문의하기 성공 실패.";
 }

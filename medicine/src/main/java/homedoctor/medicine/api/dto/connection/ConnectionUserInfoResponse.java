@@ -8,7 +8,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class ConnectionUserDto {
+public class ConnectionUserInfoResponse {
+
+    private String username;
 
     private Long connectionId;
 

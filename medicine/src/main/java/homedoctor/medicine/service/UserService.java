@@ -3,13 +3,14 @@ package homedoctor.medicine.service;
 import homedoctor.medicine.api.dto.DefaultResponse;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
-import homedoctor.medicine.domain.Label;
+import homedoctor.medicine.domain.Alarm;
+import homedoctor.medicine.domain.SnsType;
 import homedoctor.medicine.domain.User;
-import homedoctor.medicine.repository.LabelRepository;
+import homedoctor.medicine.domain.UserStatus;
+import homedoctor.medicine.repository.AlarmRepository;
 import homedoctor.medicine.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -26,6 +27,8 @@ public class UserService {
 
     private final LabelService labelService;
 
+    private final AlarmRepository alarmRepository;
+
     private final JwtService jwtService;
 
     /**
@@ -40,6 +43,7 @@ public class UserService {
                         .message(ResponseMessage.DUPLICATED_USER)
                         .build();
             }
+
             userRepository.save(user);
 
             // Create Default Label
@@ -64,8 +68,13 @@ public class UserService {
                 userRepository.findByEmail(user);
 
         if (!findUsers.isEmpty()) {
-            return false;
+            for (User findUser : findUsers) {
+                if (findUser.getUserStatus().equals(UserStatus.ACTIVATE)) {
+                    return false;
+                }
+            }
         }
+
         return true;
     }
 
@@ -119,6 +128,31 @@ public class UserService {
         }
     }
 
+    public DefaultResponse findOneSnsId(String snsId, SnsType snsType) {
+        try {
+            User findUser = userRepository.findOneBySnsId(snsId, snsType);
+
+            if (findUser != null) {
+                return DefaultResponse.builder()
+                        .status(StatusCode.OK)
+                        .message(ResponseMessage.USER_SEARCH_SUCCESS)
+                        .data(findUser)
+                        .build();
+            }
+            return DefaultResponse.builder()
+                    .status(StatusCode.UNAUTHORIZED)
+                    .message(ResponseMessage.UNAUTHORIZED)
+                    .build();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.builder()
+                    .status(StatusCode.DB_ERROR)
+                    .message(ResponseMessage.DB_ERROR)
+                    .build();
+        }
+    }
+
+
 //    @Transactional
 //    public void update(User user, String name) {
 //        User findUser = userRepository.findOneById(user);
@@ -129,7 +163,8 @@ public class UserService {
         try {
             User findUser = userRepository.findOneById(id);
             if (findUser != null) {
-                userRepository.deleteByUserId(findUser);
+                findUser.deactivateUser();
+                userRepository.save(findUser);
 
                 return DefaultResponse.builder()
                         .status(StatusCode.OK)
@@ -144,7 +179,7 @@ public class UserService {
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             log.error(e.getMessage());
-
+            e.printStackTrace();
             return DefaultResponse.builder()
                     .status(StatusCode.DB_ERROR)
                     .message(ResponseMessage.DB_ERROR)

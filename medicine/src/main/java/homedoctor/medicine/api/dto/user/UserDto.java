@@ -22,6 +22,8 @@ public class UserDto {
 
     private SnsType snsType;
 
+    private String token;
+
     private GenderType genderType;
 
     private String phoneNum;

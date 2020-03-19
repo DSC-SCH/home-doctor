@@ -3,6 +3,7 @@ package homedoctor.medicine.repository;
 import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AlarmRepository {
 
+    @Autowired
     private final EntityManager em;
 
     public void save(Alarm alarm) {
@@ -23,13 +25,30 @@ public class AlarmRepository {
     }
 
     public List<Alarm> findAllByUser(User user) {
-        return em.createQuery("select a from Alarm a where a.user = :user", Alarm.class)
+        return em.createQuery("select a from Alarm a join fetch a.label where a.user = :user", Alarm.class)
                 .setParameter("user", user)
                 .getResultList();
     }
 
-    public List<Alarm> findAllByEnable(User user) {
+    public Alarm findByUserLabel(Long userId, Long labelId) {
+        return em.createQuery("select a from Alarm a where a.user.id = :userId and a.label.id = :labelId", Alarm.class)
+                .setParameter("userId", userId)
+                .setParameter("labelId", labelId)
+                .getSingleResult();
+    }
+
+    public List<Alarm> findAllByLabel(Long user, Long label) {
+
         String query = "select a from Alarm a " +
+                "where a.user.id = :user and a.label.id = :label";
+        return em.createQuery(query, Alarm.class)
+                .setParameter("user", user)
+                .setParameter("label", label)
+                .getResultList();
+    }
+
+    public List<Alarm> findAllByEnable(User user) {
+        String query = "select a from Alarm a join fetch a.label " +
                 "where a.user = :user and " +
                 "a.alarmStatus = homedoctor.medicine.domain.AlarmStatus.ENABLE";
 
@@ -45,7 +64,12 @@ public class AlarmRepository {
                 "delete from Alarm a where a.id = :id")
                 .setParameter("id", alarm.getId())
                 .executeUpdate();
-        em.clear();
+    }
+
+    public void deleteByUser(User user) {
+        em.createQuery("delete from Alarm a where a.user = :user")
+                .setParameter("user", user)
+                .executeUpdate();
     }
 }
 

@@ -5,9 +5,15 @@ import lombok.Data;
 
 
 @Data
-@AllArgsConstructor
 public class EnableAlarmResult<T>{
     private int counts;
     private T data;
 
+    public EnableAlarmResult() {
+    }
+
+    public EnableAlarmResult(int counts, T data) {
+        this.counts = counts;
+        this.data = data;
+    }
 }

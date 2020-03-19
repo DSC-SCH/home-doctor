@@ -5,9 +5,12 @@ import homedoctor.medicine.api.dto.user.CreateUserRequest;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.common.auth.Auth;
+import homedoctor.medicine.domain.DeactivationReason;
 import homedoctor.medicine.domain.Terms;
 import homedoctor.medicine.domain.User;
 import homedoctor.medicine.api.dto.user.*;
+import homedoctor.medicine.domain.UserStatus;
+import homedoctor.medicine.repository.DeactivationReasonRepository;
 import homedoctor.medicine.service.AuthService;
 import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.TermService;
@@ -33,37 +36,84 @@ public class UserApiController {
 
     private final TermService termService;
 
+    private final DeactivationReasonRepository deactivationReasonRepository;
+
     @GetMapping("/terms")
     public DefaultResponse getTerms() {
         try {
-            List<Terms> terms = (List<Terms>) termService.findTerms().getData();
 
-            List<TermsDto> termsDto = terms.stream()
+            List<Terms> terms = (List<Terms>) termService.findTermsAll().getData();
+
+            if (terms == null||terms.isEmpty()) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_TERMS, empty);
+            }
+
+            List<TermsDto> termsDtoList = terms.stream()
                     .map(m -> TermsDto.builder()
                     .title(m.getTitle())
                     .content(m.getContent())
-                    .build())
-                    .collect(Collectors.toList());
+                    .build()).collect(Collectors.toList());
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.FOUND_TERMS,
-                    termsDto);
+                    termsDtoList);
+
         } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            System.err.println(e.getMessage());
+
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
     }
 
+//    @GetMapping("/privacy")
+//    public DefaultResponse getPrivacyInfo() {
+//        try {
+//            Terms privacyInfo = (Terms) termService.findPrivacy().getData();
+//
+//            if (privacyInfo == null) {
+//                String[] empty = new String[0];
+//                return DefaultResponse.response(StatusCode.OK,
+//                        ResponseMessage.NOT_FOUND_TERMS, empty);
+//            }
+//
+//            TermsDto privacyDto = TermsDto.builder()
+//                    .title(privacyInfo.getTitle())
+//                    .content(privacyInfo.getContent())
+//                    .build();
+//
+//            return DefaultResponse.response(StatusCode.OK,
+//                    ResponseMessage.FOUND_TERMS,
+//                    privacyDto);
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            e.printStackTrace();
+//            System.err.println(e.getMessage());
+//
+//            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+//                    ResponseMessage.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+
     @PostMapping("login")
     public DefaultResponse login(@RequestBody final LoginRequest loginRequest) {
-
         try {
+            User findUser = (User) userService.findOneSnsId(loginRequest.getSnsId(), loginRequest.getSnsType()).getData();
+
+            if (findUser == null) {
+                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
+                        ResponseMessage.NOT_EXIST_USER);
+            }
             DefaultResponse response = authService.login(loginRequest);
 
             return response;
         } catch (Exception e) {
             log.error(e.getMessage());
-
         }
 
         return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
@@ -75,25 +125,34 @@ public class UserApiController {
             @RequestBody @Valid CreateUserRequest request) {
         try {
 
-            if (request.validProperties()) {
-                User user = User.builder()
-                        .username(request.getUsername())
-                        .birthday(request.getBirthday())
-                        .email(request.getEmail())
-                        .snsType(request.getSnsType())
-                        .genderType(request.getGenderType())
-                        .phoneNum(request.getPhoneNum())
-                        .build();
-                DefaultResponse saveResponse = userService.save(user);
-
-                return DefaultResponse.response(saveResponse.getStatus(),
-                        saveResponse.getMessage());
+            if (!request.validProperties()) {
+                return DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT);
             }
 
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.NOT_CONTENT);
+            User user = User.builder()
+                    .username(request.getUsername())
+                    .birthday(request.getBirthday())
+                    .email(request.getEmail())
+                    .snsId(request.getSnsId())
+                    .snsType(request.getSnsType())
+                    .genderType(request.getGenderType())
+                    .phoneNum(request.getPhoneNum())
+                    .userStatus(UserStatus.ACTIVATE)
+                    .build();
+            DefaultResponse saveResponse = userService.save(user);
+
+            UserCreateDto userCreateDto = UserCreateDto.builder()
+                    .token(user.getToken())
+                    .userId(user.getId())
+                    .build();
+
+            return DefaultResponse.response(saveResponse.getStatus(),
+                    saveResponse.getMessage(),
+                    userCreateDto);
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }
@@ -111,19 +170,25 @@ public class UserApiController {
                         ResponseMessage.UNAUTHORIZED);
             }
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
-            UserDto userDto = UserDto.builder()
-                    .id(findUser.getId())
+
+            if (findUser == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_USER);
+            }
+
+            UserInfoResponse userInfoResponse = UserInfoResponse.builder()
                     .username(findUser.getUsername())
                     .birthday(findUser.getBirthday())
                     .email(findUser.getEmail())
                     .snsType(findUser.getSnsType())
+                    .snsId(findUser.getSnsId())
                     .genderType(findUser.getGenderType())
                     .phoneNum(findUser.getPhoneNum())
                     .build();
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.USER_SEARCH_SUCCESS,
-                    userDto);
+                    userInfoResponse);
         } catch (Exception e) {
             log.error(e.getMessage());
 
@@ -137,6 +202,14 @@ public class UserApiController {
         try {
             DefaultResponse response = userService.findAllUsers();
             List<User> findAllUser = (List<User>) response.getData();
+
+            if (findAllUser == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_USER,
+                        empty);
+            }
+
             List<UserDto> collect = findAllUser.stream()
                     .map(m -> UserDto.builder()
                             .id(m.getId())
@@ -159,33 +232,37 @@ public class UserApiController {
         }
     }
 
-//    @PutMapping("/user/{user_id}")
-//    public UpdateMemberResponse updateMemberResponse(
-//            @PathVariable("user_id") Long id,
-//            @RequestBody @Valid UpdateMemberRequest request) {
-//
-//        userService.update(id, request.getName());
-//        User findUser = userService.findOne(id);
-//
-//        return new UpdateMemberResponse(findUser.getId(), findUser.getUsername());
-//    }
-
     @Auth
-    @DeleteMapping("/user")
+    @PostMapping("/user/delete")
     public DefaultResponse deleteUser(
-             @RequestHeader("Authorization") final String header) { // token 인증 방식으로 변경
+             @RequestHeader("Authorization") final String header,
+             @RequestBody ReasonMessageRequest request) { // token 인증 방식으로 변경
         try {
             if (header == null) {
                 return DefaultResponse.response(StatusCode.UNAUTHORIZED,
                         ResponseMessage.UNAUTHORIZED);
             }
             User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
+
+            if (findUser == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_EXIST_USER);
+            }
+
+            DeactivationReason reason = DeactivationReason.builder()
+                    .content(request.getContent())
+                    .build();
+
+            // 탈퇴 사유 저장
+            deactivationReasonRepository.saveReason(reason);
             userService.delete(findUser.getId());
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.USER_DELETE_SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage());
+            e.printStackTrace();
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
                     ResponseMessage.INTERNAL_SERVER_ERROR);
         }

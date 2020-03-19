@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -67,6 +69,7 @@ public class LabelService {
                     .title("알레르기")
                     .color("#D6D6FF")
                     .build();
+
             labelRepository.save(labelOnce);
             labelRepository.save(labelTwice);
             labelRepository.save(labelThird);
@@ -93,7 +96,7 @@ public class LabelService {
             }
 
             return DefaultResponse.builder()
-                    .status(StatusCode.METHOD_NOT_ALLOWED)
+                    .status(StatusCode.OK)
                     .message(ResponseMessage.NOT_FOUND_LABEL)
                     .build();
         } catch (Exception e) {
@@ -138,18 +141,19 @@ public class LabelService {
 
             if (findLabel == null) {
                 return DefaultResponse.builder()
-                        .status(StatusCode.OK)
+                        .status(StatusCode.METHOD_NOT_ALLOWED)
                         .message(ResponseMessage.NOT_FOUND_ALARM)
                         .build();
             }
+            Date currentDate = new Date();
 
             findLabel.setTitle(label.getTitle());
             findLabel.setColor(label.getColor());
-            labelRepository.save(findLabel);
+            findLabel.setLastModifiedDate(currentDate);
 
             return DefaultResponse.builder()
                     .status(StatusCode.OK)
-                    .message(ResponseMessage.ALARM_UPDATE_SUCCESS)
+                    .message(ResponseMessage.LABEL_UPDATE_SUCCESS)
                     .build();
 
         } catch (Exception e) {
@@ -177,7 +181,6 @@ public class LabelService {
                         .message(ResponseMessage.LABEL_DELETE_SUCCESS)
                         .build();
             }
-
             return DefaultResponse.builder()
                     .status(StatusCode.METHOD_NOT_ALLOWED)
                     .message(ResponseMessage.LABEL_DELETE_FAIL)

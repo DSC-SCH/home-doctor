@@ -1,16 +1,12 @@
 package homedoctor.medicine.api.controller;
 
 import homedoctor.medicine.api.dto.DefaultResponse;
-import homedoctor.medicine.api.dto.image.CreateImageRequest;
-import homedoctor.medicine.api.dto.image.imageAlarmRequest;
-import homedoctor.medicine.api.dto.image.ImageDto;
-import homedoctor.medicine.api.dto.image.UpdateImageRequest;
+import homedoctor.medicine.api.dto.image.*;
 import homedoctor.medicine.common.ResponseMessage;
 import homedoctor.medicine.common.StatusCode;
 import homedoctor.medicine.common.auth.Auth;
 import homedoctor.medicine.domain.Alarm;
 import homedoctor.medicine.domain.PrescriptionImage;
-import homedoctor.medicine.domain.User;
 import homedoctor.medicine.service.AlarmService;
 import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.service.PrescriptionImageService;
@@ -39,34 +35,30 @@ public class ImageApiController {
     private final DefaultResponse defaultHeaderResponse =
             DefaultResponse.response(StatusCode.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED);
 
+    // 알람 생성 직후 바로 알람 아이디를 넘겨서 이미지 저장.
     @Auth
-    @PostMapping("/image/new")
+    @PostMapping("/image/{alarm_id}")
     public DefaultResponse saveImage(
             @RequestHeader("Authorization") final String header,
+            @PathVariable("alarm_id") final Long alarmId,
             @RequestBody @Valid CreateImageRequest request) {
         try {
             if (header == null) {
                 return defaultHeaderResponse;
             }
 
-            if (request.validProperties()) {
-                for (String image : request.getImages()) {
-                    Alarm findAlarm = (Alarm) alarmService.findAlarm(request.getAlarm()).getData();
-                    PrescriptionImage prescriptionImage = PrescriptionImage.builder()
-                            .image(image)
-                            .alarm(findAlarm)
-                            .build();
+            for (String image : request.getImage()) {
+                Alarm findAlarm = (Alarm) alarmService.findAlarm(alarmId).getData();
+                PrescriptionImage prescriptionImage = PrescriptionImage.builder()
+                        .image(image)
+                        .alarm(findAlarm)
+                        .build();
 
-                    imageService.save(prescriptionImage);
-                }
-
-                return DefaultResponse.response(StatusCode.OK,
-                        ResponseMessage.PRESCRIPTION_CREATE_SUCCESS);
+                imageService.save(prescriptionImage);
             }
 
-            return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                    ResponseMessage.PRESCRIPTION_CREATE_FAIL);
-
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.PRESCRIPTION_CREATE_SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
@@ -85,6 +77,12 @@ public class ImageApiController {
             }
             DefaultResponse response = imageService.findOneImage(id);
             PrescriptionImage image = (PrescriptionImage) response.getData();
+
+            if (image == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION);
+            }
+
             ImageDto imageDto = ImageDto.builder()
                     .imageId(image.getId())
                     .alarm(image.getAlarm().getId())
@@ -111,15 +109,21 @@ public class ImageApiController {
             if (header == null) {
                 return defaultHeaderResponse;
             }
-            System.out.println("=====Error========");
-            System.out.println(id);
 
 //            Alarm alarm = (Alarm) alarmService.findAlarm(request.getAlarmId()).getData();
-            Alarm alarm = (Alarm) alarmService.findAlarm(id).getData();
-            DefaultResponse response = imageService.findImagesByAlarm(alarm);
+            DefaultResponse response = imageService.findImagesByAlarm(id);
             List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
-            List<ImageDto> imageDtoList = images.stream()
-                    .map(m -> ImageDto.builder()
+
+
+            if (images == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION,
+                        empty);
+            }
+
+            List<ImageByAlarmResponse> imageDtoList = images.stream()
+                    .map(m -> ImageByAlarmResponse.builder()
                             .imageId(m.getId())
                             .image(m.getImage())
                             .alarm(m.getAlarm().getId())
@@ -144,15 +148,25 @@ public class ImageApiController {
             if (header == null) {
                 return defaultHeaderResponse;
             }
-
-            User findUser = (User) userService.findOneById(jwtService.decode(header)).getData();
-            DefaultResponse response = imageService.findImagesByUser(findUser);
+            Long userId = jwtService.decode(header);
+            DefaultResponse response = imageService.findImagesByUser(userId);
             List<PrescriptionImage> images = (List<PrescriptionImage>) response.getData();
-            List<ImageDto> imageDtoList = images.stream()
-                    .map(m -> ImageDto.builder()
+
+            if (images == null) {
+                String[] empty = new String[0];
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION,
+                        empty);
+            }
+
+            List<ImageByUserResponse> imageDtoList = images.stream()
+                    .map(m -> ImageByUserResponse.builder()
                             .imageId(m.getId())
                             .image(m.getImage())
                             .alarm(m.getAlarm().getId())
+                            .alarmTitle(m.getAlarm().getTitle())
+                            .labelColor(m.getAlarm().getLabel().getColor())
+                            .createdDate(m.getAlarm().getCreatedDate())
                             .build())
                     .collect(Collectors.toList());
 
@@ -167,20 +181,25 @@ public class ImageApiController {
     }
 
     @Auth
-    @DeleteMapping("/image/{image_id}")
-    public DefaultResponse deleteImage(
+    @PutMapping("/image/{alarm_id}")
+    public DefaultResponse updateImageByAlarm(
             @RequestHeader("Authorization") final String header,
-            @PathVariable("image_id") Long id) {
+            @PathVariable("alarm_id") final Long alarmId,
+            @RequestBody UpdateImageByAlarmRequest request) {
         try {
             if (header == null) {
                 return defaultHeaderResponse;
             }
-            DefaultResponse response = imageService.findOneImage(id);
-            PrescriptionImage image = (PrescriptionImage) response.getData();
-            imageService.delete(image);
+
+            if (request.getImage() == null || request.getImage().isEmpty()) {
+                DefaultResponse.response(StatusCode.METHOD_NOT_ALLOWED,
+                        ResponseMessage.PRESCRIPTION_UPDATE_FAIL);
+            }
+
+            imageService.updateImagesByAlarm(alarmId, request.getImage());
 
             return DefaultResponse.response(StatusCode.OK,
-                    ResponseMessage.ALARM_DELETE_SUCCESS);
+                    ResponseMessage.PRESCRIPTION_UPDATE_SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
@@ -188,6 +207,7 @@ public class ImageApiController {
         }
     }
 
+    // 아직 사용 안하는 API
     @Auth
     @PutMapping("/image/edit")
     public DefaultResponse updateImage(
@@ -208,14 +228,15 @@ public class ImageApiController {
                         ResponseMessage.PRESCRIPTION_UPDATE_FAIL);
             }
 
-            System.out.println("====errorTrack====");
             Alarm findAlarm = (Alarm) alarmService.findAlarm(request.getAlarm()).getData();
+            Long alarmId = findAlarm.getId();
+
             List<PrescriptionImage> images =
-                    (List<PrescriptionImage>) imageService.findImagesByAlarm(findAlarm).getData();
+                    (List<PrescriptionImage>) imageService.findImagesByAlarm(alarmId).getData();
 
             // 해당 알람 이미지 삭제
             for (PrescriptionImage image : images) {
-                imageService.delete(image);
+                imageService.delete(image.getId());
             }
 
             // 요청 들어온 알람 등록
@@ -229,6 +250,31 @@ public class ImageApiController {
 
             return DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.PRESCRIPTION_UPDATE_SUCCESS);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Auth
+    @DeleteMapping("/image/{image_id}")
+    public DefaultResponse deleteImage(
+            @RequestHeader("Authorization") final String header,
+            @PathVariable("image_id") Long id) {
+        try {
+            if (header == null) {
+                return defaultHeaderResponse;
+            }
+            if (id == null) {
+                return DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_PRESCRIPTION);
+            }
+
+            imageService.delete(id);
+
+            return DefaultResponse.response(StatusCode.OK,
+                    ResponseMessage.ALARM_DELETE_SUCCESS);
         } catch (Exception e) {
             log.error(e.getMessage());
             return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
