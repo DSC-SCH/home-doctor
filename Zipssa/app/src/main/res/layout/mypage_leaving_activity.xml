@@ -47,7 +47,7 @@
 				android:background="@color/background_theme"
 				android:orientation="vertical">
 
-				<CheckBox
+				<RadioButton
 					android:id="@+id/reason_1"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
 					android:background="@color/split_line"
 					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
 
-				<CheckBox
+				<RadioButton
 					android:id="@+id/reason_2"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
 					android:background="@color/split_line"
 					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
 
-				<CheckBox
+				<RadioButton
 					android:id="@+id/reason_3"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
 					android:background="@color/split_line"
 					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
 
-				<CheckBox
+				<RadioButton
 					android:id="@+id/reason_4"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
 					android:orientation="horizontal"
 					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH">
 
-					<CheckBox
+					<RadioButton
 						android:id="@+id/reason_5"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
@@ -152,7 +152,7 @@
 					android:fontFamily="@font/lotte_dream_bold"
 					android:textSize="@dimen/mypage_content_text"
 					android:textColor="@color/text_color"
-					android:text="※ 최대 2개까지 선택 가능합니다 ※"/>
+					android:text="※ 탈퇴 사유를 선택해주세요 ※"/>
 			</LinearLayout>
 
 			<LinearLayout

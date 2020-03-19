@@ -93,4 +93,8 @@ class MainActivity : AppCompatActivity() {
 			callPage(FRAG_HOME)
 		}
 	}
+
+	fun startLoading() {
+
+	}
 }

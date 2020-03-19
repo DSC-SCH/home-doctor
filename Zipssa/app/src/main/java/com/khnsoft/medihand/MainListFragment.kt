@@ -29,7 +29,6 @@ class MainListFragment : Fragment() {
 
 	companion object {
 		const val RC_DATE = 200;
-		const val STATE_DATE = "date"
 
 		var frag : MainListFragment? = null
 
@@ -38,8 +37,6 @@ class MainListFragment : Fragment() {
 			return frag!!
 		}
 	}
-
-	// TODO("Reject approach to online only function")
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		val view = inflater.inflate(R.layout.list_fragment, container, false)
@@ -115,6 +112,7 @@ class MainListFragment : Fragment() {
 			UserData.careUser = null
 			UserData.careName = null
 			sync_drawer.closeDrawer(Gravity.RIGHT)
+			refresh()
 		}
 
 		close_btn.setOnClickListener {
@@ -142,6 +140,7 @@ class MainListFragment : Fragment() {
 		main_name_bar.setBackgroundColor(if (UserData.careUser == null) 0 else resources.getColor(R.color.main_theme, null))
 		main_name.setTextColor(if (UserData.careUser == null) resources.getColor(R.color.text_color, null) else Color.WHITE)
 		main_name_sub.setTextColor(if (UserData.careUser == null) resources.getColor(R.color.text_color, null) else Color.WHITE)
+		drawer_open_btn.setImageResource(if (UserData.careUser == null) R.drawable.drawer_open_icon else R.drawable.drawer_open_white)
 
 		val curCal = Calendar.getInstance()
 		val curDate = main_date.text.toString()
@@ -290,6 +289,7 @@ class MainListFragment : Fragment() {
 				}
 
 				title.text = jItem["alarm_title"].asString
+				MyLogger.d("@@@color", jItem["label_color"].asString)
 				title.setBackgroundColor(Color.parseColor(jItem["label_color"].asString))
 
 				count.text = "${lTimes.size()}회 복용"

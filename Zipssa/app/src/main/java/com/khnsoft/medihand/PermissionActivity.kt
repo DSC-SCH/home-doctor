@@ -27,7 +27,7 @@ class PermissionActivity : AppCompatActivity() {
 			for (signature in info.signatures) {
 				val md = MessageDigest.getInstance("SHA")
 				md.update(signature.toByteArray())
-				MyLogger.d("@@@@@@", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+				MyLogger.i("@@@@@@", Base64.encodeToString(md.digest(), Base64.DEFAULT))
 			}
 		} catch (e: Exception) {
 			e.printStackTrace()

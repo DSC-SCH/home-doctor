@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
 				AccountType.KAKAO -> {
 					val result = ServerHandler.send(this@LoginActivity, EndOfAPI.CHECK_INTERNET)
 					if (!HttpHelper.isOK(result)) {
-						Toast.makeText(this@LoginActivity, "인터넷 연결이 없어 오프라인으로 로그인합니다", Toast.LENGTH_SHORT).show()
+						Toast.makeText(this@LoginActivity, "인터넷 연결이 없어 오프라인으로 로그인합니다. 오프라인 상태에서는 정보가 부정확할 수 있습니다.", Toast.LENGTH_SHORT).show()
 						UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
 						UserData.accountType = AccountType.NO_NETWORK
 						startLoading()
@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
 				AccountType.GOOGLE -> {
 					val result = ServerHandler.send(this@LoginActivity, EndOfAPI.CHECK_INTERNET)
 					if (!HttpHelper.isOK(result)) {
-						Toast.makeText(this@LoginActivity, "인터넷 연결이 없어 오프라인으로 로그인합니다", Toast.LENGTH_SHORT).show()
+						Toast.makeText(this@LoginActivity, "인터넷 연결이 없어 오프라인으로 로그인합니다. 오프라인 상태에서는 정보가 부정확할 수 있습니다.", Toast.LENGTH_SHORT).show()
 						UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
 						UserData.accountType = AccountType.NO_NETWORK
 						startLoading()
@@ -146,6 +146,10 @@ class LoginActivity : AppCompatActivity() {
 			} catch (e: Exception) {
 				e.printStackTrace()
 			}
+		} else {
+			if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+				return;
+			}
 		}
 	}
 
@@ -187,6 +191,7 @@ class LoginActivity : AppCompatActivity() {
 
 				val sp = SPHandler.getSp(this@LoginActivity)
 				val editor = sp.edit()
+				editor.putString(AlarmReceiver.SP_TOKEN, UserData.token)
 				if (sp.getInt(SP_USER_ID, UserData.DEFAULT_ID) != UserData.id) {
 					editor.putInt(SP_USER_ID, UserData.id)
 					editor.apply()

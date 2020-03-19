@@ -6,7 +6,8 @@ import java.lang.Exception
 
 class HttpHelper {
     companion object {
-        const val SERVER_URL = "http://175.126.196.153:8081"
+         const val SERVER_URL = "http://175.126.196.153:8081"
+        // const val SERVER_URL = "https://home-doctor.site"
         const val ERROR_CODE = -1
         const val OK_CODE = 200
         const val NO_USER_CODE = 401

@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
 import com.kakao.usermgmt.callback.UnLinkResponseCallback
@@ -15,7 +17,8 @@ import kotlinx.android.synthetic.main.mypage_setting_activity.back_btn
 import java.io.File
 
 class MypageLeavingActivity : AppCompatActivity() {
-	lateinit var reasonList : Array<CheckBox>
+
+	val radioGroup = MyRadioGroup()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -23,19 +26,46 @@ class MypageLeavingActivity : AppCompatActivity() {
 
 		back_btn.setOnClickListener { onBackPressed() }
 
-		reasonList = arrayOf(reason_1, reason_2, reason_3, reason_4, reason_5)
+		radioGroup.add(reason_1)
+		radioGroup.add(reason_2)
+		radioGroup.add(reason_3)
+		radioGroup.add(reason_4)
+		radioGroup.add(reason_5)
 
-		for (reason in reasonList)
-			reason.setOnClickListener(reasonClickListener)
+		reason_5.setOnCheckedChangeListener {_, isChecked ->
+			reason_else.isEnabled = isChecked
+		}
 
 		confirm_btn.setOnClickListener {
+			val reason = radioGroup.getCheckedIndex()
+			if (reason == -1) {
+				Toast.makeText(this@MypageLeavingActivity, "탈퇴 사유를 선택해 주세요", Toast.LENGTH_LONG).show()
+				return@setOnClickListener
+			} else if (reason == 4 && reason_else.text.toString().isBlank()) {
+				Toast.makeText(this@MypageLeavingActivity, "탈퇴 사유를 입력해 주세요", Toast.LENGTH_LONG).show()
+				return@setOnClickListener
+			}
 			val data = MyAlertPopup.Data(AlertType.ALERT).apply {
 				alertTitle = "서비스 탈퇴"
 				alertContent = "한 번 삭제된 계정은 복구가 불가능합니다."
 				alertConfirmText = "탈퇴"
 				confirmListener = View.OnClickListener {
 					AlarmHandler.clearAllAlarms(this@MypageLeavingActivity)
-					val result = ServerHandler.send(this@MypageLeavingActivity,EndOfAPI.USER_DELETE)
+
+					val json = JsonObject()
+					json.addProperty("content", when (reason) {
+						0 -> reason_1.text.toString()
+						1 -> reason_2.text.toString()
+						2 -> reason_3.text.toString()
+						3 -> reason_4.text.toString()
+						4 -> reason_else.text.toString()
+						else -> {
+							Toast.makeText(this@MypageLeavingActivity, "탈퇴 사유를 선택해 주세요", Toast.LENGTH_LONG).show()
+							return@OnClickListener
+						}
+					})
+
+					val result = ServerHandler.send(this@MypageLeavingActivity,EndOfAPI.USER_DELETE, json)
 					if (!HttpHelper.isOK(result)) {
 						Toast.makeText(this@MypageLeavingActivity, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 						return@OnClickListener
@@ -75,25 +105,6 @@ class MypageLeavingActivity : AppCompatActivity() {
 			intent.putExtra(ExtraAttr.POPUP_DATA, dataId)
 			startActivityForResult(intent, MyAlertPopup.RC)
 		}
-	}
-
-	val reasonClickListener = View.OnClickListener {
-		if (countCheckedReasons() > 2) {
-			(it as CheckBox).isChecked = false
-			Toast.makeText(this@MypageLeavingActivity, "탈퇴 사유는 최대 2개까지 선택할 수 있습니다", Toast.LENGTH_LONG).show()
-		}
-
-		if (it.id == R.id.reason_5) {
-			reason_else.isEnabled = reason_5.isChecked
-		}
-	}
-
-	fun countCheckedReasons() : Int {
-		var count = 0
-		for (reason in reasonList)
-			if (reason.isChecked)
-				count++
-		return count
 	}
 
 	fun killApplication() {

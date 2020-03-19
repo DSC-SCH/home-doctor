@@ -30,6 +30,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
 		const val SP_STOP_UNTIL = "stop_until"
 		const val SP_STOP_ID = "stop_id"
+		const val SP_TOKEN = "token"
 
 		fun createNotificationNow(context: Context, notificationManager: NotificationManager, jItem: JsonObject, time: Long) {
 			val sp = SPHandler.getSp(context)
@@ -58,7 +59,7 @@ class AlarmReceiver : BroadcastReceiver() {
 			// Set notification
 			val date = Date(time)
 			val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-				.setSmallIcon(R.drawable.pill)
+				.setSmallIcon(R.drawable.new_app_logo)
 				.setContentTitle(SDF.timeInKorean.format(date))
 				.setContentText("${jItem["alarm_title"].asString} 복용할 시간이에요!")
 				.addAction(R.drawable.confirm_icon, "복용", pIntent)
@@ -71,6 +72,7 @@ class AlarmReceiver : BroadcastReceiver() {
 			}
 
 			val notifyId = DEFAULT_ID + jItem["alarm_id"].asInt
+			notificationManager.cancel(notifyId)
 			notificationManager.notify(notifyId, builder.build())
 			MyLogger.d("@@@", "NotifyCreated - ${notifyId}")
 		}
@@ -80,10 +82,10 @@ class AlarmReceiver : BroadcastReceiver() {
 			val notifyId = DEFAULT_ID + alarmId
 			val cancelSender = PendingIntent.getBroadcast(context, notifyId, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-			notificationManager.cancel(notifyId)
 			if (cancelSender != null) {
-				alarmManager.cancel(cancelSender)
+				MyLogger.d("@@@", "Not null - ${notifyId}")
 				cancelSender.cancel()
+				alarmManager.cancel(cancelSender)
 			}
 			MyLogger.d("@@@", "AlarmCleared - ${notifyId}")
 		}
@@ -141,9 +143,14 @@ class AlarmReceiver : BroadcastReceiver() {
 				val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 				val jItem = JsonParser.parseString(intent.getStringExtra(ExtraAttr.NOTIFY_DATA)).asJsonObject
 				val time = intent.getLongExtra(ExtraAttr.NOTIFY_TIME, -1)
+				val sp = SPHandler.getSp(context)
+				val editor = sp.edit()
 
 				val alarmId = jItem["alarm_id"].asInt
 				notificationManager.cancel(DEFAULT_ID + alarmId)
+
+				UserData.token = sp.getString(SP_TOKEN, "")
+				UserData.version = context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
 				val json = JsonObject()
 				val date = SDF.dateBar.format(Date(time))
@@ -152,8 +159,6 @@ class AlarmReceiver : BroadcastReceiver() {
 
 				val result = ServerHandler.send(context, EndOfAPI.PUT_COUNT_ALARM, json, jItem["alarm_id"].asInt)
 				if (!HttpHelper.isOK(result)) {
-					val sp = SPHandler.getSp(context)
-					val editor = sp.edit()
 					val jFaileds = JsonParser.parseString(sp.getString(SP_SEND_FAILED, "{}")).asJsonObject
 
 					jFaileds.addProperty("${alarmId}/${date}", (jFaileds["${alarmId}/${date}"]?.asInt ?: 0) + 1)

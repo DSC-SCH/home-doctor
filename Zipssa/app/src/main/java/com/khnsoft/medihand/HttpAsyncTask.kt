@@ -8,8 +8,45 @@ import java.io.InputStreamReader
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
+import java.security.SecureRandom
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 
 class HttpAsyncTask : AsyncTask<String, Void, String>() {
+	companion object {
+		fun trustAllHosts() {
+			val trustAllCerts = arrayOf( object : X509TrustManager {
+				override fun checkClientTrusted(
+					chain: Array<out java.security.cert.X509Certificate>?,
+					authType: String?
+				) { }
+
+				override fun checkServerTrusted(
+					chain: Array<out java.security.cert.X509Certificate>?,
+					authType: String?
+				) { }
+
+				override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
+					return emptyArray()
+				}
+			})
+
+			val NullHostNameVerifier = HostnameVerifier {_, _ ->
+				true
+			}
+
+			try {
+				HttpsURLConnection.setDefaultHostnameVerifier(NullHostNameVerifier)
+				val sc = SSLContext.getInstance("TLS")
+				sc.init(null, trustAllCerts, SecureRandom())
+				HttpsURLConnection.setDefaultSSLSocketFactory(sc.socketFactory)
+			} catch (e: Exception) {
+				e.printStackTrace()
+			}
+		}
+	}
 
 	/**
 	 * @param params (end of api url, method, json data in string (for POST and PUT))
@@ -27,6 +64,7 @@ class HttpAsyncTask : AsyncTask<String, Void, String>() {
 		MyLogger.d("HttpInfo", "API: ${remote}, METHOD: ${method.name}")
 
 		try {
+			trustAllHosts()
 			val url = URL("${HttpHelper.SERVER_URL}${remote}")
 			httpCon = url.openConnection() as HttpURLConnection
 

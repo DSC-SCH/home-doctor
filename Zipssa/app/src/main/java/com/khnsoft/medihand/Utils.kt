@@ -17,7 +17,7 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     USER_REGISTER("/user", HttpMethod.POST),
     USER_LOGIN("/login", HttpMethod.POST),
     USER_GET("/user", HttpMethod.GET),
-    USER_DELETE("/user", HttpMethod.DELETE),
+    USER_DELETE("/user/delete", HttpMethod.POST),
 
     SYNC_GENERATE("/code", HttpMethod.POST),
     SYNC_CONNECT("/connect/new", HttpMethod.POST),
@@ -54,7 +54,7 @@ enum class EndOfAPI(val remote: String, val method: HttpMethod, val isIdNeeded: 
     GET_IMAGES("/image/alarm", HttpMethod.GET, true),
     GET_ALL_IMAGES("/image/user", HttpMethod.GET),
     PUT_COUNT_ALARM("/alarm/counts", HttpMethod.PUT, true), // alarm_id
-    PUT_COUNT_ALARMS("/alarm/counts/many", HttpMethod.PUT),
+    PUT_COUNT_ALARMS("/alarm/count/many", HttpMethod.PUT),
     GET_COUNT_DATE("/alarm/counts", HttpMethod.POST),
 
     ENQUIRE("/question", HttpMethod.POST),

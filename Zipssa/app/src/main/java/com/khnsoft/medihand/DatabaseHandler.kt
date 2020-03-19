@@ -116,7 +116,7 @@ class DatabaseHandler(context: Context?) {
 								-${jItem["labelId"].asInt},
 								${jItem["user"].asInt},
 								'${jItem["title"].asString}',
-								'${jItem["color"]}',
+								'${jItem["color"].asString}',
 								'${curDate}',
 								'${curDate}'
 								)

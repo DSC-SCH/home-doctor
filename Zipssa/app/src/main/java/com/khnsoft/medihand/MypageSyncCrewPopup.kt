@@ -22,8 +22,9 @@ class MypageSyncCrewPopup : AppCompatActivity() {
 
 			val result = ServerHandler.send(this@MypageSyncCrewPopup, EndOfAPI.SYNC_CONNECT, json)
 			if (HttpHelper.isOK(result)) {
-				Toast.makeText(this@MypageSyncCrewPopup, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 				finish()
+			} else {
+				Toast.makeText(this@MypageSyncCrewPopup, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 			}
 		}
 	}
