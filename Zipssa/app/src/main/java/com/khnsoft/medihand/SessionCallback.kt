@@ -1,6 +1,7 @@
-package com.khnsoft.medihand.KakaoLogin
+package com.khnsoft.medihand
 
 import android.content.Intent
+import android.widget.Toast
 import com.google.gson.JsonObject
 import com.kakao.auth.ISessionCallback
 import com.kakao.network.ErrorResult
@@ -9,7 +10,6 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.usermgmt.response.model.Gender
 import com.kakao.util.exception.KakaoException
-import com.khnsoft.medihand.*
 
 class SessionCallback(val context: LoginActivity) : ISessionCallback {
 	override fun onSessionOpenFailed(exception: KakaoException?) {
@@ -26,6 +26,7 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 				val kakaoAccount = result?.kakaoAccount
 
 				if (kakaoAccount != null) {
+					context.loadingOn()
 					val nickname = kakaoAccount.profile.nickname
 					val email = kakaoAccount.email
 					val gender = kakaoAccount.gender
@@ -35,6 +36,9 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 					json.addProperty("snsId", result.id.toString())
 					val loginResult = ServerHandler.send(null, EndOfAPI.USER_LOGIN, json)
 
+					val sp = SPHandler.getSp(context)
+					val editor = sp.edit()
+
 					when (loginResult["status"].asInt) {
 						HttpHelper.OK_CODE -> {
 							val userData = loginResult["data"].asJsonObject
@@ -43,8 +47,8 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 							UserData.id = userData["userId"].asInt
 							UserData.name = userData["username"].asString
 
-							val sp = SPHandler.getSp(context)
-							val editor = sp.edit()
+							editor.putString(AlarmReceiver.SP_TOKEN, UserData.token)
+							editor.apply()
 							if (sp.getInt(LoginActivity.SP_USER_ID, UserData.DEFAULT_ID) != UserData.id) {
 								editor.putInt(LoginActivity.SP_USER_ID, UserData.id)
 								editor.putString(LoginActivity.SP_USER_NAME, UserData.name)
@@ -69,8 +73,14 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 								else -> null
 							})
 							context.startActivity(intent)
+							context.loadingOff()
 						}
 						else -> {
+							if ((sp.getString(AlarmReceiver.SP_TOKEN, "")?:"").isBlank()) {
+								Toast.makeText(context, "최소 한 번은 인터넷이 연결된 환경에서 실행해야 합니다", Toast.LENGTH_SHORT).show()
+								context.loadingOff()
+								return
+							}
 							UserData.accountType = AccountType.NO_NETWORK
 							context.startLoading()
 						}
@@ -81,10 +91,12 @@ class SessionCallback(val context: LoginActivity) : ISessionCallback {
 			override fun onFailure(errorResult: ErrorResult?) {
 				super.onFailure(errorResult)
 				MyLogger.e("Kakao Login", errorResult.toString())
+				context.loadingOff()
 			}
 
 			override fun onSessionClosed(errorResult: ErrorResult?) {
 				MyLogger.e("Kakao Login", "onSessionClosed: ${errorResult?.errorMessage ?: "null"}")
+				context.loadingOff()
 			}
 		})
 	}

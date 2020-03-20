@@ -91,9 +91,7 @@ class AlarmHandler {
 		}
 
 		fun clearAlarmById(context: Context?, alarmId: Int) {
-			val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-			val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-			AlarmReceiver.clearAlarmById(context, alarmManager, notificationManager, alarmId)
+			AlarmReceiver.clearAlarmById(context!!, alarmId)
 		}
 
 		fun clearAllAlarms(context: Context?) {

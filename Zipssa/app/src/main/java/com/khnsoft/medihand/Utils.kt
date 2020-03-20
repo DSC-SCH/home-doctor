@@ -102,6 +102,7 @@ class ExtraAttr {
 
         const val NOTIFY_DATA = "notify_data"
         const val NOTIFY_TIME = "notify_time"
+        const val NOTIFY_CANCEL = "notify_cancel"
 
         const val IDENTIFY_RESULT = "identify_result"
         const val IDENTIFY_IMPKEY = "identify_imp_key"

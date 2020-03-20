@@ -129,7 +129,7 @@ class MypageLeavingActivity : AppCompatActivity() {
 		if (appDir.exists()) {
 			val children = appDir.list()
 			for (child in children) {
-				if (!child.equals("lib") && !child.equals("files")) {
+				if (child != "lib" && child != "files") {
 					deleteCache(File(appDir, child))
 				}
 			}

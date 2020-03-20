@@ -1,4 +1,4 @@
-package com.khnsoft.medihand.KakaoLogin
+package com.khnsoft.medihand
 
 import android.app.Application
 import com.kakao.auth.KakaoSDK

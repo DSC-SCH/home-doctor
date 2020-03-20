@@ -18,6 +18,8 @@ class MypageActivity : AppCompatActivity() {
 			onBackPressed()
 		}
 
+		// TODO("최초 사용 시 사용 설명으로 넘어가기")
+
 		account_text.text = if (UserData.accountType == AccountType.OFFLINE) "로그인" else "로그아웃"
 		account_btn.setOnClickListener {
 			val data = MyAlertPopup.Data(AlertType.ALERT).apply {

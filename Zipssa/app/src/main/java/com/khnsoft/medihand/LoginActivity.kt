@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.View
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -15,7 +16,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.gson.JsonObject
 import com.kakao.auth.AuthType
 import com.kakao.auth.Session
-import com.khnsoft.medihand.KakaoLogin.SessionCallback
 import kotlinx.android.synthetic.main.account_login_activity.*
 import java.lang.Exception
 
@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.loading_activity)
+		setContentView(R.layout.account_login_activity)
 
 		curActivity = this@LoginActivity
 
@@ -63,10 +63,12 @@ class LoginActivity : AppCompatActivity() {
 						UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
 						UserData.accountType = AccountType.NO_NETWORK
 						startLoading()
+						return
 					}
 					val session = Session.getCurrentSession()
 					session.addCallback(SessionCallback(this@LoginActivity))
 					session.open(AuthType.KAKAO_TALK, this@LoginActivity)
+					loadingOn()
 				}
 				AccountType.GOOGLE -> {
 					val result = ServerHandler.send(this@LoginActivity, EndOfAPI.CHECK_INTERNET)
@@ -75,26 +77,27 @@ class LoginActivity : AppCompatActivity() {
 						UserData.id = sp.getInt(SP_USER_ID, UserData.DEFAULT_ID)
 						UserData.accountType = AccountType.NO_NETWORK
 						startLoading()
+						return
 					}
 					val task = mGoogleSignInClient.silentSignIn()
 					if (task.isSuccessful) {
 						val account = task.result
 						validGoogle(account?:return)
+						loadingOn()
 					} else {
 						signIn()
+						loadingOn()
 					}
 				}
 				else -> {}
 			}
+			handler.postDelayed({
+				loadingOff()
+			}, 2000)
+		} else {
+			loadingOff()
 		}
 
-		handler.postDelayed({
-			setContentView(R.layout.account_login_activity)
-			setupLayout()
-		}, 1000)
-	}
-
-	fun setupLayout() {
 		offline_btn.setOnClickListener {
 			val sp = SPHandler.getSp(this@LoginActivity)
 			val editor = sp.edit()
@@ -116,10 +119,12 @@ class LoginActivity : AppCompatActivity() {
 			val session = Session.getCurrentSession()
 			session.addCallback(SessionCallback(this@LoginActivity))
 			session.open(AuthType.KAKAO_TALK, this@LoginActivity)
+			loadingOn()
 		}
 
 		login_google_btn.setOnClickListener {
 			signIn()
+			loadingOn()
 		}
 	}
 
@@ -165,12 +170,14 @@ class LoginActivity : AppCompatActivity() {
 				if (it.isSuccessful) {
 					if (acct.id == null) {
 						MyLogger.e("Google Login", "Token is null")
+						loadingOff()
 						return@addOnCompleteListener
 					}
 
 					validGoogle(acct)
 				} else {
 					MyLogger.e("Google Login", "Sign in failed")
+					loadingOff()
 				}
 			}
 	}
@@ -180,6 +187,8 @@ class LoginActivity : AppCompatActivity() {
 		json.addProperty("snsType", AccountType.GOOGLE.name)
 		json.addProperty("snsId", acct.id)
 		val loginResult = ServerHandler.send(null, EndOfAPI.USER_LOGIN, json)
+		val sp = SPHandler.getSp(this@LoginActivity)
+		val editor = sp.edit()
 
 		when (loginResult["status"].asInt) {
 			HttpHelper.OK_CODE -> {
@@ -189,11 +198,11 @@ class LoginActivity : AppCompatActivity() {
 				UserData.id = userData["userId"].asInt
 				UserData.name = userData["username"].asString
 
-				val sp = SPHandler.getSp(this@LoginActivity)
-				val editor = sp.edit()
 				editor.putString(AlarmReceiver.SP_TOKEN, UserData.token)
+				editor.apply()
 				if (sp.getInt(SP_USER_ID, UserData.DEFAULT_ID) != UserData.id) {
 					editor.putInt(SP_USER_ID, UserData.id)
+					editor.putString(SP_USER_NAME, UserData.name)
 					editor.apply()
 				}
 				if (sp.getString(SP_LOGIN, UserData.DEFAULT_ACCOUNT.name) != AccountType.GOOGLE.name) {
@@ -210,11 +219,25 @@ class LoginActivity : AppCompatActivity() {
 				intent.putExtra("name", "${acct.familyName}${acct.givenName}")
 				intent.putExtra("email", acct.email)
 				startActivity(intent)
+				loadingOff()
 			}
 			else -> {
+				if ((sp.getString(AlarmReceiver.SP_TOKEN, "")?:"").isBlank()) {
+					Toast.makeText(this@LoginActivity, "최소 한 번은 인터넷이 연결된 환경에서 실행해야 합니다", Toast.LENGTH_SHORT).show()
+					loadingOff()
+					return
+				}
 				UserData.accountType = AccountType.NO_NETWORK
 				startLoading()
 			}
 		}
+	}
+
+	fun loadingOn() {
+		loading.visibility = View.VISIBLE
+	}
+
+	fun loadingOff() {
+		loading.visibility = View.GONE
 	}
 }

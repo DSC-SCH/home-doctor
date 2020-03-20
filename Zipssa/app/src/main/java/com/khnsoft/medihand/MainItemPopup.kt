@@ -35,9 +35,10 @@ class MainItemPopup : AppCompatActivity() {
         val _id = intent.getIntExtra(ExtraAttr.ALARM_ID, -1)
         val _selectedDate = intent.getStringExtra(ExtraAttr.SELECTED_DATE)
         val _count = intent.getIntExtra(ExtraAttr.SELECTED_COUNT, Int.MAX_VALUE)
+        val startTime = System.currentTimeMillis()
         val result = if (UserData.careUser == null) ServerHandler.send(this@MainItemPopup, EndOfAPI.GET_ALARM, id=_id)
         else ServerHandler.send(this@MainItemPopup, EndOfAPI.SYNC_GET_ALARM, id=UserData.careUser, id2=_id)
-
+        MyLogger.d("POPUP", "${System.currentTimeMillis() - startTime}")
         if (!HttpHelper.isOK(result)) {
             Toast.makeText(this@MainItemPopup, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
             finish()
@@ -255,6 +256,10 @@ class MainItemPopup : AppCompatActivity() {
         }
 
         edit_btn.setOnClickListener {
+            if (UserData.accountType == AccountType.NO_NETWORK) {
+                MyAlertPopup.needNetwork(this@MainItemPopup)
+                return@setOnClickListener
+            }
             val intent = Intent(this@MainItemPopup, EditAlarmActivity::class.java)
             intent.putExtra(ExtraAttr.ALARM_ID, _id)
             startActivity(intent)

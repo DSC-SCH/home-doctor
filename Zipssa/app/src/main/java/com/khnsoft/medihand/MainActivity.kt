@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.list_fragment.*
 import kotlinx.android.synthetic.main.main_activity.*
@@ -23,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.main_activity)
+
+		startLoading()
 
 		curActivity = this@MainActivity
 
@@ -95,6 +98,23 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	fun startLoading() {
+		loading.visibility = View.VISIBLE
+	}
 
+	fun endLoading() {
+		loading.visibility = View.GONE
+	}
+
+	override fun onDestroy() {
+		super.onDestroy()
+
+		val transaction = supportFragmentManager.beginTransaction()
+		transaction.remove(
+			when (cur_frag) {
+				FRAG_HOME -> MainListFragment.getInstance()
+				else -> MainSearchFragment.getInstance()
+			}
+		)
+		transaction.commit()
 	}
 }

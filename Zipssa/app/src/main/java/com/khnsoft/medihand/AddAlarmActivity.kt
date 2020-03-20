@@ -109,6 +109,7 @@ class AddAlarmActivity : AppCompatActivity() {
 				add_time_container.adapter = adapter
 			}
 		}
+		alarm_times.setSelection(3)
 
 		// Setting start and end date
 		val startCal = Calendar.getInstance()

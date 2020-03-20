@@ -1,5 +1,6 @@
 package com.khnsoft.medihand
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.DatePicker
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,7 +68,7 @@ class JoinActivity : AppCompatActivity() {
 
 		val birthdayListener = View.OnClickListener {
 			if (birthdayTime != BIRTHDAY_NO_SELECT) curCal.time = SDF.dateInKorean.parse(birthday_input.text.toString())
-			DatePickerDialog(this@JoinActivity, { view, year, month, dayOfMonth ->
+			DatePickerDialog(this@JoinActivity, DatePickerDialog.THEME_HOLO_LIGHT, { view, year, month, dayOfMonth ->
 				curCal[Calendar.YEAR] = year
 				curCal[Calendar.MONTH] = month
 				curCal[Calendar.DAY_OF_MONTH] = dayOfMonth

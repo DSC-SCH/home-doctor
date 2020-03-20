@@ -1,6 +1,7 @@
-package com.khnsoft.medihand.KakaoLogin
+package com.khnsoft.medihand
 
 import com.kakao.auth.*
+import com.khnsoft.medihand.GlobalApplication
 
 class KakaoSDKAdapter : KakaoAdapter() {
 	override fun getApplicationConfig(): IApplicationConfig {

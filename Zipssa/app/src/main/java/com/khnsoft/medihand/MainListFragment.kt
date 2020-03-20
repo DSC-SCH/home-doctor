@@ -3,6 +3,7 @@ package com.khnsoft.medihand
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.text.format.DateUtils
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ import java.util.*
 class MainListFragment : Fragment() {
 	var viewingDate : String? = null
 	var isAlarmSet = false
+	val handler = Handler()
 
 	companion object {
 		const val RC_DATE = 200;
@@ -136,6 +138,7 @@ class MainListFragment : Fragment() {
 	}
 
 	fun refresh() {
+		val startTime = System.currentTimeMillis()
 		main_name.text = if (UserData.careUser == null) UserData.name else UserData.careName
 		main_name_bar.setBackgroundColor(if (UserData.careUser == null) 0 else resources.getColor(R.color.main_theme, null))
 		main_name.setTextColor(if (UserData.careUser == null) resources.getColor(R.color.text_color, null) else Color.WHITE)
@@ -147,13 +150,18 @@ class MainListFragment : Fragment() {
 		curCal.time = SDF.dateSlash.parse(curDate)
 
 		val result =
-			if (UserData.careUser == null) ServerHandler.send(context, EndOfAPI.GET_ENABLED_ALARMS)
+			if (UserData.careUser == null) ServerHandler.send(context, EndOfAPI.GET_ALL_ALARMS)
 			else ServerHandler.send(context, EndOfAPI.SYNC_GET_ALL_ALARMS, id = UserData.careUser)
 		if (!HttpHelper.isOK(result)) {
 			Toast.makeText(context, result["message"]?.asString ?: "null", Toast.LENGTH_SHORT).show()
 			return
 		}
 		val lTemp = result["data"].asJsonArray
+
+		val lAllAlarms = JsonArray()
+		for (item in lTemp) {
+			lAllAlarms.add(ServerHandler.convertKeys(item.asJsonObject, ServerHandler.alarmToLocal))
+		}
 
 		val json = JsonObject()
 		json.addProperty("date", SDF.dateBar.format(SDF.dateSlash.parse(curDate)))
@@ -165,23 +173,18 @@ class MainListFragment : Fragment() {
 		}
 		val lCounts = result2["data"].asJsonArray
 
-		val lAllAlarms = JsonArray()
-
-		for (item in lTemp) {
-			val jItem = ServerHandler.convertKeys(item.asJsonObject, ServerHandler.alarmToLocal)
-
-			if (!jItem["alarm_times"].asString.isBlank())
-				lAllAlarms.add(jItem)
-		}
-
 		if (!isAlarmSet && UserData.careUser == null) {
 			isAlarmSet = true
 			AlarmHandler.clearAllAlarms(context)
 			val sp = SPHandler.getSp(context!!)
 			val lList = JsonParser.parseString(sp.getString(AlarmReceiver.SP_ALL_ID, "{}")).asJsonObject
 			for (item in lAllAlarms) {
-				lList.add(item.asJsonObject["alarm_id"].asString, null)
-				AlarmHandler.createAlarm(context, item.asJsonObject)
+				val jItem = item.asJsonObject
+				if (jItem["alarm_times"].asString.isBlank() || jItem["alarm_enabled"].asString == AlarmStatus.CANCEL.name) continue
+				lList.add(jItem["alarm_id"].asString, null)
+				handler.postDelayed({
+					AlarmHandler.createAlarm(context, item.asJsonObject)
+				}, 1000)
 			}
 			val editor = sp.edit()
 			editor.putString(AlarmReceiver.SP_ALL_ID, lList.toString())
@@ -195,14 +198,18 @@ class MainListFragment : Fragment() {
 			if (SDF.dateBar.parse(jItem["alarm_start_date"].asString).time <= curCal.timeInMillis &&
 				curCal.timeInMillis <= SDF.dateBar.parse(jItem["alarm_end_date"].asString).time &&
 				jItem["alarm_repeats"].asString.contains(curCal[Calendar.DAY_OF_WEEK].toString())
-			)
+			) {
 				lAlarms.add(jItem)
+			}
 		}
 
 		val adapter = MainItemRecyclerAdapter(lAlarms, lAllAlarms, lCounts)
 		val lm = LinearLayoutManager(context)
 		main_list_container.layoutManager = lm
 		main_list_container.adapter = adapter
+
+		MainActivity.curActivity?.endLoading()
+		MyLogger.d("MAIN_LIST", "${System.currentTimeMillis() - startTime}")
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -273,7 +280,10 @@ class MainListFragment : Fragment() {
 
 				val timeNext = AlarmHandler.getNextAlarmTime(jItem, curCal.timeInMillis, nextCal)
 
-				if (timeNext != AlarmHandler.CODE_EMPTY) {
+
+				if (jItem["alarm_enabled"].asString == AlarmStatus.CANCEL.name) {
+					time_remain.text = "OFF"
+				} else if (timeNext != AlarmHandler.CODE_EMPTY) {
 					if (timeNext != AlarmHandler.CODE_ENDED) {
 						val timeLeft = timeNext - curCal.timeInMillis
 						time_remain.text =
@@ -289,7 +299,6 @@ class MainListFragment : Fragment() {
 				}
 
 				title.text = jItem["alarm_title"].asString
-				MyLogger.d("@@@color", jItem["label_color"].asString)
 				title.setBackgroundColor(Color.parseColor(jItem["label_color"].asString))
 
 				count.text = "${lTimes.size()}회 복용"
@@ -303,7 +312,7 @@ class MainListFragment : Fragment() {
 				if (UserData.careUser != null)
 					switch.isEnabled = false
 				else {
-					switch.setOnCheckedChangeListener { buttonView, isChecked ->
+					switch.setOnCheckedChangeListener { _, isChecked ->
 						val json = JsonObject()
 						json.addProperty(
 							"alarm_enabled",
@@ -359,6 +368,7 @@ class MainListFragment : Fragment() {
 
 				for (i in 0..lAllItems.size() - 1) {
 					jItem = lAllItems[i].asJsonObject
+					if (jItem["alarm_enabled"].asString == AlarmStatus.CANCEL.name) continue
 
 					val timeNext = AlarmHandler.getNextAlarmTime(jItem, curCal.timeInMillis, nextCal)
 

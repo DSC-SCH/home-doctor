@@ -54,7 +54,7 @@ class AlarmReceiver : BroadcastReceiver() {
 			takenIntent.setAction(ACTION_TAKEN)
 			takenIntent.putExtra(ExtraAttr.NOTIFY_DATA, jItem.toString())
 			takenIntent.putExtra(ExtraAttr.NOTIFY_TIME, time)
-			val pIntent = PendingIntent.getBroadcast(context, 0, takenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+			val takenSender = PendingIntent.getBroadcast(context, 0, takenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
 			// Set notification
 			val date = Date(time)
@@ -62,7 +62,7 @@ class AlarmReceiver : BroadcastReceiver() {
 				.setSmallIcon(R.drawable.new_app_logo)
 				.setContentTitle(SDF.timeInKorean.format(date))
 				.setContentText("${jItem["alarm_title"].asString} 복용할 시간이에요!")
-				.addAction(R.drawable.confirm_icon, "복용", pIntent)
+				.addAction(R.drawable.confirm_icon, "복용", takenSender)
 				.setOngoing(true)
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -77,22 +77,20 @@ class AlarmReceiver : BroadcastReceiver() {
 			MyLogger.d("@@@", "NotifyCreated - ${notifyId}")
 		}
 
-		fun clearAlarmById(context: Context, alarmManager: AlarmManager, notificationManager: NotificationManager, alarmId: Int) {
+		fun clearAlarmById(context: Context, alarmId: Int) {
 			val cancelIntent = Intent(context, AlarmReceiver::class.java)
+			cancelIntent.setAction(ACTION_NOTIFY)
+			cancelIntent.putExtra(ExtraAttr.NOTIFY_CANCEL, true)
 			val notifyId = DEFAULT_ID + alarmId
-			val cancelSender = PendingIntent.getBroadcast(context, notifyId, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+			val cancelSender = PendingIntent.getBroadcast(context, notifyId, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT)
 
-			if (cancelSender != null) {
-				MyLogger.d("@@@", "Not null - ${notifyId}")
-				cancelSender.cancel()
-				alarmManager.cancel(cancelSender)
-			}
+			cancelSender.send()
 			MyLogger.d("@@@", "AlarmCleared - ${notifyId}")
 		}
 
 		fun createNextAlarm(context: Context, alarmManager: AlarmManager, jItem: JsonObject) {
-			if (AlarmStatus.valueOf(jItem["alarm_enabled"].asString) == AlarmStatus.CANCEL) return
-			if (AlarmHandler.getLastAlarmTime(jItem) < System.currentTimeMillis()) return
+			if (AlarmStatus.valueOf(jItem["alarm_enabled"].asString) == AlarmStatus.CANCEL ||
+				AlarmHandler.getLastAlarmTime(jItem) < System.currentTimeMillis()) return
 
 			val nextTime = AlarmHandler.getNextAlarmTime(jItem, Date().time)
 			val notifyIntent = Intent(context, AlarmReceiver::class.java)
@@ -118,6 +116,7 @@ class AlarmReceiver : BroadcastReceiver() {
 				context.startActivity(serviceIntent)
 			}
 			ACTION_NOTIFY -> {
+				if (intent.getBooleanExtra(ExtraAttr.NOTIFY_CANCEL, false)) return
 				val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 				val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 				val jItem = JsonParser.parseString(intent.getStringExtra(ExtraAttr.NOTIFY_DATA)).asJsonObject
@@ -135,7 +134,7 @@ class AlarmReceiver : BroadcastReceiver() {
 					editor.commit()
 				}
 
-				clearAlarmById(context, alarmManager, notificationManager, alarmId)
+				// clearAlarmById(context, alarmManager, notificationManager, alarmId)
 				createNotificationNow(context, notificationManager, jItem, time)
 				createNextAlarm(context, alarmManager, jItem)
 			}
@@ -168,8 +167,6 @@ class AlarmReceiver : BroadcastReceiver() {
 				}
 			}
 			ACTION_CLEAR -> {
-				val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-				val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 				val sp = SPHandler.getSp(context)
 				/*
 				val firstAlarmId = sp.getInt(SP_FIRST_ID, Int.MAX_VALUE)
@@ -181,7 +178,7 @@ class AlarmReceiver : BroadcastReceiver() {
 				 */
 				val lList = JsonParser.parseString(sp.getString(SP_ALL_ID, "{}")).asJsonObject
 				for (item in lList.keySet()) {
-					clearAlarmById(context, alarmManager, notificationManager, Integer.parseInt(item))
+					clearAlarmById(context, Integer.parseInt(item))
 				}
 			}
 		}

@@ -107,11 +107,15 @@ class ServerHandler {
                 api.remote
             }
 
+            if (context != null && UserData.token == null) {
+                val sp = SPHandler.getSp(context)
+                UserData.token = sp.getString(AlarmReceiver.SP_TOKEN, "")
+            }
 
             when (api) {
                 EndOfAPI.GET_NOTICES, EndOfAPI.GET_CONTRACTS, EndOfAPI.ENQUIRE, EndOfAPI.USER_LOGIN,
                 EndOfAPI.SEARCH_NAME, EndOfAPI.SEARCH_TOTAL, EndOfAPI.CHECK_INTERNET -> {
-                    return JsonParser.parseString(HttpAsyncTask().execute(remote, method.name, json.toString()).get()).asJsonObject
+                    return getBody(JsonParser.parseString(HttpAsyncTask().execute(remote, method.name, json.toString()).get()).asJsonObject)
                 }
                 EndOfAPI.LOCAL_USER_REGISTER, EndOfAPI.LOCAL_USER_SERVER, EndOfAPI.LOCAL_LABEL_SERVER, EndOfAPI.LOCAL_ALARM_SERVER -> {
                     if (context == null)
@@ -127,7 +131,12 @@ class ServerHandler {
                 }
             }
 
-            return JsonParser.parseString(HttpAsyncTask().execute(remote, method.name, json.toString()).get()).asJsonObject
+            return getBody(JsonParser.parseString(HttpAsyncTask().execute(remote, method.name, json.toString()).get()).asJsonObject)
+        }
+
+        fun getBody(jRet: JsonObject) : JsonObject {
+            return if (!jRet.has("body")) jRet
+            else jRet["body"].asJsonObject
         }
     }
 }
