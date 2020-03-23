@@ -319,7 +319,7 @@
 					android:layout_marginHorizontal="@dimen/mypage_split_marginH"/>
 
 				<LinearLayout
-					android:id="@+id/usage_btn"
+					android:id="@+id/help_btn"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:orientation="horizontal"

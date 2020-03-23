@@ -1,95 +1,50 @@
 {
   "project_info": {
-    "project_number": "758568443155",
-    "firebase_url": "https://medihand-422db.firebaseio.com",
-    "project_id": "medihand-422db",
-    "storage_bucket": "medihand-422db.appspot.com"
+    "project_number": "517992879397",
+    "firebase_url": "https://medihand-8e94f.firebaseio.com",
+    "project_id": "medihand-8e94f",
+    "storage_bucket": "medihand-8e94f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:758568443155:android:e251af35e6092af8270ee6",
+        "mobilesdk_app_id": "1:517992879397:android:315a8c2ab3a6882b54b6cc",
         "android_client_info": {
-          "package_name": "com.khnsoft.medihand"
+          "package_name": "com.designvalue.medihand"
         }
       },
       "oauth_client": [
         {
-          "client_id": "758568443155-pulkvbq606shde42sv5k3pvgosf4vjbf.apps.googleusercontent.com",
+          "client_id": "517992879397-ge881lrocqmte7vdl9ur250ju60fp91r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.khnsoft.medihand",
+            "package_name": "com.designvalue.medihand",
             "certificate_hash": "c7d00b316d36080501ad6786f743baaa82c95735"
           }
         },
         {
-          "client_id": "758568443155-koe9tmnt6almrrkdundv0epp5gv5gihl.apps.googleusercontent.com",
+          "client_id": "517992879397-nlh729paqk21d23rjhqnh6e81k4rvp45.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.khnsoft.medihand",
+            "package_name": "com.designvalue.medihand",
             "certificate_hash": "32572d182a5229d9c4cabff3f64c40e5bce059cd"
           }
         },
         {
-          "client_id": "758568443155-8m6g7f1qq29nbtupjd93s8bct8di7o02.apps.googleusercontent.com",
+          "client_id": "517992879397-j5tlf8s0da2ih1936ndaq8rq64fplfi7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBKDu4zSafFovKXgOuzQy5gH2Q3ikSsWu4"
+          "current_key": "AIzaSyArH7yxw3qjKSwM8aoZLN3ctjxHX9zNoUM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "758568443155-8m6g7f1qq29nbtupjd93s8bct8di7o02.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:758568443155:android:7288569d515e3510270ee6",
-        "android_client_info": {
-          "package_name": "com.khnsoft.zipssa"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "758568443155-ib2qsul48kr7e5v6716bk0cspafnnev6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.khnsoft.zipssa",
-            "certificate_hash": "c7d00b316d36080501ad6786f743baaa82c95735"
-          }
-        },
-        {
-          "client_id": "758568443155-d5octdfv3qovv5d3vu4fvsr6abi81kaj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.khnsoft.zipssa",
-            "certificate_hash": "32572d182a5229d9c4cabff3f64c40e5bce059cd"
-          }
-        },
-        {
-          "client_id": "758568443155-8m6g7f1qq29nbtupjd93s8bct8di7o02.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBKDu4zSafFovKXgOuzQy5gH2Q3ikSsWu4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "758568443155-8m6g7f1qq29nbtupjd93s8bct8di7o02.apps.googleusercontent.com",
+              "client_id": "517992879397-j5tlf8s0da2ih1936ndaq8rq64fplfi7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

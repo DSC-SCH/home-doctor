@@ -429,6 +429,10 @@
 
 	<dimen name="service_enquire_text">15sp</dimen>
 
+	<!-- help activity -->
+	<dimen name="help_page_marginV">15dp</dimen>
+	<dimen name="help_btn_text">15sp</dimen>
+
 	<!-- popup window -->
 	<dimen name="popup_padding">10dp</dimen>
 
