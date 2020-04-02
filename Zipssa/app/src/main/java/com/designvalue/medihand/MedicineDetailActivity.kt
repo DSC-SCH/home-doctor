@@ -17,6 +17,8 @@ class MedicineDetailActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.medicine_detail_activity)
 
+		back_btn.setOnClickListener { onBackPressed() }
+
 		val jItem = JsonParser.parseString(intent.getStringExtra(ExtraAttr.MEDICINE)).asJsonObject
 
 		medicine_name.text = jItem["name"].asString

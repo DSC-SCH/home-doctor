@@ -307,7 +307,7 @@ class MainListFragment : Fragment() {
 				switch.isChecked = AlarmParser.parseStatus(jItem["alarm_enabled"].asString) == AlarmStatus.ENABLE
 				start_date.text = SDF.dateDotShort.format(SDF.dateBar.parse(jItem["alarm_start_date"].asString))
 				end_date.text = SDF.dateDotShort.format(endDate)
-				dday.text = "D-${day_dday}"
+				dday.text = if (day_dday < 0) "완료됨" else "D-${day_dday}"
 
 				if (UserData.careUser != null)
 					switch.isEnabled = false

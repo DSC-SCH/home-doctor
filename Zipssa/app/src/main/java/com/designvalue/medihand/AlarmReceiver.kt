@@ -85,6 +85,7 @@ class AlarmReceiver : BroadcastReceiver() {
 			val cancelSender = PendingIntent.getBroadcast(context, notifyId, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT)
 
 			cancelSender.send()
+			cancelSender.cancel()
 			MyLogger.d("@@@", "AlarmCleared - ${notifyId}")
 		}
 
