@@ -22,7 +22,7 @@ class ContractActivity : AppCompatActivity() {
 		val jContract = JsonParser.parseString(intent.getStringExtra(ExtraAttr.CONTRACT)).asJsonObject
 		val isChecked = intent.getBooleanExtra(ExtraAttr.CONTRACT_CHECKED, false)
 
-		contract_check.text = jContract["title"].asString
+		contract_title.text = jContract["title"].asString
 		contract_check.isChecked = isChecked
 		contract_content.text = jContract["content"].asString
 

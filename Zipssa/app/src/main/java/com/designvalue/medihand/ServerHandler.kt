@@ -75,7 +75,7 @@ class ServerHandler {
             return jRet
         }
 
-        fun send(context: Context?, api: EndOfAPI, data: JsonObject? = null, id: Int? = null, id2: Int? = null): JsonObject {
+        fun send(context: Context? = null, api: EndOfAPI, data: JsonObject? = null, id: Int? = null, id2: Int? = null): JsonObject {
             val method = api.method
             val json: JsonObject?
             json = if (method == HttpMethod.POST || method == HttpMethod.PUT) {
