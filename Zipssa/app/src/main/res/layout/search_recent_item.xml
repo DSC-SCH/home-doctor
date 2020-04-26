@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:padding="@dimen/search_recent_item_padding"
+	android:clipToPadding="false">
+
+	<TextView
+		android:id="@+id/recent_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:background="@drawable/search_recent_box"
+		android:paddingVertical="@dimen/search_recent_item_paddingV"
+		android:paddingHorizontal="@dimen/search_recent_item_paddingH"
+		android:elevation="@dimen/shadow_size"
+		android:fontFamily="@font/nanum_square_ac"
+		android:text="이름"
+		android:textSize="@dimen/search_recent_text"
+		android:textColor="@color/text_color" />
+</LinearLayout>

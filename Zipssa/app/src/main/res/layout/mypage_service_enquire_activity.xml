@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/main_theme">
+
+		<ImageView
+			android:id="@+id/back_btn"
+			android:layout_width="@dimen/titlebar_back_size"
+			android:layout_height="@dimen/titlebar_back_size"
+			android:layout_gravity="left|center"
+			android:adjustViewBounds="true"
+			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
+			android:src="@drawable/ic_arrow_back_24px" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="문의하기"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/titlebar_title_text"
+			android:textColor="#FFFFFF" />
+	</FrameLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:layout_marginTop="@dimen/mypage_marginV"
+			android:background="@color/background_theme">
+
+			<EditText
+				android:id="@+id/enquire_content"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/stroke_box"
+				android:gravity="top|left"
+				android:padding="@dimen/service_enquire_input_padding"
+				android:layout_margin="@dimen/service_enquire_margin"
+				android:minLines="10"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/service_enquire_text"
+				android:hint="약손 이용과 관련하여 문의하시는 내용은 운영진에게 전송됩니다."/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:background="@drawable/mypage_service_email_box"
+				android:layout_marginHorizontal="@dimen/service_enquire_margin"
+				android:padding="@dimen/service_enquire_email_distance"
+				android:gravity="center">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textColor="@color/text_color_gray"
+					android:textSize="@dimen/service_enquire_text"
+					android:text="회신 이메일"/>
+
+				<EditText
+					android:id="@+id/email_input"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:background="@drawable/stroke_box"
+					android:layout_marginLeft="@dimen/service_enquire_email_distance"
+					android:padding="@dimen/service_enquire_email_padding"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textColor="@color/text_color"
+					android:textSize="@dimen/service_enquire_text" />
+			</LinearLayout>
+
+			<TextView
+				android:id="@+id/confirm_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:background="@drawable/theme_btn"
+				android:layout_gravity="center"
+				android:layout_marginVertical="@dimen/service_enquire_confirm_marginV"
+				android:paddingVertical="@dimen/service_enquire_confirm_paddingV"
+				android:paddingHorizontal="@dimen/service_enquire_confirm_paddingH"
+				android:fontFamily="@font/lotte_dream_bold"
+				android:textSize="@dimen/service_enquire_text"
+				android:textColor="#FFFFFF"
+				android:text="문의하기" />
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

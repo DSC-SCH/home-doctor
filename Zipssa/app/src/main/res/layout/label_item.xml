@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+	<RadioButton
+		android:id="@+id/add_label_item"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/label_selector"
+		android:button="@drawable/empty_selector"
+		android:gravity="center"
+		android:paddingVertical="@dimen/label_paddingV"
+		android:layout_margin="@dimen/label_marginH"
+		android:lines="1"
+		android:fontFamily="@font/nanum_square_ac"
+		android:textSize="@dimen/label_text"
+		android:textColor="@color/text_color" />
+</LinearLayout>

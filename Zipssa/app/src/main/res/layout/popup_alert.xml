@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="@dimen/popup_sizeH"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:background="@drawable/popup_alert"
+	android:padding="@dimen/popup_padding"
+	android:gravity="center">
+
+	<TextView
+		android:id="@+id/popup_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textSize="@dimen/popup_content_text"
+		android:textColor="@color/text_color"
+		android:text="Title"/>
+
+	<TextView
+		android:id="@+id/popup_content"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:fontFamily="@font/nanum_square_ac"
+		android:padding="@dimen/popup_content_padding"
+		android:textSize="@dimen/popup_content_text"
+		android:textColor="@color/text_color"
+		android:text="Content"/>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/split_line"
+		android:layout_marginTop="@dimen/popup_button_marginT"
+		android:background="@color/split_line"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<TextView
+			android:id="@+id/popup_cancel"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:padding="@dimen/popup_button_padding"
+			android:gravity="center"
+			android:fontFamily="@font/nanum_square_ac"
+			android:textSize="@dimen/popup_button_text"
+			android:textColor="@color/text_color"
+			android:text="취소"/>
+
+		<View
+			android:layout_width="@dimen/split_line"
+			android:layout_height="match_parent"
+			android:background="@color/split_line"/>
+
+		<TextView
+			android:id="@+id/popup_confirm"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:padding="@dimen/popup_button_padding"
+			android:gravity="center"
+			android:fontFamily="@font/nanum_square_ac"
+			android:textSize="@dimen/popup_button_text"
+			android:textColor="@color/text_color"/>
+	</LinearLayout>
+</LinearLayout>

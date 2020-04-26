@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="@dimen/popup_sizeH"
+	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+
+		<FrameLayout
+			android:id="@+id/alarm_label"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/main_popup_title">
+
+			<TextView
+				android:id="@+id/alarm_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/lotte_dream_bold"
+				android:layout_gravity="center"
+				android:padding="@dimen/main_popup_title_padding"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/main_popup_title_text"
+				android:text="처방전"/>
+
+			<Switch
+				android:id="@+id/alarm_switch"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right|center"
+				android:layout_marginRight="@dimen/main_popup_switch_marginR" />
+		</FrameLayout>
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/main_popup_scroll_sizeV"
+			android:background="@color/box_theme">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:paddingVertical="@dimen/main_popup_content_paddingV">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:orientation="horizontal"
+					android:padding="@dimen/main_popup_date_padding">
+
+					<TextView
+						android:id="@+id/start_date"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/nanum_square_ac"
+						android:text="0월 00일"
+						android:textColor="@color/text_color"
+						android:textSize="@dimen/main_popup_date_text" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/nanum_square_ac"
+						android:text=" 부터 "
+						android:textColor="@color/text_color"
+						android:textSize="@dimen/main_popup_date_text" />
+
+					<TextView
+						android:id="@+id/end_date"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/nanum_square_ac"
+						android:text="0월 00일"
+						android:textColor="@color/text_color"
+						android:textSize="@dimen/main_popup_date_text" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:fontFamily="@font/nanum_square_ac"
+						android:text=" 까지 복용"
+						android:textColor="@color/text_color"
+						android:textSize="@dimen/main_popup_date_text" />
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:layout_marginHorizontal="@dimen/main_popup_split_marginH"
+					android:background="@color/split_line" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:paddingVertical="@dimen/main_popup_content_distanceV">
+
+					<TextView
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:fontFamily="@font/lotte_dream_bold"
+						android:gravity="center"
+						android:text="복용 횟수"
+						android:textColor="@color/text_color"
+						android:textSize="@dimen/main_popup_content_text" />
+
+					<LinearLayout
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:orientation="horizontal">
+
+						<TextView
+							android:id="@+id/alarm_count"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:fontFamily="@font/nanum_square_ac"
+							android:text="하루 0회 복용"
+							android:textColor="@color/text_color"
+							android:textSize="@dimen/main_popup_content_text" />
+					</LinearLayout>
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:layout_marginHorizontal="@dimen/main_popup_split_marginH"
+					android:background="@color/split_line" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:paddingVertical="@dimen/main_popup_times_paddingV">
+
+					<TextView
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_marginVertical="@dimen/main_popup_time_paddingV"
+						android:layout_weight="1"
+						android:fontFamily="@font/lotte_dream_bold"
+						android:gravity="center"
+						android:text="알림 시간"
+						android:textColor="@color/text_color"
+						android:textSize="@dimen/main_popup_content_text" />
+
+					<LinearLayout
+						android:id="@+id/times_container"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:orientation="vertical" />
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:layout_marginHorizontal="@dimen/main_popup_split_marginH"
+					android:background="@color/split_line" />
+			</LinearLayout>
+		</ScrollView>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:paddingHorizontal="@dimen/main_popup_buttons_paddingH"
+			android:background="@drawable/main_popup_menubar">
+
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1"/>
+
+			<LinearLayout
+				android:id="@+id/pause_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:padding="@dimen/main_popup_button_paddingH">
+
+				<ImageView
+					android:layout_width="@dimen/main_popup_icon_size"
+					android:layout_height="@dimen/main_popup_icon_size"
+					android:src="@drawable/delete_icon"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:text="중단"
+					android:textColor="@color/text_color_gray"
+					android:textSize="@dimen/main_popup_button_text"
+					android:padding="@dimen/main_popup_button_text_padding"/>
+			</LinearLayout>
+
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1"/>
+
+			<LinearLayout
+				android:id="@+id/confirm_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:padding="@dimen/main_popup_button_paddingH">
+
+				<ImageView
+					android:layout_width="@dimen/main_popup_icon_size"
+					android:layout_height="@dimen/main_popup_icon_size"
+					android:src="@drawable/confirm_icon"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/main_popup_button_text"
+					android:textColor="@color/text_color_gray"
+					android:text="확인"
+					android:padding="@dimen/main_popup_button_text_padding" />
+			</LinearLayout>
+
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1"/>
+
+			<LinearLayout
+				android:id="@+id/edit_btn"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:gravity="center"
+				android:orientation="vertical"
+				android:padding="@dimen/main_popup_button_paddingH">
+
+				<ImageView
+					android:layout_width="@dimen/main_popup_icon_size"
+					android:layout_height="@dimen/main_popup_icon_size"
+					android:src="@drawable/edit_icon"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/main_popup_button_text"
+					android:textColor="@color/text_color_gray"
+					android:text="수정"
+					android:padding="@dimen/main_popup_button_text_padding"/>
+			</LinearLayout>
+
+			<Space
+				android:layout_width="0dp"
+				android:layout_height="0dp"
+				android:layout_weight="1"/>
+		</LinearLayout>
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/floating_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:background="@drawable/main_popup_floating_shadow"
+		android:visibility="invisible">
+
+		<LinearLayout
+			android:id="@+id/floating_container"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical" >
+
+			<TextView
+				android:id="@+id/cancel_oneday"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="@dimen/main_popup_floating_margin"
+				android:background="@drawable/main_popup_floating"
+				android:fontFamily="@font/nanum_square_ac"
+				android:paddingHorizontal="@dimen/main_popup_floating_paddingH"
+				android:paddingVertical="@dimen/main_popup_floating_paddingV"
+				android:text="하루 건너뛰기"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/main_popup_floating_text" />
+
+			<TextView
+				android:id="@+id/cancel_future"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="@dimen/main_popup_floating_margin"
+				android:background="@drawable/main_popup_floating"
+				android:fontFamily="@font/nanum_square_ac"
+				android:paddingHorizontal="@dimen/main_popup_floating_paddingH"
+				android:paddingVertical="@dimen/main_popup_floating_paddingV"
+				android:text="알림 중단하기"
+				android:textColor="@color/text_color"
+				android:textSize="@dimen/main_popup_floating_text" />
+		</LinearLayout>
+	</LinearLayout>
+</FrameLayout>

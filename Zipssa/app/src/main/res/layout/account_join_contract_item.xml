@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+	<CheckBox
+		android:id="@+id/contract_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/join_item_marginT"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textColor="@color/text_color"
+		android:textSize="@dimen/join_contract_text"
+		android:text="개인정보 처리 방침 동의" />
+
+	<TextView
+		android:id="@+id/contract_content"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="@dimen/join_item_marginL"
+		android:layout_marginTop="@dimen/join_item_marginT"
+		android:fontFamily="@font/nanum_square_ac"
+		android:textColor="@color/main_theme"
+		android:textSize="@dimen/join_contract_text"
+		android:text="상세 보기" />
+</LinearLayout>

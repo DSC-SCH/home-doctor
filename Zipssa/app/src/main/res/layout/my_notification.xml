@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:padding="@dimen/notify_padding">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textColor="@color/text_color"
+		android:textSize="@dimen/notify_content_text"
+		android:text="약손"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<ImageView
+			android:layout_width="@dimen/notify_icon_sizeH"
+			android:layout_height="@dimen/notify_icon_sizeV"
+			android:src="@drawable/mypage_notice_icon"
+			android:layout_marginRight="@dimen/notify_title_marginH"/>
+
+		<TextView
+			android:id="@+id/notify_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/notify_time_text"
+			android:text="오전 9:00"/>
+
+		<TextView
+			android:id="@+id/notify_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingVertical="@dimen/alarm_title_paddingV"
+			android:paddingHorizontal="@dimen/alarm_title_paddingH"
+			android:layout_marginHorizontal="@dimen/notify_title_marginH"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/notify_title_text"
+			android:text="제목"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/notify_content_text"
+			android:text="복용할 시간이에요!"/>
+	</LinearLayout>
+</LinearLayout>

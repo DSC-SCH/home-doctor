@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/main_theme">
+
+		<ImageView
+			android:id="@+id/back_btn"
+			android:layout_width="@dimen/titlebar_back_size"
+			android:layout_height="@dimen/titlebar_back_size"
+			android:layout_gravity="left|center"
+			android:adjustViewBounds="true"
+			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
+			android:src="@drawable/ic_arrow_back_24px" />
+
+		<TextView
+			android:id="@+id/contract_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="약관 명칭"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/titlebar_title_text"
+			android:textColor="#FFFFFF" />
+	</FrameLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:padding="@dimen/join_padding"
+		android:background="#FFFFFF"
+		android:layout_marginTop="@dimen/mypage_marginV"
+		android:orientation="vertical">
+
+		<CheckBox
+			android:id="@+id/contract_check"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/join_contract_text"
+			android:text="이용약관 동의" />
+
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:background="@drawable/account_stroke_box"
+			android:layout_marginBottom="@dimen/join_contract_marginT">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					android:id="@+id/contract_content"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="@dimen/join_input_padding"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textColor="@color/text_color"
+					android:textSize="@dimen/join_contract_text" />
+			</LinearLayout>
+		</ScrollView>
+
+		<TextView
+			android:id="@+id/contract_confirm_btn"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:background="@drawable/account_stroke_box"
+			android:paddingVertical="@dimen/join_btn_paddingV"
+			android:layout_marginHorizontal="@dimen/join_btn_marginH"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textColor="@color/text_color"
+			android:textSize="@dimen/join_btn_text"
+			android:text="확인"/>
+	</LinearLayout>
+</LinearLayout>

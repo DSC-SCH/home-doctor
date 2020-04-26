@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Calendar View Lib</string>
+    <string name="not_available">not available</string>
+    <string name="previous_month">previous month</string>
+    <string name="next_month">next month</string>
+    <string name="note_text">next month</string>
+</resources>
