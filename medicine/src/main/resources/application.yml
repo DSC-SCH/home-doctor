@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/medicine?serverTimezone=UTC&characterEncoding=UTF-8
-    username: username
+    username: nathan
     password: password
     driver-class-name: com.mysql.jdbc.Driver
 

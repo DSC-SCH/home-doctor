@@ -17,6 +17,8 @@ import homedoctor.medicine.service.TermService;
 import homedoctor.medicine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,15 +41,15 @@ public class UserApiController {
     private final DeactivationReasonRepository deactivationReasonRepository;
 
     @GetMapping("/terms")
-    public DefaultResponse getTerms() {
+    public ResponseEntity getTerms() {
         try {
 
             List<Terms> terms = (List<Terms>) termService.findTermsAll().getData();
 
             if (terms == null||terms.isEmpty()) {
                 String[] empty = new String[0];
-                return DefaultResponse.response(StatusCode.OK,
-                        ResponseMessage.NOT_FOUND_TERMS, empty);
+                return new ResponseEntity<>(DefaultResponse.response(StatusCode.OK,
+                        ResponseMessage.NOT_FOUND_TERMS, empty), HttpStatus.OK);
             }
 
             List<TermsDto> termsDtoList = terms.stream()
@@ -56,17 +58,17 @@ public class UserApiController {
                     .content(m.getContent())
                     .build()).collect(Collectors.toList());
 
-            return DefaultResponse.response(StatusCode.OK,
+            return new ResponseEntity<>(DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.FOUND_TERMS,
-                    termsDtoList);
+                    termsDtoList), HttpStatus.OK);
 
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
             System.err.println(e.getMessage());
 
-            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
-                    ResponseMessage.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

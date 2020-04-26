@@ -13,6 +13,8 @@ import homedoctor.medicine.service.JwtService;
 import homedoctor.medicine.utils.DateTimeHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -64,30 +66,28 @@ public class AlarmCountApiController {
 
     @Auth
     @PutMapping("/alarm/count/many")
-    public DefaultResponse updateAllAlarmCounts(
+    public ResponseEntity updateAllAlarmCounts(
             @RequestHeader("Authorization") final String header,
             @RequestBody @Valid AlarmListCountChangeRequest request) {
         try {
 
             if (header == null) {
-                return DefaultResponse.response(StatusCode.UNAUTHORIZED,
-                        ResponseMessage.UNAUTHORIZED);
+                return new ResponseEntity<>(new DefaultResponse(StatusCode.UNAUTHORIZED, ResponseMessage.UNAUTHORIZED), HttpStatus.OK);
             }
 
             if (request.getCounts() == null) {
-                return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                        ResponseMessage.NOT_CONTENT);
+                return new ResponseEntity<>(new DefaultResponse(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT), HttpStatus.OK);
             }
 
             DefaultResponse response = alarmCountService.updateCountByAlarmList(request.getCounts());
 
-            return DefaultResponse.response(response.getStatus(),
-                    response.getMessage());
+            return  new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             log.error(Arrays.toString(e.getStackTrace()));
-            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
-                    ResponseMessage.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new DefaultResponse(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -96,14 +96,14 @@ public class AlarmCountApiController {
      */
     @Auth
     @GetMapping("/alarm/counts/{alarm_id}")
-    public DefaultResponse getCountByAlarmDate(
+    public ResponseEntity getCountByAlarmDate(
             @RequestHeader("Authorization") final String header,
             @RequestBody @Valid AlarmCountRequest request,
             @PathVariable("alarm_id") Long alarmId) {
         try {
             if (request.getDate() == null) {
-                return DefaultResponse.response(StatusCode.BAD_REQUEST,
-                        ResponseMessage.NOT_CONTENT);
+                return new ResponseEntity<>(DefaultResponse.response(StatusCode.BAD_REQUEST,
+                        ResponseMessage.NOT_CONTENT), HttpStatus.OK);
             }
 
             AlarmCount findAlarmCount = (AlarmCount) alarmCountService.findCountsByAlarmDate(
@@ -113,14 +113,14 @@ public class AlarmCountApiController {
                     .count(findAlarmCount.getCounts())
                     .build();
 
-            return DefaultResponse.response(StatusCode.OK,
+            return new ResponseEntity<>(DefaultResponse.response(StatusCode.OK,
                     ResponseMessage.ALARM_COUNT_SEARCH_SUCCESS,
-                    alarmCountResponse);
+                    alarmCountResponse), HttpStatus.OK);
         } catch (Exception e) {
             log.error(e.getMessage());
             log.error(Arrays.toString(e.getStackTrace()));
-            return DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
-                    ResponseMessage.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(DefaultResponse.response(StatusCode.INTERNAL_SERVER_ERROR,
+                    ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
