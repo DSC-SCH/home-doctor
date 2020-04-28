@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:focusableInTouchMode="true">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/main_theme">
+
+		<ImageView
+			android:id="@+id/back_btn"
+			android:layout_width="@dimen/titlebar_back_size"
+			android:layout_height="@dimen/titlebar_back_size"
+			android:layout_gravity="left|center"
+			android:adjustViewBounds="true"
+			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
+			android:src="@drawable/ic_arrow_back_24px" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Secession"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/titlebar_title_text"
+			android:textColor="#FFFFFF" />
+	</FrameLayout>
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginVertical="@dimen/mypage_marginV"
+				android:background="@color/background_theme"
+				android:orientation="vertical">
+
+				<RadioButton
+					android:id="@+id/reason_1"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="Uncomfortable service"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<RadioButton
+					android:id="@+id/reason_2"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="Unnecessary service"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<RadioButton
+					android:id="@+id/reason_3"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="Privacy Security Issues"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<RadioButton
+					android:id="@+id/reason_4"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingVertical="@dimen/mypage_menu_paddingV"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="Change into similar service"/>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/split_line"
+					android:background="@color/split_line"
+					android:layout_marginHorizontal="@dimen/leaving_split_marginH"/>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:layout_marginHorizontal="@dimen/mypage_menu_paddingH">
+
+					<RadioButton
+						android:id="@+id/reason_5"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:paddingVertical="@dimen/mypage_menu_paddingV"
+						android:fontFamily="@font/nanum_square_ac"
+						android:textSize="@dimen/mypage_content_text"
+						android:textColor="@color/text_color"
+						android:text="Else  " />
+
+					<EditText
+						android:id="@+id/reason_else"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:background="@drawable/stroke_box"
+						android:padding="@dimen/leaving_input_padding"
+						android:enabled="false"
+						android:fontFamily="@font/nanum_square_ac"
+						android:textSize="@dimen/mypage_content_text"
+						android:textColor="@color/text_color"
+						android:hint="Reason"/>
+				</LinearLayout>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="center"
+					android:layout_marginTop="@dimen/leaving_warning_marginT"
+					android:fontFamily="@font/lotte_dream_bold"
+					android:textSize="@dimen/mypage_content_text"
+					android:textColor="@color/text_color"
+					android:text="※ Please select the reason for secession ※"/>
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:background="@color/background_theme"
+				android:padding="@dimen/mypage_menu_paddingH">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/leaving_warning_title_text"
+					android:textColor="@color/warning_color"
+					android:text="Warning"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="@dimen/leaving_warning_marginT"
+					android:layout_marginLeft="@dimen/leaving_warning_marginL"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/leaving_warning_title_text"
+					android:textColor="@color/text_color"
+					android:text="In order to prevent the recurrence of fraudulent use by defective users (such as the use of other people's personal information), the member's personal information will be kept for up to three months from the date of withdrawal. For social logins, you need to release the account associated with the medicine hand to complete the deletion.\nAfter, all personal information and usage records will be deleted, and deleted accounts cannot be recovered."
+					android:lineSpacingExtra="5dp"/>
+
+				<TextView
+					android:id="@+id/confirm_btn"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:background="@drawable/theme_btn"
+					android:layout_gravity="center"
+					android:layout_marginTop="@dimen/leaving_confirm_marginT"
+					android:paddingVertical="@dimen/leaving_confirm_paddingV"
+					android:paddingHorizontal="@dimen/leaving_confirm_paddingH"
+					android:fontFamily="@font/lotte_dream_bold"
+					android:textSize="@dimen/leaving_confirm_text"
+					android:textColor="#FFFFFF"
+					android:text="확인" />
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>

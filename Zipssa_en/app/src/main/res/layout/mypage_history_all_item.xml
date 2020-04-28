@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/history_item"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingHorizontal="@dimen/history_item_paddingH"
+	android:paddingVertical="@dimen/history_item_paddingV"
+	android:clipToPadding="false"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/history_all_item"
+		android:elevation="@dimen/shadow_size"
+		android:paddingVertical="@dimen/history_all_content_paddingV"
+		android:paddingHorizontal="@dimen/history_all_content_paddingH">
+
+		<LinearLayout
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:orientation="horizontal"
+			android:gravity="center">
+
+			<TextView
+				android:id="@+id/alarm_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="left|center"
+				android:paddingHorizontal="@dimen/alarm_title_paddingH"
+				android:paddingVertical="@dimen/alarm_title_paddingV"
+				android:fontFamily="@font/lotte_dream_bold"
+				android:text="Title"
+				android:textSize="@dimen/history_all_title_text"
+				android:textColor="@color/text_color"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:id="@+id/start_date"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/history_all_content_text"
+					android:textColor="@color/text_color"
+					android:text="00.00.00" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/history_all_content_text"
+					android:textColor="@color/text_color"
+					android:text=" ~ " />
+
+				<TextView
+					android:id="@+id/end_date"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/history_all_content_text"
+					android:textColor="@color/text_color"
+					android:text="00.00.00" />
+			</LinearLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/split_line"
+				android:background="@color/split_line"
+				android:layout_marginVertical="@dimen/history_all_split_marginV"/>
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:id="@+id/alarm_count"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/history_all_content_text"
+					android:textColor="@color/text_color"
+					android:text="0" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:fontFamily="@font/nanum_square_ac"
+					android:textSize="@dimen/history_all_content_text"
+					android:textColor="@color/text_color"
+					android:text=" times per day" />
+			</LinearLayout>
+		</LinearLayout>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<TextView
+			android:id="@+id/created_date"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/nanum_square_ac"
+			android:textSize="@dimen/history_all_date_text"
+			android:textColor="@color/text_color_gray"
+			android:text="0000.00.00" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:fontFamily="@font/nanum_square_ac"
+			android:textSize="@dimen/history_all_date_text"
+			android:textColor="@color/text_color_gray"
+			android:text=" created" />
+	</LinearLayout>
+</LinearLayout>

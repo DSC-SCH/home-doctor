@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="alarm_times">
+		<item>Only when needed</item>
+		<item>1 time</item>
+		<item>2 times</item>
+		<item>3 times</item>
+		<item>6 times</item>
+		<item>8 times</item>
+		<item>12 times</item>
+	</string-array>
+
+	<string-array name="search_type">
+		<item>Search</item>
+		<item>Name</item>
+	</string-array>
+</resources>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/main_theme" >
+
+		<TextView
+			android:id="@+id/help_prev_btn"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_gravity="left"
+			android:gravity="center"
+			android:paddingHorizontal="@dimen/titlebar_btn_marginH"
+			android:text="Prev"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/help_btn_text"
+			android:textColor="#FFFFFF" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Simple Guide"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/titlebar_title_text"
+			android:textColor="#FFFFFF" />
+
+		<TextView
+			android:id="@+id/help_next_btn"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_gravity="right"
+			android:gravity="center"
+			android:paddingHorizontal="@dimen/titlebar_btn_marginH"
+			android:text="Next"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/help_btn_text"
+			android:textColor="#FFFFFF" />
+	</FrameLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:layout_marginTop="@dimen/mypage_marginV"
+		android:paddingBottom="@dimen/mypage_marginV"
+		android:background="@color/background_theme"
+		android:orientation="vertical">
+
+		<Space
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_weight="1" />
+
+		<ImageView
+			android:id="@+id/help_image"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:adjustViewBounds="true"/>
+
+		<Space
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_weight="1" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center">
+
+			<TextView
+				android:id="@+id/help_page"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textSize="@dimen/titlebar_title_text"
+				android:textColor="@color/text_color"
+				android:text="0"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textSize="@dimen/titlebar_title_text"
+				android:textColor="@color/text_color"
+				android:text=" / "/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textSize="@dimen/titlebar_title_text"
+				android:textColor="@color/text_color"
+				android:text="10"/>
+		</LinearLayout>
+
+		<Space
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:layout_weight="1" />
+	</LinearLayout>
+</LinearLayout>

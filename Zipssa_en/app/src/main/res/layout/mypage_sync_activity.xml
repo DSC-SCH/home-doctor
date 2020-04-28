@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/background_theme"
+	android:orientation="vertical">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/main_theme">
+
+		<ImageView
+			android:id="@+id/back_btn"
+			android:layout_width="@dimen/titlebar_back_size"
+			android:layout_height="@dimen/titlebar_back_size"
+			android:layout_gravity="left|center"
+			android:adjustViewBounds="true"
+			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
+			android:src="@drawable/ic_arrow_back_24px" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="Linking"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/titlebar_title_text"
+			android:textColor="#FFFFFF" />
+
+		<TextView
+			android:id="@+id/edit_btn"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/white_btn"
+			android:layout_gravity="right|center"
+			android:layout_marginHorizontal="@dimen/titlebar_btn_marginH"
+			android:paddingHorizontal="@dimen/sync_editbtn_paddingH"
+			android:paddingVertical="@dimen/sync_editbtn_paddingV"
+			android:fontFamily="@font/nanum_square_ac"
+			android:textSize="@dimen/sync_editbtn_text"
+			android:textColor="@color/main_theme"
+			android:text="Modify" />
+	</FrameLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginVertical="@dimen/mypage_marginV" >
+
+		<RadioButton
+			android:id="@+id/manage_manager"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:checked="true"
+			android:background="@drawable/mypage_tab_selector"
+			android:button="@drawable/empty_selector"
+			android:gravity="center"
+			android:padding="@dimen/mypage_tab_padding"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/mypage_tabbtn_text"
+			android:textColor="@drawable/text_color_selector"
+			android:text="Manager" />
+
+		<RadioButton
+			android:id="@+id/manage_crew"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@drawable/mypage_tab_selector"
+			android:button="@drawable/empty_selector"
+			android:gravity="center"
+			android:padding="@dimen/mypage_tab_padding"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/mypage_tabbtn_text"
+			android:textColor="@drawable/text_color_selector"
+			android:text="Crew" />
+	</LinearLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/split_line"
+		android:background="@color/split_line"
+		android:layout_marginHorizontal="@dimen/mypage_tab_split_marginH"/>
+
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/sync_container"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1" />
+
+	<TextView
+		android:id="@+id/add_btn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:visibility="gone"
+		android:layout_margin="@dimen/sync_addbtn_margin"
+		android:paddingVertical="@dimen/sync_addbtn_paddingV"
+		android:paddingHorizontal="@dimen/sync_addbtn_paddingH"
+		android:background="@drawable/theme_btn"
+		android:fontFamily="@font/lotte_dream_bold"
+		android:textSize="@dimen/sync_addbtn_text"
+		android:textColor="#FFFFFF"
+		android:text="New Manager"/>
+</LinearLayout>

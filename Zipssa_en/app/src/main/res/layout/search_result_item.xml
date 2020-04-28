@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingHorizontal="@dimen/search_result_item_paddingH"
+	android:paddingVertical="@dimen/search_result_item_paddingV"
+	android:clipToPadding="false">
+
+	<LinearLayout
+		android:id="@+id/medicine_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:elevation="@dimen/shadow_size"
+		android:padding="@dimen/search_result_item_content_padding"
+		android:background="@drawable/search_result_item">
+
+		<TextView
+			android:id="@+id/medicine_name_ko"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/search_result_item_distance"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/search_result_text"
+			android:textColor="@color/text_color"
+			android:text="약물 이름"/>
+
+		<!--
+		<TextView
+			android:id="@+id/medicine_name_en"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="@dimen/search_result_item_distance"
+			android:layout_marginTop="@dimen/search_result_item_distance"
+			android:layout_marginBottom="@dimen/search_result_item_distanceL"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/search_result_en_text"
+			android:textColor="@color/text_color_gray"
+			android:text="Medicine Name"/>
+
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:layout_margin="@dimen/search_result_item_distance">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textSize="@dimen/search_result_text"
+				android:textColor="@color/text_color"
+				android:text=" - "/>
+
+			<TextView
+				android:id="@+id/medicine_function"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:fontFamily="@font/nanum_square_ac"
+				android:textSize="@dimen/search_result_text"
+				android:textColor="@color/text_color"
+				android:text="기능"/>
+		</LinearLayout>
+		-->
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="@dimen/search_result_item_distance"
+			android:layout_marginBottom="@dimen/search_result_item_distance"
+			android:layout_marginTop="@dimen/search_result_item_distanceL"
+			android:fontFamily="@font/lotte_dream_bold"
+			android:textSize="@dimen/search_result_content_text"
+			android:textColor="@color/text_color"
+			android:text="효능 및 효과"/>
+
+		<TextView
+			android:id="@+id/medicine_effect"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_margin="@dimen/search_result_item_distance"
+			android:fontFamily="@font/nanum_square_ac"
+			android:textSize="@dimen/search_result_content_text"
+			android:textColor="@color/text_color"
+			android:text="효능 및 효과"/>
+	</LinearLayout>
+</LinearLayout>

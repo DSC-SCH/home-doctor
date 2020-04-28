@@ -1,0 +1,12 @@
+<resources>
+	<string name="app_name">YakSon</string>
+	<string name="kakao_app_key">f457dc3f8d1aa0380a533a9f91c55160</string>
+	<string name="imp_key">3269528787150082</string>
+	<string name="imp_secret">u8zFVb2fqE9XW0GLMRiQTb3bw672X7ysg87bj9qKOAIKApwmgPca0glwmtzjA8LRgT2A3slS23CDs9ZJ</string>
+
+	<string name="underline_medicine_effect"><u>Efficacy</u></string>
+	<string name="underline_medicine_dosage"><u>Capacity</u></string>
+	<string name="underline_medicine_validity"><u>Validity</u></string>
+	<string name="underline_medicine_preservation"><u>Storage</u></string>
+	<string name="underline_medicine_warning"><u>Precautions</u></string>
+</resources>

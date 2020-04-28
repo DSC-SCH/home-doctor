@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.designvalue.medihand_en">
+
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+	<application
+		android:name="com.designvalue.medihand_en.GlobalApplication"
+		android:allowBackup="true"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:roundIcon="@mipmap/ic_launcher_round"
+		android:supportsRtl="true"
+		android:theme="@style/AppTheme"
+		android:usesCleartextTraffic="true">
+
+		<meta-data
+			android:name="com.kakao.sdk.AppKey"
+			android:value="@string/kakao_app_key" />
+
+		<activity android:name="com.designvalue.medihand_en.MypageMyprofileActivity" />
+		<activity android:name="com.designvalue.medihand_en.MainActivity" />
+		<activity android:name="com.designvalue.medihand_en.AddAlarmActivity" />
+		<activity android:name="com.designvalue.medihand_en.EditAlarmActivity" />
+		<activity android:name="com.designvalue.medihand_en.MedicineDetailActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageActivity" />
+		<activity
+			android:name="com.designvalue.medihand_en.MyAlertPopup"
+			android:theme="@style/PopupTheme" />
+		<activity
+			android:name="com.designvalue.medihand_en.AddLabelPopup"
+			android:theme="@style/PopupTheme" />
+		<activity
+			android:name="com.designvalue.medihand_en.MainItemPopup"
+			android:theme="@style/PopupTheme" />
+		<activity android:name="com.designvalue.medihand_en.MypageNoticeActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageNoticeDetailActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageSyncActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageHistoryActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageHistoryPhotoDetailActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageSettingActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageLeavingActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageServiceActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageServiceContractActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageServiceEnquireActivity" />
+		<activity android:name="com.designvalue.medihand_en.LoginActivity" />
+		<activity android:name="com.designvalue.medihand_en.JoinActivity" />
+		<activity android:name="com.designvalue.medihand_en.PermissionActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name="com.designvalue.medihand_en.ContractActivity" />
+		<activity android:name="com.designvalue.medihand_en.MainListCalendarActivity" />
+		<activity android:name="com.designvalue.medihand_en.LoadingActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageLabelActivity" />
+		<activity
+			android:name="com.designvalue.medihand_en.EditLabelPopup"
+			android:theme="@style/PopupTheme" />
+		<activity
+			android:name="com.designvalue.medihand_en.MypageSyncManagerPopup"
+			android:theme="@style/PopupTheme" />
+		<activity
+			android:name="com.designvalue.medihand_en.MypageSyncCrewPopup"
+			android:theme="@style/PopupTheme" />
+		<activity android:name="com.designvalue.medihand_en.AuthWebActivity" />
+		<activity android:name="com.designvalue.medihand_en.MypageHelpActivity" />
+
+		<receiver android:name="com.designvalue.medihand_en.AlarmReceiver" >
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
+		<service android:name="com.designvalue.medihand_en.AlarmService" />
+	</application>
+</manifest>
