@@ -18,6 +18,7 @@ So, we developed the alarm application called “약손” which can prevent med
 
 Please refer to the video below for detailed app.
 
+[Introduction Video](https://youtu.be/UyIPcS3bm0g)
 
 ## 📂 Directory structure
 
@@ -67,6 +68,7 @@ Search
 
 **Please refer to the video below for detailed description for use**
 
+[How To Use](https://youtu.be/UyIPcS3bm0g)
 
 ### Contact
 
